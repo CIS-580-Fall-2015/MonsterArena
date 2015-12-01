@@ -20,5 +20,5 @@ Keep compiling simple!
 
 ## Contributors
 
-Richard Petrie
-Nic Johnson
+* Richard Petrie
+* Nic Johnson
