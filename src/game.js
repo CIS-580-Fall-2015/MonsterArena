@@ -5,8 +5,8 @@ module.exports = (function (){
     SCREEN_HEIGHT = 720;
 
     // Module variables
-    var Hero = require('hero.js'),
-        Monster = require('monster.js');
+    var Hero = require('./hero.js'),
+        Monster = require('./monster.js');
 
 
     var load = function(sm) {

@@ -1,5 +1,5 @@
 module.exports = (function(){
-  var Entity = require('entity.js');
+  var Entity = require('./entity.js');
 
   Hero.prototype = new Entity();
 

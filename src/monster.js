@@ -2,7 +2,7 @@
  * implemented as a common JS module
  */
 module.exports = (function(){
-  var Entity = require('entity.js');
+  var Entity = require('./entity.js');
 
   Monster.prototype = new Entity();
 
