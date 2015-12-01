@@ -1,12 +1,14 @@
 # MonsterArena
+
 Final project for CIS580
 
-# Compiling
+## Compiling
+
 Keep compiling simple!
 
 ```browserify src\game.js -o MonsterArena.js```
 
-# TODO
+## TODO
 
 * Index page
 * Menu states
@@ -17,6 +19,6 @@ Keep compiling simple!
 * Monster/Hero interaction
 * Everything ;)
 
-# Contributors
+## Contributors
 
 Richard Petrie
