@@ -14,7 +14,6 @@ Keep compiling simple!
 * Menu states
 * UI Design
 * UI Icons
-* UI Icons
 * Monster sprites
 * Monster/Hero interaction
 * Everything ;)
@@ -22,3 +21,4 @@ Keep compiling simple!
 ## Contributors
 
 Richard Petrie
+Nic Johnson
