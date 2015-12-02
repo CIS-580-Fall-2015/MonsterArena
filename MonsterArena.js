@@ -15,12 +15,8 @@ module.exports = (function(){
   }
 
   Entity.prototype.attacked = function(damage) {
-    //Temporary
-    this.health -= damage - this.defense;
-    if (this.health >= 0) {
-      //TODO die
-    }
-  };
+    //TODO IN CLASSES
+  }
 
   Entity.prototype.doTurn = function() {
     //TODO IN CLASSES
@@ -31,6 +27,47 @@ module.exports = (function(){
 }());
 
 },{}],2:[function(require,module,exports){
+module.exports = (function() {
+
+  var doors = [];
+  var monsters = [];
+  var Hero = require('./hero.js');
+  var Door = require('./spawner');
+  var stat_cap = {"attack": 2, "defense": 2, "health": 2};
+  var stat_levels = [2, 3, 5, 7, 10, 12, 15];
+
+  function initialize() {
+    //TODO spawn doors
+
+    //TODO spawn Hero
+  }
+
+  function update() {
+    //TODO generate information to render
+  }
+
+  function update_cap(stat, level) {
+    //TODO error catching
+    stat_cap[stat] = stat_levels.indexOf(level);
+  }
+
+  //TODO open doors upgrade
+
+  //TODO monster spawning
+
+  //TODO currency stuff
+
+
+
+  return {
+    initialize: initialize,
+    update: update,
+    update_cap: update_cap,
+  };
+
+}());
+
+},{"./hero.js":4,"./spawner":6}],3:[function(require,module,exports){
 module.exports = (function (){
 
     // The width & height of the screen
@@ -40,12 +77,12 @@ module.exports = (function (){
     // Module variables
     var Hero = require('./hero.js'),
         Monster = require('./monster.js');
+        EntityManager = require('./entity_manager.js');
 
 
     var load = function(sm) {
+      EntityManager.initialize();
         //TODO Menu/game state
-        //TODO initialize world
-        //TODO initialize hero
         //TODO start game loop
     };
 
@@ -67,7 +104,7 @@ module.exports = (function (){
 
 })();
 
-},{"./hero.js":3,"./monster.js":4}],3:[function(require,module,exports){
+},{"./entity_manager.js":2,"./hero.js":4,"./monster.js":5}],4:[function(require,module,exports){
 module.exports = (function(){
   var Entity = require('./entity.js');
 
@@ -79,6 +116,15 @@ module.exports = (function(){
     this.defense = defense;
   }
 
+  Hero.prototype.attacked = function(amount) {
+    //Temporary
+    this.health -= damage - this.defense;
+    //TODO grant hero blood
+    if (this.health >= 0) {
+      //TODO die
+    }
+  };
+
   Hero.prototype.doTurn = function() {
     //TODO TARGET MONSTER AND ATTACK
   };
@@ -87,16 +133,16 @@ module.exports = (function(){
 
 }());
 
-},{"./entity.js":1}],4:[function(require,module,exports){
+},{"./entity.js":1}],5:[function(require,module,exports){
 /* Base class for all game entities,
  * implemented as a common JS module
  */
-module.exports = (function(){
+module.exports = (function() {
   var Entity = require('./entity.js');
 
   Monster.prototype = new Entity();
 
-  function Monster(health, attack, defense, door, specials){
+  function Monster(health, attack, defense, door, specials) {
     this.health = health;
     this.attack = attack;
     this.defense = defense;
@@ -110,6 +156,14 @@ module.exports = (function(){
     this.angle = undefined;
   }
 
+  Monster.prototype.attacked = function(amount) {
+    //Temporary
+    this.health -= damage - this.defense;
+    if (this.health >= 0) {
+      //TODO die
+    }
+  };
+
   Monster.prototype.doTurn = function() {
     //TODO MOVEMENT
 
@@ -120,8 +174,23 @@ module.exports = (function(){
 
   };
 
-   return Monster;
+  return Monster;
 
 }());
 
-},{"./entity.js":1}]},{},[2]);
+},{"./entity.js":1}],6:[function(require,module,exports){
+module.exports = (function(){
+
+  function Door(x, y, id) {
+    this.x = x;
+    this.y = y;
+    this.id = id;
+    this.open = false;
+    this.monster = false;
+  }
+
+  return Door;
+
+}());
+
+},{}]},{},[3]);

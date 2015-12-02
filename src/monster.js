@@ -1,12 +1,12 @@
 /* Base class for all game entities,
  * implemented as a common JS module
  */
-module.exports = (function(){
+module.exports = (function() {
   var Entity = require('./entity.js');
 
   Monster.prototype = new Entity();
 
-  function Monster(health, attack, defense, door, specials){
+  function Monster(health, attack, defense, door, specials) {
     this.health = health;
     this.attack = attack;
     this.defense = defense;
@@ -20,6 +20,14 @@ module.exports = (function(){
     this.angle = undefined;
   }
 
+  Monster.prototype.attacked = function(amount) {
+    //Temporary
+    this.health -= damage - this.defense;
+    if (this.health >= 0) {
+      //TODO die
+    }
+  };
+
   Monster.prototype.doTurn = function() {
     //TODO MOVEMENT
 
@@ -30,6 +38,6 @@ module.exports = (function(){
 
   };
 
-   return Monster;
+  return Monster;
 
 }());

@@ -14,12 +14,8 @@ module.exports = (function(){
   }
 
   Entity.prototype.attacked = function(damage) {
-    //Temporary
-    this.health -= damage - this.defense;
-    if (this.health >= 0) {
-      //TODO die
-    }
-  };
+    //TODO IN CLASSES
+  }
 
   Entity.prototype.doTurn = function() {
     //TODO IN CLASSES

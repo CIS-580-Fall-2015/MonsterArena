@@ -7,12 +7,12 @@ module.exports = (function (){
     // Module variables
     var Hero = require('./hero.js'),
         Monster = require('./monster.js');
+        EntityManager = require('./entity_manager.js');
 
 
     var load = function(sm) {
+      EntityManager.initialize();
         //TODO Menu/game state
-        //TODO initialize world
-        //TODO initialize hero
         //TODO start game loop
     };
 
