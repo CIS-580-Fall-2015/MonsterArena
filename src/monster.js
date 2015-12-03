@@ -25,7 +25,9 @@ module.exports = (function() {
     this.health -= damage - this.defense;
     if (this.health >= 0) {
       //TODO die
+      return this.health + this.attack + this.defense;
     }
+    return 0;
   };
 
   Monster.prototype.doTurn = function() {
