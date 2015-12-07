@@ -1,5 +1,5 @@
-/* Base class for all game entities,
- * implemented as a common JS module
+/* Base class for each monster.
+ * It inherits from the generic entity class.
  */
 module.exports = (function() {
   var Entity = require('./entity.js');
