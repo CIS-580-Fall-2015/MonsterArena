@@ -1,191 +1,233 @@
 /* Author: Nic Johnson
  *
- * Title: StatManager.js
+ * Title: StatsManager.js
  *
- * Description: manages the monster stat's UI
- * 		for MonsterArena
+ * Description: StatsManger for monster stats UI
+ * 			in Monster Arena for CIS 580 final
+ * 			project
  * 
  *
  * History:
  * 		December 06, 2015: 
  *  		-Date Created
+ *  	December 7, 2015:
+ *  		-Redid implementation away from Entity-style
+ *  			because javascript scope is stupid.
  */
-module.exports = (function ()
+module.exports = (function()
 {
-	function StatsManager()
+	
+	//////////////////////////////////////
+	// Value for outputting debug code. //
+	//////////////////////////////////////
+	var DEBUG = true;
+
+	//////////////////////////////////////
+	// Default values for start of game //
+	//////////////////////////////////////
+	var startingAttackVal = 5;
+	var startingDefenseVal = 5;
+	var startingHealthVal = 5;
+
+	var attackCap = 10;
+	var defenseCap = 10;
+	var healthCap = 10;
+
+	var attackFloor = 1;
+	var defenseFloor = 1;
+	var healthFloor = 1;
+
+	///////////////////
+	// Actual values //
+	///////////////////
+	var attackVal = startingAttackVal;
+	var defenseVal = startingDefenseVal;
+	var healthVal = startingHealthVal;
+	var specialContent = undefined;
+	var spawnDelegate = undefined;
+
+	////////////////
+	// Text hooks //
+	////////////////
+	var attackText = document.getElementById('Attack_Text');
+	attackText.textContent = attackVal;
+
+	var defenseText = document.getElementById('Defense_Text');
+	defenseText.textContent = defenseVal;
+
+	var healthText = document.getElementById('Health_Text');
+	healthText.textContent = healthVal;
+
+	////////////////////////
+	// Button Click Hooks //
+	////////////////////////
+	var attackPlus = document.getElementById('Attack_Plus');
+	attackPlus.addEventListener('click', AttackPlus);
+
+	var attackMinus = document.getElementById('Attack_Minus');
+	attackMinus.addEventListener('click', AttackMinus);
+
+	var defensePlus = document.getElementById('Defense_Plus');
+	defensePlus.addEventListener('click', DefensePlus);
+
+	var defenseMinus = document.getElementById('Defense_Minus');
+	defenseMinus.addEventListener('click', DefenseMinus);
+
+	var healthPlus = document.getElementById('Health_Plus');
+	healthPlus.addEventListener('click', HealthPlus);
+
+	var healthMinus = document.getElementById('Health_Minus');
+	healthMinus.addEventListener('click', HealthMinus);
+
+	var specialUp = document.getElementById('Special_Up');
+	specialUp.addEventListener('click', SpecialUp);
+
+	var specialDown = document.getElementById('Special_Down');
+	specialDown.addEventListener('click', SpecialDown);
+
+	var spawnButton = document.getElementById('Spawn_Button');
+	spawnButton.addEventListener('click', SpawnMonster);
+
+	///////////////////////
+	// Handler Functions //
+	///////////////////////
+	function AttackPlus()
 	{
-		//////////////////////////////////////
-		// Value for outputting debug code. //
-		//////////////////////////////////////
-		this.DEBUG = true;
-
-		//////////////////////////////////////
-		// Default values for start of game //
-		//////////////////////////////////////
-		this.startingAttackVal = 5;
-		this.startingDefenseVal = 5;
-		this.startingHealthVal = 5;
-
-		this.attackCap = 10;
-		this.defenseCap = 10;
-		this.healthCap = 10;
-
-		this.attackFloor = 1;
-		this.defenseFloor = 1;
-		this.healthFloor = 1;
-
-		///////////////////
-		// Actual values //
-		///////////////////
-		this.attackVal = this.startingAttackVal;
-		this.defenseVal = this.startingDefenseVal;
-		this.healthVal = this.startingHealthVal;
-
-		//////////////////////////////////////////////////////
-		// Hooks to all the UI buttons in the stats manager //
-		//////////////////////////////////////////////////////
-		this.attackPlus = document.getElementById('Attack_Plus');
-		this.attackPlus.addEventListener('click', this.AttackPlus);
-
-		this.attackMinus = document.getElementById('Attack_Minus');
-		this.attackMinus.addEventListener('click', this.AttackMinus);
-
-		this.defensePlus = document.getElementById('Defense_Plus');
-		this.defensePlus.addEventListener('click', this.DefensePlus);
-
-		this.defenseMinus = document.getElementById('Defense_Minus');
-		this.defenseMinus.addEventListener('click', this.DefenseMinus);
-
-		this.healthPlus = document.getElementById('Health_Plus');
-		this.healthPlus.addEventListener('click', this.HealthPlus);
-
-		this.healthMinus = document.getElementById('Health_Minus');
-		this.healthMinus.addEventListener('click', this.HealthMinus);
-
-		this.specialUp = document.getElementById('Special_Up');
-		this.specialUp.addEventListener('click', this.SpecialUp);
-
-		this.specialDown = document.getElementById('Special_Down');
-		this.specialDown.addEventListener('click', this.SpecialDown);
-
-		//////////////////////////////
-		// Assignment of the values //
-		//////////////////////////////
-		this.attackText = document.getElementById('Attack_Text');
-		this.attackText.textContent = this.attackVal;
-
-		this.defenseText = document.getElementById('Defense_Text');
-		this.defenseText.textContent = this.defenseVal;
-
-		this.healthText = document.getElementById('Health_Text');
-		this.healthText.textContent = this.healthVal;
-
-		this.healthText.textContent = 0;
-	}
-
-	StatsManager.prototype.AttackPlus = function() 
-	{
-		if (this.DEBUG) { console.log("Attack +1 Clicked"); }
-		if (this.attackVal < this.attackCap)
+		if (DEBUG) { console.log("StatsManager: Attack +1 Clicked"); }
+		if (attackVal < attackCap)
 		{
-			this.attackVal++;
-			this.attackText.textContent = this.attackVal;
+			attackVal++;
+			attackText.textContent = attackVal;
 		}
 	}
 
-	StatsManager.prototype.AttackMinus = function() 
+	function AttackMinus() 
 	{
-		if (this.DEBUG) { console.log("Attack -1 Clicked"); }
-		if (this.attackVal > this.attackFloor)
+		if (DEBUG) { console.log("StatsManager: Attack -1 Clicked"); }
+		if (attackVal > attackFloor)
 		{
-			this.attackVal--;
-			this.attackText.textContent = this.attackVal;
+			attackVal--;
+			attackText.textContent = attackVal;
 		}
 	}
 
-	StatsManager.prototype.DefensePlus = function() 
+	function DefensePlus() 
 	{
-		if (this.DEBUG) { console.log("Defense +1 Clicked") }
-		if (this.defenseVal < this.defenseCap)
+		if (DEBUG) { console.log("StatsManager: Defense +1 Clicked") }
+		if (defenseVal < defenseCap)
 		{
-			this.defenseVal++;
-			this.defenseText.textContent = this.defenseVal;
+			defenseVal++;
+			defenseText.textContent = defenseVal;
 		}
 	}
 
-	StatsManager.prototype.DefenseMinus = function() 
+	function DefenseMinus() 
 	{
-		if (this.DEBUG) { console.log("Defense -1 Clicked") }
-		if (this.defenseVal > this.defenseFloor)
+		if (DEBUG) { console.log("StatsManager: Defense -1 Clicked") }
+		if (defenseVal > defenseFloor)
 		{
-			this.defenseVal--;
-			this.defenseText.textContent = this.defenseVal;
+			defenseVal--;
+			defenseText.textContent = defenseVal;
 		}
 	}
 
-	StatsManager.prototype.HealthPlus = function() 
+	function HealthPlus() 
 	{
-		if (this.DEBUG) { console.log("Health +1 Clicked"); }
-		if (this.healthVal < this.healthCap)
+		if (DEBUG) { console.log("StatsManager: Health +1 Clicked"); }
+		if (healthVal < healthCap)
 		{
-			this.healthVal++;
-			this.healthText.textContent = this.healthVal;
+			healthVal++;
+			healthText.textContent = healthVal;
 		}
 	}
 
 
-	StatsManager.prototype.HealthMinus = function() 
+	function HealthMinus() 
 	{
-		if (this.DEBUG) { console.log("Health -1 Clicked."); }
-		if (this.healthVal > this.healthFloor)
+		if (DEBUG) { console.log("StatsManager: Health -1 Clicked."); }
+		if (healthVal > healthFloor)
 		{
-			this.healthVal--;
-			this.healthText.textContent = this.healthVal;
+			healthVal--;
+			healthText.textContent = healthVal;
 		}
 	}
 
-	StatsManager.prototype.SpecialUp = function()
+	function SpecialUp()
 	{
-		if (this.DEBUG) { console.log("Special Up Clicked.") }
+		if (DEBUG) { console.log("StatsManager: Special Up Clicked."); }
 	}
 
-	StatsManager.prototype.SpecialDown = function()
+	function SpecialDown()
 	{
-		if (this.DEBUG) { console.log("Special Down Clicked.") }
+		if (DEBUG) { console.log("StatsManager: Special Down Clicked."); }
 	}
 
-	StatsManager.prototype.IncreaseAttackCap = function(val)
+	function IncreaseAttackCap(val)
 	{
-		if (this.DEBUG) { console.log("Increasing Attack Cap") }
+		if (DEBUG) { console.log("StatsManager: Increasing Attack Cap"); }
 		var amt = val || 1;
-		this.attackCap += amt;
+		attackCap += amt;
 	}
 
-	StatsManager.prototype.IncreaseDefenseCap = function(val)
+	function IncreaseDefenseCap(val)
 	{
-		if (this.DEBUG) { console.log("Increasing Defense Cap") }
+		if (DEBUG) { console.log("StatsManager: Increasing Defense Cap"); }
 		var amt = val || 1;
-		this.defenseCap += amt;
+		defenseCap += amt;
 	}
 
-	StatsManager.prototype.IncreaseHealthCap = function(val)
+	function IncreaseHealthCap(val)
 	{
-		if (this.DEBUG) { console.log("Increasing Health Cap") }
+		if (DEBUG) { console.log("StatsManager: Increasing Health Cap"); }
 		var amt = val || 1;
-		this.healthCap += amt;
+		healthCap += amt;
 	}
 
-	return StatsManager;
+	/////////////////////
+	// Getters/Setters //
+	/////////////////////
+	function SetSpawnDelegate(val)
+	{
+		spawnDelegate = val;
+	}
+
+
+	///////////////////////
+	// Exposed Functions //
+	///////////////////////
+	function SpawnMonster()
+	{
+		if (DEBUG) { console.log("StatsManager: SpawnMonster Clicked"); }
+		if (spawnDelegate == undefined)
+		{
+			console.log("Spawn Delegate not set.");
+		}
+		else
+		{
+			spawnDelegate();
+		}
+	}
+
+	function GetCurrentStats()
+	{
+		if (DEBUG) { console.log('StatsManager: Polling Current Monster Stats'); }
+		return {
+			attack: attackVal,
+			defense: defenseVal,
+			health: healthVal,
+			special: specialContent
+		};
+	}
+
+
+
+	return {
+		GetCurrentStats: GetCurrentStats,
+		SpawnMonster: SpawnMonster,
+		SetSpawnDelegate: SetSpawnDelegate
+	}
 
 })();
-
-
-
-
-
-
-
-
 
 
 
