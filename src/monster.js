@@ -6,10 +6,6 @@ module.exports = (function() {
 
   Monster.prototype = new Entity();
 
-  // States for the monster
-  const WALKING = 0;
-  const ATTACKING = 1;
-
   function Monster(health, attack, defense, door, specials) {
     this.health = health;
     this.attack = attack;
