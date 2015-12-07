@@ -6,7 +6,7 @@ Final project for CIS580
 
 Keep compiling simple!
 
-```browserify src\game.js -o MonsterArena.js```
+```browserify src/game.js -o MonsterArena.js```
 
 ## TODO
 
@@ -22,3 +22,4 @@ Keep compiling simple!
 
 * Richard Petrie (rap1011@ksu.edu)
 * Nic Johnson
+* Christian Hughes (cjhughes255@ksu.edu)
