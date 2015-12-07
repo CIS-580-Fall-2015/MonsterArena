@@ -1,8 +1,27 @@
 <div>
-	Heart and Door icons (modified) made by 
-	<a href="http://www.freepik.com" title="Freepik">Freepik</a> from 
-	<a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a> 
-	is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0">CC BY 3.0</a>
+	Heart and Door icons (modified) made by
+	<a href="http://www.freepik.com" title="Freepik">Freepik</a> from
+	<a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a>
+	and is covered by a <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0">CC BY 3.0 License</a>.
+</div>
+
+<div>
+	All sprite sheets were sourced from <a href="http://opengameart.org" title="OpenGameArt">opengameart.org</a>, and created by user
+	<a href="http://opengameart.org/users/dogchicken" title="dogchicken">dogchicken</a>. They are covered by a
+	<a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0">CC BY 3.0 License</a>.
+	<br>
+	The Creepo Sprite Sheet can be found <a href="http://opengameart.org/content/cute-monster-sprite-sheet" title="Creepo">here</a>.
+	<br>
+	The Skully Sprite Sheet can be found <a href="http://opengameart.org/content/skull-monster-sprite-sheet" title="Skully">here</a>.
+	<br>
+	The Gunner Sprite Sheet can be found <a href="http://opengameart.org/content/cat-fighter-addon2-assault-rifle-kit" title="Gunner">here</a>.
+	<br>
+	The Snappy Sprite Sheet can be found <a href="http://opengameart.org/content/demon-flower-monster-sprite-sheet" title="Snappy">here</a>.
+	<br>
+	The Wingy Sprite Sheet can be found <a href="http://opengameart.org/content/flying-tongue-monster-sprite-sheet" title="Wingy">here</a>.
+	<br>
+	The Puncher Sprite Sheet can be found <a href="http://opengameart.org/content/cat-fighter-sprite-sheet" title="Puncher">here</a>.
+	<br>
 </div>
 
 BORDER VECTOR GRAPHICS:
@@ -10,6 +29,3 @@ BORDER VECTOR GRAPHICS:
 
 SWORD ICON
 	http://opengameart.org/content/medieval-sword AUTHOR: Lexatchison
-
-SHIELD ICON
-	http://opengameart.org/content/kite-shield-64x64 AUTHOR: LordNeo
