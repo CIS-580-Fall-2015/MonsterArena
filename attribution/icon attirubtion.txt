@@ -10,3 +10,6 @@ BORDER VECTOR GRAPHICS:
 
 SWORD ICON
 	http://opengameart.org/content/medieval-sword AUTHOR: Lexatchison
+
+SHIELD ICON
+	http://opengameart.org/content/kite-shield-64x64 AUTHOR: LordNeo
