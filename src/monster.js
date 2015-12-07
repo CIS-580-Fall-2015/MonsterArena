@@ -6,6 +6,10 @@ module.exports = (function() {
 
   Monster.prototype = new Entity();
 
+  // States for the monster
+  const WALKING = 0;
+  const ATTACKING = 1;
+
   function Monster(health, attack, defense, door, specials) {
     this.health = health;
     this.attack = attack;
@@ -13,6 +17,12 @@ module.exports = (function() {
     this.door = door;
     this.specials = specials;
     this.state = 0;
+
+    // Create an animations property, with arrays for each direction of animations.
+    this.animations = {
+      left: [],
+      right: []
+    };
 
     //TODO modify according to center of door.
     this.x = this.door.x;
