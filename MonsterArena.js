@@ -29,17 +29,22 @@ module.exports = (function(){
 },{}],2:[function(require,module,exports){
 module.exports = (function() {
 
-  var doors = [];
-  var monsters = [];
   var Hero = require('./hero.js');
   var Door = require('./spawner');
+  var doors = [];
   var stat_cap = {"attack": 2, "defense": 2, "health": 2};
   var stat_levels = [2, 3, 5, 7, 10, 12, 15];
+  var blood = 0;
+
+  var hero;
+  // Value followed by scaling
+  var HERO_STATS = {health: [2, 1.2], attack: [3, 1.2], defense: [2, 1.1], exp: [0, 1.2]};
+  var monsters = [];
 
   function initialize() {
     //TODO spawn doors
 
-    //TODO spawn Hero
+    hero = new Hero(HERO_STATS, this);
   }
 
   function update() {
@@ -55,7 +60,16 @@ module.exports = (function() {
 
   //TODO monster spawning
 
-  //TODO currency stuff
+  function mod_blood(amount) {
+    blood += amount;
+    if (blood < 0) {
+      blood = 0;
+    }
+  }
+
+  function get_blood() {
+    return blood;
+  }
 
 
 
@@ -63,6 +77,8 @@ module.exports = (function() {
     initialize: initialize,
     update: update,
     update_cap: update_cap,
+    mod_blood: mod_blood,
+    get_blood: get_blood,
   };
 
 }());
@@ -110,22 +126,48 @@ module.exports = (function(){
 
   Hero.prototype = new Entity();
 
-  function Hero(health, attack, defense){
-    this.health = health;
-    this.attack = attack;
-    this.defense = defense;
+
+
+  function Hero(stats, EntityManager){
+    this.health = stats.health[0];
+    this.health_scale = stats.health[1];
+    this.attack = stats.attack[0];
+    this.attack_scale = stats.attack[1];
+    this.defene = stats.defense[0];
+    this.defense_scale = stats.defense[1];
+    this.exp_scale = stats.exp[1];
+    this.EntityManager = EntityManager;
+
+    this.exp = 0;
+    this.req_exp = 10;
+    this.level = 0;
+    //TODO place hero
+    //this.x =
+    //this.y =
   }
+
+  Hero.prototype.levelup = function() {
+    this.health *= this.health_scale;
+    this.attack *= this.attack_scale;
+    this.defense *= this.defense_scale;
+    this.req_exp ^= this.exp_scale;
+    this.exp = 0;
+  };
 
   Hero.prototype.attacked = function(amount) {
     //Temporary
-    this.health -= damage - this.defense;
-    //TODO grant hero blood
+    var damage = amount - this.defense;
+    this.health -= damage;
+    EntityManager.mod_blood(damage);
     if (this.health >= 0) {
       //TODO die
     }
   };
 
   Hero.prototype.doTurn = function() {
+    if (this.exp >= this.req_exp) {
+      this.levelup();
+    }
     //TODO TARGET MONSTER AND ATTACK
   };
 
@@ -134,13 +176,17 @@ module.exports = (function(){
 }());
 
 },{"./entity.js":1}],5:[function(require,module,exports){
-/* Base class for all game entities,
- * implemented as a common JS module
+/* Base class for each monster.
+ * It inherits from the generic entity class.
  */
 module.exports = (function() {
   var Entity = require('./entity.js');
 
   Monster.prototype = new Entity();
+
+  // States for the monster
+  const WALKING = 0;
+  const ATTACKING = 1;
 
   function Monster(health, attack, defense, door, specials) {
     this.health = health;
@@ -149,6 +195,12 @@ module.exports = (function() {
     this.door = door;
     this.specials = specials;
     this.state = 0;
+
+    // Create an animations property, with arrays for each direction of animations.
+    this.animations = {
+      left: [],
+      right: []
+    };
 
     //TODO modify according to center of door.
     this.x = this.door.x;
@@ -161,7 +213,9 @@ module.exports = (function() {
     this.health -= damage - this.defense;
     if (this.health >= 0) {
       //TODO die
+      return this.health + this.attack + this.defense;
     }
+    return 0;
   };
 
   Monster.prototype.doTurn = function() {
