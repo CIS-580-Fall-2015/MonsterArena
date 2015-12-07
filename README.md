@@ -22,3 +22,4 @@ Keep compiling simple!
 
 * Richard Petrie (rap1011@ksu.edu)
 * Nic Johnson
+* Christian Hughes (cjhughes255@ksu.edu)
