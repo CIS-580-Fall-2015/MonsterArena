@@ -1,4 +1,5 @@
-module.exports = (function (){
+window.onload = function()
+{
 
     // The width & height of the screen
     SCREEN_WIDTH = 1280;
@@ -8,6 +9,8 @@ module.exports = (function (){
     var Hero = require('./hero.js'),
         Monster = require('./monster.js');
         EntityManager = require('./entity_manager.js');
+    ShopManager = require('./ShopManager.js');
+    StatsManager = require('./StatsManager.js');
 
 
     var load = function(sm) {
@@ -25,11 +28,4 @@ module.exports = (function (){
         //TODO
     };
 
-
-    return {
-      load: load,
-      update: update,
-      render: render,
-    };
-
-})();
+}
