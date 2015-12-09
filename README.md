@@ -26,6 +26,9 @@ Keep compiling simple!
 
 ## Contributors
 
-* Richard Petrie (rap1011@ksu.edu)
-* Nic Johnson (njj@ksu.edu)
+* Kyle Brown (kyle16@ksu.edu)
 * Christian Hughes (cjhughes255@ksu.edu)
+* Nic Johnson (njj@ksu.edu)
+* Richard Petrie (rap1011@ksu.edu)
+
+
