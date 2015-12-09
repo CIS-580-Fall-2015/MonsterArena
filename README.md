@@ -10,11 +10,15 @@ Keep compiling simple!
 
 ## TODO
 
-* Index page
+* Index page  
+    * Need to incorporate arena area between menus
 * Menu states
 * ~~Stats UI~~
-* ~~Shop UI~~ (mostly)
-* UI Design
+* ~~Shop UI~~ (mostly)  
+    * ~~Selection highlighting~~
+    * Assigning delegates to handle updating
+    * Final two upgrade options
+* ~~UI Design~~
 * UI Icons
 * Monster sprites
 * Monster/Hero interaction
