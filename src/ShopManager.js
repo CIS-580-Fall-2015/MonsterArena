@@ -67,7 +67,7 @@ module.exports = (function()
 		this.healthPlus = document.getElementById('HealthCap_Plus');
 		this.healthPlus.descText = "Increases health cap.";
 		this.healthPlus.selected = document.getElementById('Health_Selected');
-		console.log(this.healthPlus.selected);
+		
 		this.healthPlus.addEventListener('click', function(e)
 		{
 			self.HealthPlus();
@@ -140,7 +140,6 @@ module.exports = (function()
 		else
 		{
 			this.currentSelected = this.attackPlus.selected;
-			console.log(this.currentSelected);
 			this.currentSelected.setAttribute('stroke-opacity', '100');
 		}
 	}
