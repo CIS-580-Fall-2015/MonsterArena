@@ -12,6 +12,8 @@ Keep compiling simple!
 
 * Index page
 * Menu states
+* ~~Stats UI~~
+* ~~Shop UI~~ (mostly)
 * UI Design
 * UI Icons
 * Monster sprites
