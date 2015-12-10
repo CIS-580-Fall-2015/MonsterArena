@@ -1,4 +1,15 @@
-
+/* Author: Nic Johnson
+ *
+ * Title: ShopManager.js
+ *
+ * Description: manages the upgrade shop for 
+ * 		MonsterArena
+ * 
+ *
+ * History:
+ * 		December 08, 2015: 
+ *  		-Date Created
+ */
 
 module.exports = (function()
 {
@@ -106,6 +117,14 @@ module.exports = (function()
 
 		this.descriptionText = document.getElementById('Description_Text');
 		this.descriptionText.textContent = "";
+	}
+
+	ShopManager.prototype.SetStatsManagerDelegates = function(attack, defense, health)
+	{
+		if (this.DEBUG) { console.log('ShopManager: StatsManager delegates being set.'); }
+		this.increaseAttack = attack;
+		this.increaseDefense = defense;
+		this.increaseHealth = health;
 	}
 
 	ShopManager.prototype.DoorPlus = function() 
@@ -220,6 +239,33 @@ module.exports = (function()
 	{
 		if (this.DEBUG) { console.log('ShopManager: PurchaseBtn Clicked'); }
 		console.log("Upgrade: " + this.Strings[this.currentUpgrade]);
+
+		switch (this.currentUpgrade)
+		{
+			case 0: // Door
+
+				break;
+
+			case 1: // Attack
+				this.increaseAttack();
+				break;
+
+			case 2: // Health
+				this.increaseHealth();
+				break;
+
+			case 3: // Defense
+				this.increaseDefense();
+				break;
+
+			case 4: // Other1
+
+				break;
+
+			case 5: // Other2
+
+				break;
+		}
 	}
 
 
