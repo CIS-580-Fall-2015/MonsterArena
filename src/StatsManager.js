@@ -62,21 +62,30 @@ module.exports = (function()
 	// Button Click Hooks //
 	////////////////////////
 	var attackPlus = document.getElementById('Attack_Plus');
+	var attackPlus1 = document.getElementById('attackPlus1');
+	var attackPlus2 = document.getElementById('attackPlus2');
 	attackPlus.addEventListener('click', AttackPlus);
 
 	var attackMinus = document.getElementById('Attack_Minus');
+	var attackMinus1 = document.getElementById('attackMinus1');
 	attackMinus.addEventListener('click', AttackMinus);
 
 	var defensePlus = document.getElementById('Defense_Plus');
+	var defensePlus1 = document.getElementById('defensePlus1');
+	var defensePlus2 = document.getElementById('defensePlus2');
 	defensePlus.addEventListener('click', DefensePlus);
 
 	var defenseMinus = document.getElementById('Defense_Minus');
+	var defenseMinus1 = document.getElementById('defenseMinus1');
 	defenseMinus.addEventListener('click', DefenseMinus);
 
 	var healthPlus = document.getElementById('Health_Plus');
+	var healthPlus1 = document.getElementById('healthPlus1');
+	var healthPlus2 = document.getElementById('healthPlus2');
 	healthPlus.addEventListener('click', HealthPlus);
 
 	var healthMinus = document.getElementById('Health_Minus');
+	var healthMinus1 = document.getElementById('healthMinus1');
 	healthMinus.addEventListener('click', HealthMinus);
 
 	var specialUp = document.getElementById('Special_Up');
@@ -99,6 +108,14 @@ module.exports = (function()
 			attackVal++;
 			attackText.textContent = attackVal;
 		}
+
+		if (attackVal == attackCap)
+		{
+			attackPlus1.setAttribute('stroke', '#b3b3b3');
+			attackPlus2.setAttribute('stroke', '#b3b3b3');
+		}
+
+		attackMinus1.setAttribute('stroke', "#000000");
 	}
 
 	function AttackMinus() 
@@ -109,6 +126,14 @@ module.exports = (function()
 			attackVal--;
 			attackText.textContent = attackVal;
 		}
+
+		if (attackVal == attackFloor)
+		{
+			attackMinus1.setAttribute('stroke', '#b3b3b3');
+		}
+
+		attackPlus1.setAttribute('stroke', '#000000');
+		attackPlus2.setAttribute('stroke', '#000000');
 	}
 
 	function DefensePlus() 
@@ -119,6 +144,14 @@ module.exports = (function()
 			defenseVal++;
 			defenseText.textContent = defenseVal;
 		}
+
+		if (defenseVal == defenseCap)
+		{
+			defensePlus1.setAttribute('stroke', '#b3b3b3');
+			defensePlus2.setAttribute('stroke', '#b3b3b3');
+		}
+
+		defenseMinus1.setAttribute('stroke', "#000000");
 	}
 
 	function DefenseMinus() 
@@ -129,6 +162,14 @@ module.exports = (function()
 			defenseVal--;
 			defenseText.textContent = defenseVal;
 		}
+
+		if (defenseVal == defenseFloor)
+		{
+			defenseMinus1.setAttribute('stroke', '#b3b3b3');
+		}
+
+		defensePlus1.setAttribute('stroke', '#000000');
+		defensePlus2.setAttribute('stroke', '#000000');
 	}
 
 	function HealthPlus() 
@@ -139,6 +180,14 @@ module.exports = (function()
 			healthVal++;
 			healthText.textContent = healthVal;
 		}
+
+		if (healthVal == healthCap)
+		{
+			healthPlus1.setAttribute('stroke', '#b3b3b3');
+			healthPlus2.setAttribute('stroke', '#b3b3b3');
+		}
+
+		healthMinus1.setAttribute('stroke', "#000000");
 	}
 
 
@@ -150,6 +199,14 @@ module.exports = (function()
 			healthVal--;
 			healthText.textContent = healthVal;
 		}
+
+		if (healthVal == healthFloor)
+		{
+			healthMinus1.setAttribute('stroke', '#b3b3b3');
+		}
+
+		healthPlus1.setAttribute('stroke', '#000000');
+		healthPlus2.setAttribute('stroke', '#000000');
 	}
 
 	function SpecialUp()
@@ -219,12 +276,21 @@ module.exports = (function()
 		};
 	}
 
-
+	function GetCurrentCaps()
+	{
+		return "Attack: " + attackCap +
+				"\nDefense: " + defenseCap +
+				"\nHealth: " + healthCap;
+	}
 
 	return {
 		GetCurrentStats: GetCurrentStats,
 		SpawnMonster: SpawnMonster,
-		SetSpawnDelegate: SetSpawnDelegate
+		SetSpawnDelegate: SetSpawnDelegate,
+		GetCurrentCaps: GetCurrentCaps,
+		IncreaseAttackCap: IncreaseAttackCap,
+		IncreaseDefenseCap: IncreaseDefenseCap,
+		IncreaseHealthCap: IncreaseHealthCap
 	}
 
 })();
