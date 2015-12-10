@@ -1,5 +1,16 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-
+/* Author: Nic Johnson
+ *
+ * Title: ShopManager.js
+ *
+ * Description: manages the upgrade shop for 
+ * 		MonsterArena
+ * 
+ *
+ * History:
+ * 		December 08, 2015: 
+ *  		-Date Created
+ */
 
 module.exports = (function()
 {
@@ -107,6 +118,17 @@ module.exports = (function()
 
 		this.descriptionText = document.getElementById('Description_Text');
 		this.descriptionText.textContent = "";
+	}
+
+	ShopManager.prototype.SetStatsManagerDelegates = function(attack, defense, health)
+	{
+		if (this.DEBUG) { console.log('ShopManager: StatsManager delegates being set.'); }
+		this.increaseAttack = attack;
+		//console.log(this.increaseAttack);
+		this.increaseDefense = defense;
+		//console.log(this.increaseDefense);
+		this.increaseHealth = health;
+		//console.log(this.increaseHealth);
 	}
 
 	ShopManager.prototype.DoorPlus = function() 
@@ -221,6 +243,33 @@ module.exports = (function()
 	{
 		if (this.DEBUG) { console.log('ShopManager: PurchaseBtn Clicked'); }
 		console.log("Upgrade: " + this.Strings[this.currentUpgrade]);
+
+		switch (this.currentUpgrade)
+		{
+			case 0: // Door
+
+				break;
+
+			case 1: // Attack
+				this.increaseAttack();
+				break;
+
+			case 2: // Health
+				this.increaseHealth();
+				break;
+
+			case 3: // Defense
+				this.increaseDefense();
+				break;
+
+			case 4: // Other1
+
+				break;
+
+			case 5: // Other2
+
+				break;
+		}
 	}
 
 
@@ -309,21 +358,30 @@ module.exports = (function()
 	// Button Click Hooks //
 	////////////////////////
 	var attackPlus = document.getElementById('Attack_Plus');
+	var attackPlus1 = document.getElementById('attackPlus1');
+	var attackPlus2 = document.getElementById('attackPlus2');
 	attackPlus.addEventListener('click', AttackPlus);
 
 	var attackMinus = document.getElementById('Attack_Minus');
+	var attackMinus1 = document.getElementById('attackMinus1');
 	attackMinus.addEventListener('click', AttackMinus);
 
 	var defensePlus = document.getElementById('Defense_Plus');
+	var defensePlus1 = document.getElementById('defensePlus1');
+	var defensePlus2 = document.getElementById('defensePlus2');
 	defensePlus.addEventListener('click', DefensePlus);
 
 	var defenseMinus = document.getElementById('Defense_Minus');
+	var defenseMinus1 = document.getElementById('defenseMinus1');
 	defenseMinus.addEventListener('click', DefenseMinus);
 
 	var healthPlus = document.getElementById('Health_Plus');
+	var healthPlus1 = document.getElementById('healthPlus1');
+	var healthPlus2 = document.getElementById('healthPlus2');
 	healthPlus.addEventListener('click', HealthPlus);
 
 	var healthMinus = document.getElementById('Health_Minus');
+	var healthMinus1 = document.getElementById('healthMinus1');
 	healthMinus.addEventListener('click', HealthMinus);
 
 	var specialUp = document.getElementById('Special_Up');
@@ -346,6 +404,14 @@ module.exports = (function()
 			attackVal++;
 			attackText.textContent = attackVal;
 		}
+
+		if (attackVal == attackCap)
+		{
+			attackPlus1.setAttribute('stroke', '#b3b3b3');
+			attackPlus2.setAttribute('stroke', '#b3b3b3');
+		}
+
+		attackMinus1.setAttribute('stroke', "#000000");
 	}
 
 	function AttackMinus() 
@@ -356,6 +422,14 @@ module.exports = (function()
 			attackVal--;
 			attackText.textContent = attackVal;
 		}
+
+		if (attackVal == attackFloor)
+		{
+			attackMinus1.setAttribute('stroke', '#b3b3b3');
+		}
+
+		attackPlus1.setAttribute('stroke', '#000000');
+		attackPlus2.setAttribute('stroke', '#000000');
 	}
 
 	function DefensePlus() 
@@ -366,6 +440,14 @@ module.exports = (function()
 			defenseVal++;
 			defenseText.textContent = defenseVal;
 		}
+
+		if (defenseVal == defenseCap)
+		{
+			defensePlus1.setAttribute('stroke', '#b3b3b3');
+			defensePlus2.setAttribute('stroke', '#b3b3b3');
+		}
+
+		defenseMinus1.setAttribute('stroke', "#000000");
 	}
 
 	function DefenseMinus() 
@@ -376,6 +458,14 @@ module.exports = (function()
 			defenseVal--;
 			defenseText.textContent = defenseVal;
 		}
+
+		if (defenseVal == defenseFloor)
+		{
+			defenseMinus1.setAttribute('stroke', '#b3b3b3');
+		}
+
+		defensePlus1.setAttribute('stroke', '#000000');
+		defensePlus2.setAttribute('stroke', '#000000');
 	}
 
 	function HealthPlus() 
@@ -386,6 +476,14 @@ module.exports = (function()
 			healthVal++;
 			healthText.textContent = healthVal;
 		}
+
+		if (healthVal == healthCap)
+		{
+			healthPlus1.setAttribute('stroke', '#b3b3b3');
+			healthPlus2.setAttribute('stroke', '#b3b3b3');
+		}
+
+		healthMinus1.setAttribute('stroke', "#000000");
 	}
 
 
@@ -397,6 +495,14 @@ module.exports = (function()
 			healthVal--;
 			healthText.textContent = healthVal;
 		}
+
+		if (healthVal == healthFloor)
+		{
+			healthMinus1.setAttribute('stroke', '#b3b3b3');
+		}
+
+		healthPlus1.setAttribute('stroke', '#000000');
+		healthPlus2.setAttribute('stroke', '#000000');
 	}
 
 	function SpecialUp()
@@ -466,12 +572,21 @@ module.exports = (function()
 		};
 	}
 
-
+	function GetCurrentCaps()
+	{
+		return "Attack: " + attackCap +
+				"\nDefense: " + defenseCap +
+				"\nHealth: " + healthCap;
+	}
 
 	return {
 		GetCurrentStats: GetCurrentStats,
 		SpawnMonster: SpawnMonster,
-		SetSpawnDelegate: SetSpawnDelegate
+		SetSpawnDelegate: SetSpawnDelegate,
+		GetCurrentCaps: GetCurrentCaps,
+		IncreaseAttackCap: IncreaseAttackCap,
+		IncreaseDefenseCap: IncreaseDefenseCap,
+		IncreaseHealthCap: IncreaseHealthCap
 	}
 
 })();
@@ -584,6 +699,9 @@ window.onload = function()
         EntityManager = require('./entity_manager.js');
     ShopManager = require('./ShopManager.js');
     StatsManager = require('./StatsManager.js');
+
+    ShopManager.SetStatsManagerDelegates(StatsManager.IncreaseAttackCap, 
+                                    StatsManager.IncreaseDefenseCap, StatsManager.IncreaseHealthCap);
 
 
     var load = function(sm) {
