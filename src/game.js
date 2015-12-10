@@ -12,6 +12,9 @@ window.onload = function()
     ShopManager = require('./ShopManager.js');
     StatsManager = require('./StatsManager.js');
 
+    ShopManager.SetStatsManagerDelegates(StatsManager.IncreaseAttackCap, 
+                                    StatsManager.IncreaseDefenseCap, StatsManager.IncreaseHealthCap);
+
 
     var load = function(sm) {
       EntityManager.initialize();
