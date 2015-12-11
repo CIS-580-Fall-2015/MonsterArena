@@ -22,6 +22,7 @@
 	<br>
 	The Puncher Sprite Sheet can be found <a href="http://opengameart.org/content/cat-fighter-sprite-sheet" title="Puncher">here</a>.
 	<br>
+	All Boss Sprites are public domain.
 </div>
 
 BORDER VECTOR GRAPHICS:
