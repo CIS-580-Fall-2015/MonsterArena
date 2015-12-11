@@ -35,5 +35,6 @@ Keep compiling simple!
 * Nic Johnson (njj@ksu.edu)
 * Richard Petrie (rap1011@ksu.edu)
 * David Barnes III (dbarnes3@ksu.edu)
+* E.N. Speer (ispeer@ksu.edu)
 
 
