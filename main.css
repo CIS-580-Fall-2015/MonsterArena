@@ -9,9 +9,14 @@
   float: left;
 }
 #toplevel #arena {
-  width: 50%;
-  height: 595px;
+  width: 590px;
+  height: 340px;
   float: left;
+  background-color: red;
+  background-image: url('img/arena3.png');
+  background-size: contain;
+  margin-right: 10px;
+  margin-top: 127.5px;
 }
 #toplevel #shop {
   width: 25%;
