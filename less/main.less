@@ -1,4 +1,8 @@
 @default_height: 595px;
+@img_height: 340px;
+@img_width: 590px;
+@top_padding: ((@default_height - @img_height) / 2);
+
 #toplevel
 {
 	width: 100%;
@@ -14,9 +18,14 @@
 
 	#arena
 	{
-		width: 50%;
-		height: @default_height;
+		width: @img_width;
+		height: @img_height;
 		float: left;
+		background-color: red;
+		background-image: url('./img/arena3.png');
+		background-size: contain;
+		margin-right: 10px;
+		margin-top: @top_padding;
 	}
 
 	#shop
