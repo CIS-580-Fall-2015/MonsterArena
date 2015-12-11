@@ -793,8 +793,8 @@ module.exports = (function() {
     this.specials = specials;
     this.state = 0;
 	
-	var cx = 100;
-	var cy = 100;
+	var cx = document.getElementById('svgArea').width.baseVal.value/2.0;
+	var cy =  document.getElementById('svgArea').height.baseVal.value/2.0;
 	
     // Create an animations property, with arrays for each direction of animations.
     this.animations = {
