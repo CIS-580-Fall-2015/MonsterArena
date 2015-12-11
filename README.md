@@ -12,21 +12,25 @@ Keep compiling simple!
 ## TODO
 
 * Index page  
-    * Need to incorporate arena area between menus
+    * ~~Need to incorporate arena area between menus~~
+    * fix arena sizing
 * Menu states
 * ~~Stats UI~~
 * ~~Shop UI~~ (mostly)  
     * ~~Selection highlighting~~
-    * Assigning delegates to handle updating
+    * ~~Assigning delegates to handle updating~~ (paritally)
     * Final two upgrade options
+    * Cost grey/available
 * ~~UI Design~~
 * UI Icons
 * Monster sprites
-   *Monster Movment
-   *MOnster Animation
-   *Monster UPdating/Rendering
+   * Monster Movment
+   * Monster Animation
+   * Monster Updating/Rendering
+   * Monster Spawning
 * Monster/Hero interaction
-* Everything ;)
+* Hero Spawning
+
 
 ## Contributors
 
