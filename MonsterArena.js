@@ -842,7 +842,7 @@ module.exports = (function() {
 			this.angle = 225;
 		}
 	}
-	elseif(this.y<cy)
+	else if(this.y<cy)
 	{
 		this.angle = 45;
 	}
