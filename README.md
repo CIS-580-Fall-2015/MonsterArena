@@ -22,6 +22,9 @@ Keep compiling simple!
 * ~~UI Design~~
 * UI Icons
 * Monster sprites
+   *Monster Movment
+   *MOnster Animation
+   *Monster UPdating/Rendering
 * Monster/Hero interaction
 * Everything ;)
 
