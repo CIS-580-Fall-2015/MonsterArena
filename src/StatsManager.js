@@ -272,7 +272,7 @@ module.exports = (function()
 			attack: attackVal,
 			defense: defenseVal,
 			health: healthVal,
-			special: specialContent
+			special: specialContent,
 		};
 	}
 
@@ -290,7 +290,7 @@ module.exports = (function()
 		GetCurrentCaps: GetCurrentCaps,
 		IncreaseAttackCap: IncreaseAttackCap,
 		IncreaseDefenseCap: IncreaseDefenseCap,
-		IncreaseHealthCap: IncreaseHealthCap
+		IncreaseHealthCap: IncreaseHealthCap,
 	};
 
 })();
