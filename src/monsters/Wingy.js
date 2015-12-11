@@ -13,19 +13,19 @@ module.exports = (function() {
 
   // The right walking Wingy spritesheet
   var WingyWalkRight = new Image();
-  WingyWalkRight.src = './img/monsters/Wingy_Walk_Right.png';
+  WingyWalkRight.src = './img/monsters/Wingy/Wingy_Walk_Right.png';
 
   // The left walking Wingy spritesheet
   var WingyWalkLeft = new Image();
-  WingyWalkLeft.src = "./img/monsters/Wingy_Walk_Left.png";
+  WingyWalkLeft.src = "./img/monsters/Wingy/Wingy_Walk_Left.png";
 
   // The right attacking Wingy spritesheet
   var WingyAttackRight = new Image();
-  WingyAttackRight.src = "./img/monsters/Wingy_Attack_Right.png";
+  WingyAttackRight.src = "./img/monsters/Wingy/Wingy_Attack_Right.png";
 
   // The left attacking Wingy spritesheet
   var WingyAttackLeft = new Image();
-  WingyAttackLeft.src = "./img/monsters/Wingy_Attack_Left.png";
+  WingyAttackLeft.src = "./img/monsters/Wingy/Wingy_Attack_Left.png";
 
   function Wingy()
   {

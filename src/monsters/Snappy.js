@@ -13,19 +13,19 @@ module.exports = (function() {
 
   // The right walking Snappy spritesheet
   var SnappyWalkRight = new Image();
-  SnappyWalkRight.src = './img/monsters/Snappy_Walk_Right.png';
+  SnappyWalkRight.src = './img/monsters/Snappy/Snappy_Walk_Right.png';
 
   // The left walking Snappy spritesheet
   var SnappyWalkLeft = new Image();
-  SnappyWalkLeft.src = "./img/monsters/Snappy_Walk_Left.png";
+  SnappyWalkLeft.src = "./img/monsters/Snappy/Snappy_Walk_Left.png";
 
   // The right attacking Snappy spritesheet
   var SnappyAttackRight = new Image();
-  SnappyAttackRight.src = "./img/monsters/Snappy_Attack_Right.png";
+  SnappyAttackRight.src = "./img/monsters/Snappy/Snappy_Attack_Right.png";
 
   // The left attacking Snappy spritesheet
   var SnappyAttackLeft = new Image();
-  SnappyAttackLeft.src = "./img/monsters/Snappy_Attack_Left.png";
+  SnappyAttackLeft.src = "./img/monsters/Snappy/Snappy_Attack_Left.png";
 
   function Snappy()
   {
