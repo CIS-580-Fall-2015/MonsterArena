@@ -52,8 +52,12 @@ module.exports = (function()
 		////////////////////////////////
 		var self = this;
 
+		////////////////
+		// Properties //
+		////////////////
 		this.currentSelected = undefined;
 		this.currentUpgrade = undefined;
+		this.totalGold = 0;
 
 
 		//////////////////////
@@ -116,8 +120,23 @@ module.exports = (function()
 		// =-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 		this.descriptionText = document.getElementById("Description_Text");
-		this.descriptionText.textContent = "";
+		
+		this.goldText = document.getElementById('Gold_Text');
+		this.doorText = document.getElementById('Door_Cost');
+		this.attackText = document.getElementById('Attack_Cost');
+		this.defenseText = document.getElementById('Defense_Cost');
+		this.healthText = document.getElementById('Health_Cost');
+		this.otherOneText = document.getElementById('Other1_Cost');
+		this.otherTwoText = document.getElementById('Other2_Cost');
+
+		this.SetGoldText();
 	}
+
+	ShopManager.prototype.SetGoldText = function()
+	{	
+		this.goldText.textContent = "Gold: " + this.totalGold;
+	};
+
 
 	ShopManager.prototype.SetStatsManagerDelegates = function(attack, defense, health)
 	{

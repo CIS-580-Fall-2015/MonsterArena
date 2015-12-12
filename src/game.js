@@ -9,8 +9,8 @@ window.onload = function()
     var Hero = require('./hero.js'),
         Monster = require('./monster.js');
         EntityManager = require('./entity_manager.js');
-    ShopManager = require('./ShopManager.js');
-    StatsManager = require('./StatsManager.js');
+    ShopManager = require('./shop_manager.js');
+    StatsManager = require('./stats_manager.js');
 
     ShopManager.SetStatsManagerDelegates(StatsManager.IncreaseAttackCap, 
                                     StatsManager.IncreaseDefenseCap, StatsManager.IncreaseHealthCap);
