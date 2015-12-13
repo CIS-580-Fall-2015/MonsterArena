@@ -50,16 +50,16 @@
  * Version Date				Version Number kb-4RGB-pixels() 	Comment
  * -----------				---------------------------------	-------
  * ad-2015-12-09 23:50:00	(0,0,1)(0,7,231)(1,12,9)(23,50,0)	AudioManager created
- *							00-00-01 | 00-07-E7 | 01-0C-09 | 17-32-00 
+ *					00-00-01 | 00-07-E7 | 01-0C-09 | 17-32-00 
  *
  * ad-2015-12-10 20:07:00	(0,0,1)(0,7,231)(1,12,10)(20,7,0)	Design outline
- *							00-00-01 | 00-07-E7 | 01-0C-0A | 14-07-00 
+ *					00-00-01 | 00-07-E7 | 01-0C-0A | 14-07-00 
  *
  * ad-2015-12-11 19:17:00	(0,0,1)(0,7,231)(1,12,11)(19,17,0)	Working Version
- *							00-00-01 | 00-07-E7 | 01-0C-0b | 13-10-00
+ *					00-00-01 | 00-07-E7 | 01-0C-0b | 13-10-00
  *
  * ad-2015-12-12 17:49:00	(0,0,1)(0,7,231)(1,12,12)(17,49,0)	Clean up
- *							00-00-01 | 00-07-E7 | 01-0C-0C | 11-31-00
+ *					00-00-01 | 00-07-E7 | 01-0C-0C | 11-31-00
  * =================
  * File Dependencies
  * =================
@@ -396,8 +396,10 @@ module.exports = (function() {
 
   var Hero = require('./hero.js');
   var Door = require('./spawner');
+  var Monster = require('./monster.js');
   var doors = [];
   var monsters = [];
+  var unlocked_doors = 1;
 
   var hero;
 
@@ -409,28 +411,45 @@ module.exports = (function() {
     exp: [0, 1.2]
   };
 
-  function initialize() {
-    //TODO spawn doors
+  var ARENA_WIDTH; //TODO
+  var ARENA_HEIGHT; //TODO
+  var OFFSET = 64;
 
-    hero = new Hero(HERO_STATS, this);
+  function initialize() {
+    doors[0] = new Door(ARENA_WIDTH / 2, OFFSET); // North
+    doors[1] = new Door(ARENA_WIDTH - OFFSET, ARENA_HEIGHT / 2); // East
+    doors[2] = new Door(ARENA_WIDTH / 2, ARENA_HEIGHT - OFFSET); //South
+    doors[3] = new Door(OFFSET, ARENA_HEIGHT / 2); // West
+    doors[4] = new Door(ARENA_WIDTH * 0.75, ARENA_HEIGHT * 0.25); // North-East
+    doors[5] = new Door(ARENA_WIDTH * 0.75, ARENA_HEIGHT * 0.75); // South-East
+    doors[6] = new Door(ARENA_WIDTH * 0.25, ARENA_HEIGHT * 0.75); // South-West
+    doors[7] = new Door(ARENA_WIDTH * 0.25, ARENA_HEIGHT * 0.25); // North-West
+
+    hero = new Hero(HERO_STATS, ARENA_WIDTH / 2 - 32, ARENA_HEIGHT / 2 - 32, this);
   }
 
   function update() {
-    //TODO generate information to render
+    for (var i = 0; i < monsters.length; i++) {
+      monsters[i].doTurn();
+    }
   }
 
-  //TODO open doors upgrade
+  function open_door() {
+    if (unlocked_doors < doors.length) {
+      unlocked_doors++;
+    }
+  }
 
   function spawn_monster(stats) {
     var d = null;
-    for (var i = 0; i > 8; i++) {
-      if (doors[i].open && doors[i].avaliable) {
+    for (var i = 1; i > unlocked_doors; i++) {
+      if (doors[i].avaliable) {
         d = doors[i];
         break;
       }
     }
     if (d) {
-      var m = new Monster(stats, d);
+      var m = new Monster(stats, i);
       d.avaliable = false;
       monsters.push(m);
     }
@@ -439,52 +458,53 @@ module.exports = (function() {
   return {
     initialize: initialize,
     update: update,
+    open_door: open_door,
     spawn_monster: spawn_monster,
   };
 
 }());
 
-},{"./hero.js":5,"./spawner":8}],4:[function(require,module,exports){
-window.onload = function()
-{
+},{"./hero.js":5,"./monster.js":6,"./spawner":8}],4:[function(require,module,exports){
+window.onload = function() {
 
-    // The width & height of the screen
-    SCREEN_WIDTH = 1280;
-    SCREEN_HEIGHT = 720;
+  // The width & height of the screen
+  SCREEN_WIDTH = 1280;
+  SCREEN_HEIGHT = 720;
 
-    // Module variables
-    var Hero = require('./hero.js'),
-        Monster = require('./monster.js');
-        EntityManager = require('./entity_manager.js');
-    ShopManager = require('./shop_manager.js');
-    StatsManager = require('./stats_manager.js');
-	AudioManager = require('./AudioManager.js');		
+  // Module variables
+  var Hero = require('./hero.js'),
+  EntityManager = require('./entity_manager.js');
+  ShopManager = require('./shop_manager.js');
+  StatsManager = require('./stats_manager.js');
+  AudioManager = require('./AudioManager.js');
 
-
-    ShopManager.SetStatsManagerDelegates(StatsManager.IncreaseAttackCap, 
-                                    StatsManager.IncreaseDefenseCap, StatsManager.IncreaseHealthCap);
-									
-	AudioManager.playIdleMusic();
+  StatsManager.SetSpawnDelegate = EntityManager.spawn_monster;
 
 
-    var load = function(sm) {
-      EntityManager.initialize();
-        //TODO Menu/game state
-        //TODO start game loop
-    };
+  ShopManager.SetStatsManagerDelegates(StatsManager.IncreaseAttackCap,
+    StatsManager.IncreaseDefenseCap, StatsManager.IncreaseHealthCap);
 
-    var update = function(elapsedTime) {
-        //TODO
-    };
+  AudioManager.playIdleMusic();
 
 
-    var render = function() {
-        //TODO
-    };
+  var load = function(sm) {
+    EntityManager.initialize();
+    //TODO Menu/game state
+    //TODO start game loop
+  };
+
+  var update = function(elapsedTime) {
+    EntityManager.update();
+  };
+
+
+  var render = function() {
+    //TODO
+  };
 
 }
 
-},{"./AudioManager.js":1,"./entity_manager.js":3,"./hero.js":5,"./monster.js":6,"./shop_manager.js":7,"./stats_manager.js":9}],5:[function(require,module,exports){
+},{"./AudioManager.js":1,"./entity_manager.js":3,"./hero.js":5,"./shop_manager.js":7,"./stats_manager.js":9}],5:[function(require,module,exports){
 module.exports = (function(){
   var Entity = require('./entity.js');
 
@@ -492,7 +512,7 @@ module.exports = (function(){
 
 
 
-  function Hero(stats, EntityManager){
+  function Hero(stats, x, y, EntityManager){
     this.health = stats.health[0];
     this.health_scale = stats.health[1];
     this.attack = stats.attack[0];
@@ -505,9 +525,9 @@ module.exports = (function(){
     this.exp = 0;
     this.req_exp = 10;
     this.level = 0;
-    //TODO place hero
-    //this.x =
-    //this.y =
+
+    this.x = x;
+    this.y = y;
   }
 
   Hero.prototype.levelup = function() {
@@ -520,9 +540,8 @@ module.exports = (function(){
 
   Hero.prototype.attacked = function(amount) {
     //Temporary
-    var damage = amount - this.defense;
+    var damage = amount - this.defense / 2;
     this.health -= damage;
-    EntityManager.mod_blood(damage);
     if (this.health >= 0) {
       //TODO die
     }
@@ -548,11 +567,11 @@ module.exports = (function() {
 
   Monster.prototype = new Entity();
 
-  function Monster(stats, door) {
+  function Monster(stats, doorID) {
     this.health = stats.health;
     this.attack = stats.attack;
     this.defense = stats.defense;
-    this.door = door;
+    this.doorID = doorID;
     this.specials = stats.specials;
     this.state = 0;
 
@@ -592,10 +611,10 @@ module.exports = (function() {
     } else if (this.y < cy) {
       this.angle = 45;
     } else {
-      this.angle = 315
+      this.angle = 315;
     }
     this.angle = this.angle * Math.PI / 180;
-    if (this.angle == 0) {
+    if (this.angle === 0) {
       this.dx = -1;
       this.dy = 0;
     } else if (this.angle == 45) {
@@ -798,7 +817,6 @@ module.exports = (function()
 		this.goldText.textContent = "Gold: " + this.totalGold;
 	};
 
-<<<<<<< HEAD
 	/**
 	 * Function: SetDoorText
 	 * 
@@ -858,8 +876,6 @@ module.exports = (function()
 		this.totalGold += val;
 	};
 
-=======
->>>>>>> origin/master
 
 	ShopManager.prototype.SetStatsManagerDelegates = function(attack, defense, health)
 	{
@@ -1033,18 +1049,12 @@ module.exports = (function()
 
 
 
-<<<<<<< HEAD
-},{}],7:[function(require,module,exports){
-=======
 },{}],8:[function(require,module,exports){
->>>>>>> origin/master
 module.exports = (function() {
 
-  function Door(x, y, id) {
+  function Door(x, y) {
     this.x = x;
     this.y = y;
-    this.id = id;
-    this.open = false;
     this.avaliable = false;
   }
 
@@ -1060,10 +1070,10 @@ module.exports = (function() {
  * Description: StatsManger for monster stats UI
  * 			in Monster Arena for CIS 580 final
  * 			project
- * 
+ *
  *
  * History:
- * 		December 06, 2015: 
+ * 		December 06, 2015:
  *  		-Date Created
  *  	December 7, 2015:
  *  		-Redid implementation away from Entity-style
@@ -1071,7 +1081,7 @@ module.exports = (function() {
  */
 module.exports = (function()
 {
-	
+
 	//////////////////////////////////////
 	// Value for outputting debug code. //
 	//////////////////////////////////////
@@ -1173,7 +1183,7 @@ module.exports = (function()
 		attackMinus1.setAttribute("stroke", "#000000");
 	}
 
-	function AttackMinus() 
+	function AttackMinus()
 	{
 		if (DEBUG) { console.log("StatsManager: Attack -1 Clicked"); }
 		if (attackVal > attackFloor)
@@ -1191,7 +1201,7 @@ module.exports = (function()
 		attackPlus2.setAttribute("stroke", "#000000");
 	}
 
-	function DefensePlus() 
+	function DefensePlus()
 	{
 		if (DEBUG) { console.log("StatsManager: Defense +1 Clicked"); }
 		if (defenseVal < defenseCap)
@@ -1209,7 +1219,7 @@ module.exports = (function()
 		defenseMinus1.setAttribute("stroke", "#000000");
 	}
 
-	function DefenseMinus() 
+	function DefenseMinus()
 	{
 		if (DEBUG) { console.log("StatsManager: Defense -1 Clicked"); }
 		if (defenseVal > defenseFloor)
@@ -1227,7 +1237,7 @@ module.exports = (function()
 		defensePlus2.setAttribute("stroke", "#000000");
 	}
 
-	function HealthPlus() 
+	function HealthPlus()
 	{
 		if (DEBUG) { console.log("StatsManager: Health +1 Clicked"); }
 		if (healthVal < healthCap)
@@ -1246,7 +1256,7 @@ module.exports = (function()
 	}
 
 
-	function HealthMinus() 
+	function HealthMinus()
 	{
 		if (DEBUG) { console.log("StatsManager: Health -1 Clicked."); }
 		if (healthVal > healthFloor)
@@ -1310,13 +1320,13 @@ module.exports = (function()
 	function SpawnMonster()
 	{
 		if (DEBUG) { console.log("StatsManager: SpawnMonster Clicked"); }
-		if (spawnDelegate == undefined)
+		if (spawnDelegate === undefined)
 		{
 			console.log("Spawn Delegate not set.");
 		}
 		else
 		{
-			spawnDelegate();
+			spawnDelegate(GetCurrentStats());
 		}
 	}
 
@@ -1349,14 +1359,5 @@ module.exports = (function()
 	};
 
 })();
-
-
-
-
-
-
-
-
-
 
 },{}]},{},[4]);
