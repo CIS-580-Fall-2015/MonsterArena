@@ -432,8 +432,24 @@ module.exports = (function() {
   }
 
   function update() {
+    var del = false;
     for (var i = 0; i < monsters.length; i++) {
-      monsters[i].doTurn();
+      var e = monsters[i].doTurn();
+      if (e >= 0) {
+        del = true;
+        hero.addExp(e);
+        delete monsters[i];
+      }
+    }
+    if (del) {
+      var undef;
+      var temp = [];
+      for (var i = 0; i < monsters.length; i++) {
+        if (monsters[i] !== undef) {
+          temp.push(arr[i])
+        }
+      }
+      monsters = temp;
     }
   }
 
@@ -452,8 +468,7 @@ module.exports = (function() {
       }
     }
     if (d) {
-      var m = new Monster(stats, i);
-      d.avaliable = false;
+      var m = new Monster(stats, d);
       monsters.push(m);
     }
   }
@@ -535,6 +550,10 @@ module.exports = (function(){
 	document.getElementById('health').max = this.health;
   }
 
+  Hero.prototype.addExp = function(amount) {
+    this.exp += amount;
+  }
+
   Hero.prototype.levelup = function() {
     this.health *= this.health_scale;
     this.attack *= this.attack_scale;
@@ -574,13 +593,17 @@ module.exports = (function() {
 
   Monster.prototype = new Entity();
 
-  function Monster(stats, doorID) {
+  function Monster(stats, door, isBoss) {
     this.health = stats.health;
     this.attack = stats.attack;
     this.defense = stats.defense;
-    this.doorID = doorID;
+    this.door = door;
+    this.door.avaliable = false;
     this.specials = stats.specials;
     this.state = 0;
+    this.x = this.door.x;
+    this.y = this.door.y;
+    this.isBoss = isBoss;
 
     this.cx = document.getElementById('svgArea').width.baseVal.value / 2.0;
     this.cy = document.getElementById('svgArea').height.baseVal.value / 2.0;
@@ -600,40 +623,40 @@ module.exports = (function() {
     if (this.x == this.cx) {
       if (this.y > this.cy) {
         this.angle = 270;
-		this.dx = 0;
-		this.dy = -1;
+        this.dx = 0;
+        this.dy = -1;
       } else {
         this.angle = 90;
-		this.dx = 0;
-		this.dy = 1;
+        this.dx = 0;
+        this.dy = 1;
       }
     } else if (this.y == this.cy) {
       if (this.x > this.cx) {
-        this.angle = 0*Math.PI/180;
-		this.dx = -1;
-		this.dy = 0;
+        this.angle = 0 * Math.PI / 180;
+        this.dx = -1;
+        this.dy = 0;
       } else {
         this.angle = 180;
-		this.dx = 1;
-		this.dy = 0;
+        this.dx = 1;
+        this.dy = 0;
       }
     } else if (this.x < this.cx) {
       if (this.y < this.cy) {
         this.angle = 135;
-		this.dx = Math.sqrt(2) / 2;
-		this.dy = Math.sqrt(2) / 2;
+        this.dx = Math.sqrt(2) / 2;
+        this.dy = Math.sqrt(2) / 2;
       } else {
         this.angle = 225;
-		this.dx = Math.sqrt(2) / 2;
-		this.dy = -Math.sqrt(2) / 2;
+        this.dx = Math.sqrt(2) / 2;
+        this.dy = -Math.sqrt(2) / 2;
       }
     } else if (this.y < this.cy) {
       this.angle = 45;
-	  this.dx = -Math.sqrt(2) / 2;
+      this.dx = -Math.sqrt(2) / 2;
       this.dy = Math.sqrt(2) / 2;
     } else {
       this.angle = 315;
-	  this.dx = -Math.sqrt(2) / 2;
+      this.dx = -Math.sqrt(2) / 2;
       this.dy = -Math.sqrt(2) / 2;
     }
   }
@@ -643,40 +666,42 @@ module.exports = (function() {
     this.health -= damage - this.defense;
     if (this.health >= 0) {
       //TODO die
-      return this.health + this.attack + this.defense;
+      this.door.avaliable = true;
+      if (this.isBoss) {
+        return 0;
+      } else {
+        return this.health + this.attack + this.defense;
+      }
     }
-    return 0;
+    return -1;
   };
 
   //n is the number of frames*numberofpixelsperframe since last update (dx & dy calculated for move of 1 pixel)
   Monster.prototype.doTurn = function(n) {
-	  //Checks Range and does movment
+    //Checks Range and does movment
     //Check if movement needed based on which direction it is coming in from.
     var a = math.floor(this.angle);
-	if(a==135||a==180||a==225){
-		if(this.x <=this.cx-96){
-			this.x += n * this.dx;
-			this.y += n * this.dy;
-		}
-	}
-	else if(a==45||a==0||a==315){
-		if(this.x>=this.cx+32){
-			this.x += n * this.dx;
-			this.y += n * this.dy;
-		}
-	}
-    else if(a==90){
-		if(this.y<=this.cy-96){
-			this.x += n * this.dx;
-			this.y += n * this.dy;
-		}
-	}
-	else if(a==270){
-		if(this.y>=this.cy+32){
-			this.x += n * this.dx;
-			this.y += n * this.dy;
-		}
-	}
+    if (a == 135 || a == 180 || a == 225) {
+      if (this.x <= this.cx - 96) {
+        this.x += n * this.dx;
+        this.y += n * this.dy;
+      }
+    } else if (a == 45 || a == 0 || a == 315) {
+      if (this.x >= this.cx + 32) {
+        this.x += n * this.dx;
+        this.y += n * this.dy;
+      }
+    } else if (a == 90) {
+      if (this.y <= this.cy - 96) {
+        this.x += n * this.dx;
+        this.y += n * this.dy;
+      }
+    } else if (a == 270) {
+      if (this.y >= this.cy + 32) {
+        this.x += n * this.dx;
+        this.y += n * this.dy;
+      }
+    }
 
     //TODO specials
 
@@ -719,7 +744,7 @@ module.exports = (function()
 			ATTACK: 1,
 			HEALTH: 2,
 			DEFENSE: 3,
-			OTHER1: 4,
+			SPECIAL: 4,
 			OTHER2: 5,
 		};
 		Object.freeze(this.Upgrades);
@@ -730,7 +755,7 @@ module.exports = (function()
 			1: "ATTACK",
 			2: "HEALTH",
 			3: "DEFENSE",
-			4: "OTHER1",
+			4: "SPECIAL",
 			5: "OTHER2",
 		};
 		Object.freeze(this.Strings);
@@ -749,13 +774,15 @@ module.exports = (function()
 		this.currentUpgrade = undefined;
 		this.totalGold = 0;
 		this.defaultAddition = 100;
+		this.specialProgression = ["taunt_special", "critical_special", "magic_special"];
+		this.specialIndex = 0;
 
 		// Flags for greying out shop items
 		this.defenseSelectable = false;
 		this.doorSelectable = false;
 		this.attackSelectable = false;
 		this.healthSelectable = false;
-		this.otherOneSelectable = false;
+		this.specialSelectable = false;
 		this.otherTwoSelectable = false;
 		this.purchaseClickable = false;
 
@@ -764,7 +791,7 @@ module.exports = (function()
 		this.defenseCost = 500;
 		this.attackCost = 500;
 		this.healthCost = 500; 
-		this.otherOneCost = 500;
+		this.specialCost = 500;
 		this.otherTwoCost = 500;
 
 
@@ -804,12 +831,11 @@ module.exports = (function()
 			self.DefensePlus();
 		});
 
-		this.otherOne = document.getElementById("Other1");
-		this.otherOne.descText = "Desc of Other 1";
-		this.otherOne.selected = document.getElementById("Other1_Selected");
-		this.otherOne.addEventListener("click", function(e)
+		this.special = document.getElementById("Special");
+		this.special.selected = document.getElementById("Special_Selected");
+		this.special.addEventListener("click", function(e)
 		{
-			self.OtherOne();
+			self.Special();
 		});
 
 		this.otherTwo = document.getElementById("Other2");
@@ -825,6 +851,8 @@ module.exports = (function()
 		{
 			self.PurchaseBtn();
 		});
+
+		this.currentSpecial = document.getElementById(this.specialProgression[this.specialIndex]);
 
 
 		// =-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -846,8 +874,8 @@ module.exports = (function()
 		this.healthText = document.getElementById("Health_Cost");
 		this.healthText.textContent = this.healthCost;
 
-		this.otherOneText = document.getElementById("Other1_Cost");
-		this.otherOneText.textContent = this.otherOneCost;
+		this.specialText = document.getElementById("Special_Cost");
+		this.specialText.textContent = this.specialCost;
 
 		this.otherTwoText = document.getElementById("Other2_Cost");
 		this.otherTwoText.textContent = this.otherTwoCost;
@@ -856,7 +884,7 @@ module.exports = (function()
 		this.attackGrey = document.getElementById("Attack_Grey");
 		this.healthGrey = document.getElementById("Health_Grey");
 		this.defenseGrey = document.getElementById("Defense_Grey");
-		this.otherOneGrey = document.getElementById("Other1_Grey");
+		this.specialGrey = document.getElementById("Special_Grey");
 		this.otherTwoGrey = document.getElementById("Other2_Grey");
 		this.purchaseGrey = document.getElementById("Purchase_Grey");
 
@@ -900,10 +928,10 @@ module.exports = (function()
 		this.healthText.textContent = this.healthCost;
 	};
 
-	ShopManager.prototype.SetOtherOneCost = function (val)
+	ShopManager.prototype.SetSpecialCost = function (val)
 	{
-		this.otherOneCost = val;
-		this.otherOneText.textContent = this.otherOneCost;
+		this.specialCost = val;
+		this.specialText.textContent = this.specialCost;
 	};
 
 	ShopManager.prototype.SetOtherTwoCost = function (val)
@@ -949,10 +977,10 @@ module.exports = (function()
 			this.defenseGrey.setAttribute("opacity", "0");
 			this.defenseSelectable = true;
 		}
-		if (this.totalGold >= this.otherOneCost)
+		if (this.totalGold >= this.specialCost)
 		{
-			this.otherOneGrey.setAttribute("opacity", "0");
-			this.otherOneSelectable = true;
+			this.specialGrey.setAttribute("opacity", "0");
+			this.specialSelectable = true;
 		}
 		if (this.totalGold >= this.otherTwoCost)
 		{
@@ -1095,23 +1123,23 @@ module.exports = (function()
 		}
 	};
 
-	ShopManager.prototype.OtherOne = function() 
+	ShopManager.prototype.Special = function() 
 	{
-		if (this.DEBUG) { console.log("ShopManager: Other1 Clicked"); }
-		this.descriptionText.textContent = this.otherOne.descText;
+		if (this.DEBUG) { console.log("ShopManager: Special Clicked"); }
+		this.descriptionText.textContent = this.currentSpecial.getAttribute('desc');
 		this.currentUpgrade = this.Upgrades.OTHER1;
 		if (this.currentSelected != undefined)
 		{
 			this.currentSelected.setAttribute("stroke-opacity", "0");
-			this.currentSelected = this.otherOne.selected;
+			this.currentSelected = this.special.selected;
 			this.currentSelected.setAttribute("stroke-opacity", "100");
 		}
 		else
 		{
-			this.currentSelected = this.otherOne.selected;
+			this.currentSelected = this.special.selected;
 			this.currentSelected.setAttribute("stroke-opacity", "100");
 		}
-		if (this.otherOneSelectable)
+		if (this.specialSelectable)
 		{
 			this.purchaseClickable = true;
 			this.UpdatePurchaseBtn();
@@ -1274,7 +1302,7 @@ module.exports = (function()
 	var healthVal = startingHealthVal;
 	var specialContent = undefined;
 	var spawnDelegate = undefined;
-	var specialList = ["critical_special", "magic_special", "taunt_special"];
+	var specialList = ["none_special","critical_special", "magic_special", "taunt_special"];
 	var specialIndex = 0;
 
 	////////////////
@@ -1288,6 +1316,9 @@ module.exports = (function()
 
 	var healthText = document.getElementById("Health_Text");
 	healthText.textContent = healthVal;
+
+	var specialText = document.getElementById("Special_Desc");
+	specialText.textContent = "No special";
 
 	////////////////////////
 	// Button Click Hooks //
@@ -1445,7 +1476,7 @@ module.exports = (function()
 	function UpdateSpecial(dir)
 	{
 		var current = document.getElementById(specialList[specialIndex]);
-		current.setAttribute('opacity', '0');
+		current.setAttribute("opacity", "0");
 		if (dir == 1)
 		{
 			if (specialIndex < specialList.length - 1)
@@ -1470,6 +1501,7 @@ module.exports = (function()
 		}
 		current = document.getElementById(specialList[specialIndex]);
 		current.setAttribute("opacity", "1");
+		specialText.textContent = current.getAttribute("desc");
 	}
 
 	function SpecialUp()
