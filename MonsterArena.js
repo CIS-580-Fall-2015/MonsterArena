@@ -1270,6 +1270,8 @@ module.exports = (function()
 	var healthVal = startingHealthVal;
 	var specialContent = undefined;
 	var spawnDelegate = undefined;
+	var specialList = ["critical_special", "magic_special", "taunt_special"];
+	var specialIndex = 0;
 
 	////////////////
 	// Text hooks //
@@ -1434,14 +1436,48 @@ module.exports = (function()
 		healthPlus2.setAttribute("stroke", "#000000");
 	}
 
+	// 1 is up
+	// -1 is down
+	function UpdateSpecial(dir)
+	{
+		var current = document.getElementById(specialList[specialIndex]);
+		current.setAttribute('opacity', '0');
+		if (dir == 1)
+		{
+			if (specialIndex < specialList.length - 1)
+			{
+				specialIndex++;
+			}
+			else
+			{
+				specialIndex = 0;
+			}
+		}
+		if (dir == -1)
+		{
+			if (specialIndex > 0)
+			{
+				specialIndex--;
+			}
+			else
+			{
+				specialIndex = specialList.length - 1;
+			}
+		}
+		current = document.getElementById(specialList[specialIndex]);
+		current.setAttribute("opacity", "1");
+	}
+
 	function SpecialUp()
 	{
 		if (DEBUG) { console.log("StatsManager: Special Up Clicked."); }
+		UpdateSpecial(1);
 	}
 
 	function SpecialDown()
 	{
 		if (DEBUG) { console.log("StatsManager: Special Down Clicked."); }
+		UpdateSpecial(-1);
 	}
 
 	function IncreaseAttackCap(val)
