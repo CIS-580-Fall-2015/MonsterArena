@@ -7,6 +7,8 @@
   width: 25%;
   height: 595px;
   float: left;
+  padding: 0 0 0 0;
+  margin: 0 0 0 0;
 }
 #toplevel #arena {
   width: 590px;
@@ -15,10 +17,14 @@
   background-image: url('img/arena3.png');
   background-size: contain;
   margin-right: 10px;
+  margin-left: 10px;
   margin-top: 127.5px;
+  padding: 0 0 0 0;
 }
 #toplevel #shop {
   width: 25%;
   height: 595px;
   float: left;
+  padding: 0 0 0 0;
+  margin: 0 0 0 0;
 }
