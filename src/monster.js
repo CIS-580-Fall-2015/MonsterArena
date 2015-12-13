@@ -6,7 +6,7 @@ module.exports = (function() {
 
   Monster.prototype = new Entity();
 
-  function Monster(stats, door) {
+  function Monster(stats, door, isBoss) {
     this.health = stats.health;
     this.attack = stats.attack;
     this.defense = stats.defense;
@@ -16,6 +16,7 @@ module.exports = (function() {
     this.state = 0;
     this.x = this.door.x;
     this.y = this.door.y;
+    this.isBoss = isBoss;
 
     this.cx = document.getElementById('svgArea').width.baseVal.value / 2.0;
     this.cy = document.getElementById('svgArea').height.baseVal.value / 2.0;
@@ -35,40 +36,40 @@ module.exports = (function() {
     if (this.x == this.cx) {
       if (this.y > this.cy) {
         this.angle = 270;
-		this.dx = 0;
-		this.dy = -1;
+        this.dx = 0;
+        this.dy = -1;
       } else {
         this.angle = 90;
-		this.dx = 0;
-		this.dy = 1;
+        this.dx = 0;
+        this.dy = 1;
       }
     } else if (this.y == this.cy) {
       if (this.x > this.cx) {
-        this.angle = 0*Math.PI/180;
-		this.dx = -1;
-		this.dy = 0;
+        this.angle = 0 * Math.PI / 180;
+        this.dx = -1;
+        this.dy = 0;
       } else {
         this.angle = 180;
-		this.dx = 1;
-		this.dy = 0;
+        this.dx = 1;
+        this.dy = 0;
       }
     } else if (this.x < this.cx) {
       if (this.y < this.cy) {
         this.angle = 135;
-		this.dx = Math.sqrt(2) / 2;
-		this.dy = Math.sqrt(2) / 2;
+        this.dx = Math.sqrt(2) / 2;
+        this.dy = Math.sqrt(2) / 2;
       } else {
         this.angle = 225;
-		this.dx = Math.sqrt(2) / 2;
-		this.dy = -Math.sqrt(2) / 2;
+        this.dx = Math.sqrt(2) / 2;
+        this.dy = -Math.sqrt(2) / 2;
       }
     } else if (this.y < this.cy) {
       this.angle = 45;
-	  this.dx = -Math.sqrt(2) / 2;
+      this.dx = -Math.sqrt(2) / 2;
       this.dy = Math.sqrt(2) / 2;
     } else {
       this.angle = 315;
-	  this.dx = -Math.sqrt(2) / 2;
+      this.dx = -Math.sqrt(2) / 2;
       this.dy = -Math.sqrt(2) / 2;
     }
   }
@@ -79,40 +80,41 @@ module.exports = (function() {
     if (this.health >= 0) {
       //TODO die
       this.door.avaliable = true;
-      return this.health + this.attack + this.defense;
+      if (this.isBoss) {
+        return 0;
+      } else {
+        return this.health + this.attack + this.defense;
+      }
     }
-    return 0;
+    return -1;
   };
 
   //n is the number of frames*numberofpixelsperframe since last update (dx & dy calculated for move of 1 pixel)
   Monster.prototype.doTurn = function(n) {
-	  //Checks Range and does movment
+    //Checks Range and does movment
     //Check if movement needed based on which direction it is coming in from.
     var a = math.floor(this.angle);
-	if(a==135||a==180||a==225){
-		if(this.x <=this.cx-96){
-			this.x += n * this.dx;
-			this.y += n * this.dy;
-		}
-	}
-	else if(a==45||a==0||a==315){
-		if(this.x>=this.cx+32){
-			this.x += n * this.dx;
-			this.y += n * this.dy;
-		}
-	}
-    else if(a==90){
-		if(this.y<=this.cy-96){
-			this.x += n * this.dx;
-			this.y += n * this.dy;
-		}
-	}
-	else if(a==270){
-		if(this.y>=this.cy+32){
-			this.x += n * this.dx;
-			this.y += n * this.dy;
-		}
-	}
+    if (a == 135 || a == 180 || a == 225) {
+      if (this.x <= this.cx - 96) {
+        this.x += n * this.dx;
+        this.y += n * this.dy;
+      }
+    } else if (a == 45 || a == 0 || a == 315) {
+      if (this.x >= this.cx + 32) {
+        this.x += n * this.dx;
+        this.y += n * this.dy;
+      }
+    } else if (a == 90) {
+      if (this.y <= this.cy - 96) {
+        this.x += n * this.dx;
+        this.y += n * this.dy;
+      }
+    } else if (a == 270) {
+      if (this.y >= this.cy + 32) {
+        this.x += n * this.dx;
+        this.y += n * this.dy;
+      }
+    }
 
     //TODO specials
 
