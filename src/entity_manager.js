@@ -48,7 +48,7 @@ module.exports = (function() {
     for (var i = 0; i < monsters.length; i++) {
       var e = monsters[i].doTurn();
       if (e >= 0) {
-        delete = true;
+        del = true;
         hero.addExp(e);
         delete monsters[i];
       }
