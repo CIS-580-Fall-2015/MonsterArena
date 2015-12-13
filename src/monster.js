@@ -32,50 +32,40 @@ module.exports = (function() {
     if (this.x == this.cx) {
       if (this.y > this.cy) {
         this.angle = 270;
+		this.dx = 0;
+		this.dy = -1;
       } else {
         this.angle = 90;
+		this.dx = 0;
+		this.dy = 1;
       }
     } else if (this.y == this.cy) {
       if (this.x > this.cx) {
-        this.angle = 0;
+        this.angle = 0*Math.PI/180;
+		this.dx = -1;
+		this.dy = 0;
       } else {
         this.angle = 180;
+		this.dx = 1;
+		this.dy = 0;
       }
     } else if (this.x < this.cx) {
       if (this.y < this.cy) {
         this.angle = 135;
+		this.dx = Math.sqrt(2) / 2;
+		this.dy = Math.sqrt(2) / 2;
       } else {
         this.angle = 225;
+		this.dx = Math.sqrt(2) / 2;
+		this.dy = -Math.sqrt(2) / 2;
       }
     } else if (this.y < this.cy) {
       this.angle = 45;
+	  this.dx = -Math.sqrt(2) / 2;
+      this.dy = Math.sqrt(2) / 2;
     } else {
       this.angle = 315;
-    }
-    this.angle = this.angle * Math.PI / 180;
-    if (this.angle === 0) {
-      this.dx = -1;
-      this.dy = 0;
-    } else if (this.angle == 45) {
-      this.dx = -Math.sqrt(2) / 2;
-      this.dy = Math.sqrt(2) / 2;
-    } else if (this.angle == 90) {
-      this.dx = 0;
-      this.dy = 1;
-    } else if (this.angle == 135) {
-      this.dx = Math.sqrt(2) / 2;
-      this.dy = Math.sqrt(2) / 2;
-    } else if (this.angle == 180) {
-      this.dx = 1;
-      this.dy = 0;
-    } else if (this.angle == 225) {
-      this.dx = Math.sqrt(2) / 2;
-      this.dy = -Math.sqrt(2) / 2;
-    } else if (this.angle == 270) {
-      this.dx = 0;
-      this.dy = -1;
-    } else if (this.angle == 315) {
-      this.dx = -Math.sqrt(2) / 2;
+	  this.dx = -Math.sqrt(2) / 2;
       this.dy = -Math.sqrt(2) / 2;
     }
   }
@@ -92,8 +82,9 @@ module.exports = (function() {
 
   //n is the number of frames*numberofpixelsperframe since last update (dx & dy calculated for move of 1 pixel)
   Monster.prototype.doTurn = function(n) {
+	  //Checks Range and does movment
     //Check if movement needed based on which direction it is coming in from.
-    var a = math.floor(this.angle*180/Math.PI);
+    var a = math.floor(this.angle);
 	if(a==135||a==180||a==225){
 		if(this.x <=this.cx-96){
 			this.x += n * this.dx;
@@ -118,7 +109,6 @@ module.exports = (function() {
 			this.y += n * this.dy;
 		}
 	}
-    //TODO CHECK RANGE
 
     //TODO specials
 
