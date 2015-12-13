@@ -337,11 +337,13 @@ module.exports = (function() {
       this.health = BOSS.health;
       this.attack = BOSS.attack;
       this.defense = BOSS.defense;
-    } else {
+      this.sprite = availableBosses[Math.floor((Math.random() * 3))]; // Pick one of the three boss sprites at random.
+    } else { // Otherwise, use one of the generic sprites.
       this.health = stats.health;
       this.attack = stats.attack;
       this.defense = stats.defense;
       this.specials = stats.specials;
+      this.sprite = availableRegMonsters[Math.floor((Math.random() * 7))]; // Pick one of the six regular sprites at random.
     }
 
     this.door = door;
@@ -476,11 +478,11 @@ module.exports = (function() {
     // Draw the Monster (and the correct animation).
     if (this.isLeft)
     {
-      this.animations.left[this.state].render(context, this.x, this.y);
+      this.sprite.animations.left[this.state].render(context, this.x, this.y);
     }
     else
     {
-      this.animations.right[this.state].render(context, this.x, this.y);
+      this.sprite.animations.right[this.state].render(context, this.x, this.y);
     }
   };
 
