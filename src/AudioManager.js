@@ -3,7 +3,7 @@
  * Script ID Data
  * ==============
  * File Name: AudioManager.js
- * Version Date: ad-2015-12-11 19:17:00
+ * Version Date: ad-2015-12-12 20:10:00
  * Contributors: Kyle Brown
  *
  * Documentation Language: English  (en){lkB-000-001}
@@ -49,16 +49,19 @@
  * Version Date				Version Number kb-4RGB-pixels() 	Comment
  * -----------				---------------------------------	-------
  * ad-2015-12-09 23:50:00	(0,0,1)(0,7,231)(1,12,9)(23,50,0)	AudioManager created
- *					00-00-01 | 00-07-E7 | 01-0C-09 | 17-32-00 
+ *			00-00-01 | 00-07-E7 | 01-0C-09 | 17-32-00 
  *
  * ad-2015-12-10 20:07:00	(0,0,1)(0,7,231)(1,12,10)(20,7,0)	Design outline
- *					00-00-01 | 00-07-E7 | 01-0C-0A | 14-07-00 
+ *			00-00-01 | 00-07-E7 | 01-0C-0A | 14-07-00 
  *
  * ad-2015-12-11 19:17:00	(0,0,1)(0,7,231)(1,12,11)(19,17,0)	Working Version
- *					00-00-01 | 00-07-E7 | 01-0C-0b | 13-10-00
+ *			00-00-01 | 00-07-E7 | 01-0C-0b | 13-10-00
  *
  * ad-2015-12-12 17:49:00	(0,0,1)(0,7,231)(1,12,12)(17,49,0)	Clean up
- *					00-00-01 | 00-07-E7 | 01-0C-0C | 11-31-00
+ *			00-00-01 | 00-07-E7 | 01-0C-0C | 11-31-00
+ *
+ * ad-2015-12-12 20:10:00   	(0,0,1)(0,7,231)(1,12,12)(20,10,0)	Naming fixes
+ *			0-00-01 | 00-07-E7 | 01-0C-0C | 14-01-00
  * =================
  * File Dependencies
  * =================
@@ -343,12 +346,12 @@ module.exports = (function()
 	}
 	
 	// Volume Control Functions
-	AudioManager.prototype.toggleMusicVolume = function ()
+	AudioManager.prototype.toggleMusic = function ()
 	{
 		if (this.DEBUG) { console.log("AudioManager: ToggleMusicVolume"); }
 		toggleMusic(this.musicElm, this.MAX_VOLUME_LVL, this.MIN_VOLUME_LVL, this.ZERO_VOLUME_LVL);
 	}
-	AudioManager.prototype.toggleEffectsVolume = function ()
+	AudioManager.prototype.toggleEffects = function ()
 	{
 		if (this.DEBUG) { console.log("AudioManager: ToggleEffectsVolume"); }
 		toggleMusic(this.soundElm, this.MAX_VOLUME_LVL, this.MIN_VOLUME_LVL, this.ZERO_VOLUME_LVL);
