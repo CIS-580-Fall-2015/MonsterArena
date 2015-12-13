@@ -117,6 +117,7 @@ module.exports = (function()
 		{
 			self.PurchaseBtn();
 		});
+
 		// =-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 		this.descriptionText = document.getElementById("Description_Text");
@@ -135,6 +136,11 @@ module.exports = (function()
 	ShopManager.prototype.SetGoldText = function()
 	{	
 		this.goldText.textContent = "Gold: " + this.totalGold;
+	};
+
+	ShopManager.prototype.SetDoorText = function () 
+	{
+		
 	};
 
 
