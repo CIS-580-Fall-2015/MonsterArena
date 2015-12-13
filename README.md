@@ -31,15 +31,23 @@ Keep compiling simple!
 * Monster/Hero interaction
 * ~~Hero Spawning~~
 
-## Audio Manager README
-Added audio containers in HTML.
-Added in game.js:
-AudioManager = require('./AudioManager.js')
-Simply call functions like AudioManager.playIdleMusic().
-Functions:
-playIdleMusic, playBattleMusic,playWinMusic,playLoseMusic,
-playLevelUpSFX, playUpgradeSFX, playBuffSFX, playDebuffSFX, playClickSFX,
-toggleMusic, toggleEffects
+## Audio Manager
+Added audio containers in HTML. Add to molule via
+
+```AudioManager = require('./AudioManager.js')```
+
+Public Functions:
+* playIdleMusic
+* playBattleMusic
+* playWinMusic
+* playLoseMusic
+* playLevelUpSFX
+* playUpgradeSFX
+* playBuffSFX
+* playDebuffSFX
+* playClickSFX
+* toggleMusic
+* toggleEffects
  
 Added 4 svg images, in img folder for icons for toggling sound.
   
