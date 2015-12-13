@@ -660,26 +660,26 @@ module.exports = (function() {
     var a = math.floor(this.angle*180/Math.PI);
 	if(a==135||a==180||a==225){
 		if(this.x <=this.cx-96){
-			this.x += n * dx;
-			this.y += n * dy;
+			this.x += n * this.dx;
+			this.y += n * this.dy;
 		}
 	}
 	else if(a==45||a==0||a==315){
 		if(this.x>=this.cx+32){
-			this.x += n * dx;
-			this.y += n * dy;
+			this.x += n * this.dx;
+			this.y += n * this.dy;
 		}
 	}
     else if(a==90){
 		if(this.y<=this.cy-96){
-			this.x += n * dx;
-			this.y += n * dy;
+			this.x += n * this.dx;
+			this.y += n * this.dy;
 		}
 	}
 	else if(a==270){
 		if(this.y>=this.cy+32){
-			this.x += n * dx;
-			this.y += n * dy;
+			this.x += n * this.dx;
+			this.y += n * this.dy;
 		}
 	}
     //TODO CHECK RANGE
