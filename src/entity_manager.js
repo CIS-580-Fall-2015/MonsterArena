@@ -3,53 +3,65 @@ module.exports = (function() {
   var Hero = require('./hero.js');
   var Door = require('./spawner');
   var doors = [];
-  var stat_cap = {"attack": 2, "defense": 2, "health": 2};
-  var stat_levels = [2, 3, 5, 7, 10, 12, 15];
-  var blood = 0;
+  var monsters = [];
+  var unlocked_doors = 1;
 
   var hero;
+
   // Value followed by scaling
-  var HERO_STATS = {health: [2, 1.2], attack: [3, 1.2], defense: [2, 1.1], exp: [0, 1.2]};
-  var monsters = [];
+  var HERO_STATS = {
+    health: [2, 1.2],
+    attack: [3, 1.2],
+    defense: [2, 1.1],
+    exp: [0, 1.2]
+  };
+
+  var ARENA_WIDTH; //TODO
+  var ARENA_HEIGHT; //TODO
+  var OFFSET = 64;
 
   function initialize() {
-    //TODO spawn doors
+    doors[0] = new Door(ARENA_WIDTH / 2, OFFSET); // North
+    doors[1] = new Door(ARENA_WIDTH - OFFSET, ARENA_HEIGHT / 2); // East
+    doors[2] = new Door(ARENA_WIDTH / 2, ARENA_HEIGHT - OFFSET); //South
+    doors[3] = new Door(OFFSET, ARENA_HEIGHT / 2); // West
+    doors[4] = new Door(ARENA_WIDTH * 0.75, ARENA_HEIGHT * 0.25); // North-East
+    doors[5] = new Door(ARENA_WIDTH * 0.75, ARENA_HEIGHT * 0.75); // South-East
+    doors[6] = new Door(ARENA_WIDTH * 0.25, ARENA_HEIGHT * 0.75); // South-West
+    doors[7] = new Door(ARENA_WIDTH * 0.25, ARENA_HEIGHT * 0.25); // North-West
 
-    hero = new Hero(HERO_STATS, this);
+    hero = new Hero(HERO_STATS, ARENA_WIDTH / 2 - 32, ARENA_HEIGHT / 2 - 32, this);
   }
 
   function update() {
     //TODO generate information to render
   }
 
-  function update_cap(stat, level) {
-    //TODO error catching
-    stat_cap[stat] = stat_levels.indexOf(level);
-  }
-
-  //TODO open doors upgrade
-
-  //TODO monster spawning
-
-  function mod_blood(amount) {
-    blood += amount;
-    if (blood < 0) {
-      blood = 0;
+  function open_door() {
+    if (unlocked_doors < 7) {
+      unlocked_doors++;
     }
   }
 
-  function get_blood() {
-    return blood;
+  function spawn_monster(stats) {
+    var d = null;
+    for (var i = 1; i > unlocked_doors; i++) {
+      if (doors[i].avaliable) {
+        d = doors[i];
+        break;
+      }
+    }
+    if (d) {
+      var m = new Monster(stats, d);
+      d.avaliable = false;
+      monsters.push(m);
+    }
   }
-
-
 
   return {
     initialize: initialize,
     update: update,
-    update_cap: update_cap,
-    mod_blood: mod_blood,
-    get_blood: get_blood,
+    spawn_monster: spawn_monster,
   };
 
 }());

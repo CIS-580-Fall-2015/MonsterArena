@@ -4,17 +4,28 @@
   display: inline-block;
 }
 #toplevel #spawner {
-  width: 25%;
+  width: 295px;
   height: 595px;
   float: left;
+  padding: 0 0 0 0;
+  margin: 0 auto;
 }
 #toplevel #arena {
-  width: 50%;
-  height: 595px;
+  width: 590px;
+  height: 340px;
   float: left;
+  /*
+		background-image: url('./img/arena3.png');
+		background-size: contain;
+		*/
+  margin: 0 auto;
+  margin-top: 127.5px;
+  padding: 0 0 0 0;
 }
 #toplevel #shop {
-  width: 25%;
+  width: 295px;
   height: 595px;
   float: left;
+  padding: 0 0 0 0;
+  margin: 0 auto;
 }

@@ -1,11 +1,9 @@
-module.exports = (function(){
+module.exports = (function() {
 
-  function Door(x, y, id) {
+  function Door(x, y) {
     this.x = x;
     this.y = y;
-    this.id = id;
-    this.open = false;
-    this.monster = false;
+    this.avaliable = false;
   }
 
   return Door;

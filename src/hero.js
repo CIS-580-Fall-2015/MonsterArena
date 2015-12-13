@@ -5,7 +5,7 @@ module.exports = (function(){
 
 
 
-  function Hero(stats, EntityManager){
+  function Hero(stats, x, y, EntityManager){
     this.health = stats.health[0];
     this.health_scale = stats.health[1];
     this.attack = stats.attack[0];
@@ -18,9 +18,9 @@ module.exports = (function(){
     this.exp = 0;
     this.req_exp = 10;
     this.level = 0;
-    //TODO place hero
-    //this.x =
-    //this.y =
+    
+    this.x = x;
+    this.y = y;
   }
 
   Hero.prototype.levelup = function() {

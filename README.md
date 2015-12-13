@@ -12,21 +12,50 @@ Keep compiling simple!
 ## TODO
 
 * Index page  
-    * Need to incorporate arena area between menus
+    * ~~Need to incorporate arena area between menus~~
+    * fix arena sizing
 * Menu states
 * ~~Stats UI~~
 * ~~Shop UI~~ (mostly)  
     * ~~Selection highlighting~~
-    * Assigning delegates to handle updating
+    * ~~Assigning delegates to handle updating~~ (paritally)
     * Final two upgrade options
+    * Cost grey/available
 * ~~UI Design~~
 * UI Icons
 * Monster sprites
-   *Monster Movment
-   *MOnster Animation
-   *Monster UPdating/Rendering
+   * Monster Movment
+   * Monster Animation
+   * Monster Updating/Rendering
+   * Monster Spawning
 * Monster/Hero interaction
-* Everything ;)
+* ~~Hero Spawning~~
+
+## Audio Manager
+Added audio containers in HTML. Add to molule via
+
+```AudioManager = require('./AudioManager.js')```
+
+Public Functions:
+* playIdleMusic
+* playBattleMusic
+* playWinMusic
+* playLoseMusic
+* playLevelUpSFX
+* playUpgradeSFX
+* playBuffSFX
+* playDebuffSFX
+* playClickSFX
+* toggleMusic
+* toggleEffects
+ 
+Added 4 svg images, in img folder for icons for toggling sound.
+  
+TO BE IMPLEMENTED... 
+* add icons for music and sound effects toggling in UI and call functions toggleMusic() and toggleEffects() on click.
+* Wherever the wave starts, call playBattleMusic(), and ends call playIdleMusic().
+* Wherever sound effects need to be implemented, call that sound effect function.
+    
 
 ## Contributors
 
