@@ -45,7 +45,7 @@ module.exports = (function()
 	var healthVal = startingHealthVal;
 	var specialContent = undefined;
 	var spawnDelegate = undefined;
-	var specialList = ["critical_special", "magic_special", "taunt_special"];
+	var specialList = ["none_special","critical_special", "magic_special", "taunt_special"];
 	var specialIndex = 0;
 
 	////////////////
@@ -59,6 +59,9 @@ module.exports = (function()
 
 	var healthText = document.getElementById("Health_Text");
 	healthText.textContent = healthVal;
+
+	var specialText = document.getElementById("Special_Desc");
+	specialText.textContent = "No special";
 
 	////////////////////////
 	// Button Click Hooks //
@@ -216,7 +219,7 @@ module.exports = (function()
 	function UpdateSpecial(dir)
 	{
 		var current = document.getElementById(specialList[specialIndex]);
-		current.setAttribute('opacity', '0');
+		current.setAttribute("opacity", "0");
 		if (dir == 1)
 		{
 			if (specialIndex < specialList.length - 1)
@@ -241,6 +244,7 @@ module.exports = (function()
 		}
 		current = document.getElementById(specialList[specialIndex]);
 		current.setAttribute("opacity", "1");
+		specialText.textContent = current.getAttribute("desc");
 	}
 
 	function SpecialUp()
