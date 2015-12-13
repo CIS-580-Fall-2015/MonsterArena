@@ -32,14 +32,17 @@ module.exports = (function() {
   var Hero = require('./hero.js');
   var Door = require('./spawner');
   var doors = [];
-  var stat_cap = {"attack": 2, "defense": 2, "health": 2};
-  var stat_levels = [2, 3, 5, 7, 10, 12, 15];
-  var blood = 0;
+  var monsters = [];
 
   var hero;
+
   // Value followed by scaling
-  var HERO_STATS = {health: [2, 1.2], attack: [3, 1.2], defense: [2, 1.1], exp: [0, 1.2]};
-  var monsters = [];
+  var HERO_STATS = {
+    health: [2, 1.2],
+    attack: [3, 1.2],
+    defense: [2, 1.1],
+    exp: [0, 1.2]
+  };
 
   function initialize() {
     //TODO spawn doors
@@ -51,34 +54,27 @@ module.exports = (function() {
     //TODO generate information to render
   }
 
-  function update_cap(stat, level) {
-    //TODO error catching
-    stat_cap[stat] = stat_levels.indexOf(level);
-  }
-
   //TODO open doors upgrade
 
-  //TODO monster spawning
-
-  function mod_blood(amount) {
-    blood += amount;
-    if (blood < 0) {
-      blood = 0;
+  function spawn_monster(stats) {
+    var d = null;
+    for (var i = 0; i > 8; i++) {
+      if (doors[i].open && doors[i].avaliable) {
+        d = doors[i];
+        break;
+      }
+    }
+    if (d) {
+      var m = new Monster(stats, d);
+      d.avaliable = false;
+      monsters.push(m);
     }
   }
-
-  function get_blood() {
-    return blood;
-  }
-
-
 
   return {
     initialize: initialize,
     update: update,
-    update_cap: update_cap,
-    mod_blood: mod_blood,
-    get_blood: get_blood,
+    spawn_monster: spawn_monster,
   };
 
 }());
@@ -183,17 +179,17 @@ module.exports = (function() {
 
   Monster.prototype = new Entity();
 
-  function Monster(health, attack, defense, door, specials) {
-    this.health = health;
-    this.attack = attack;
-    this.defense = defense;
+  function Monster(stats, door) {
+    this.health = stats.health;
+    this.attack = stats.attack;
+    this.defense = stats.defense;
     this.door = door;
-    this.specials = specials;
+    this.specials = stats.specials;
     this.state = 0;
-	
-	var cx = document.getElementById('svgArea').width.baseVal.value/2.0;
-	var cy =  document.getElementById('svgArea').height.baseVal.value/2.0;
-	
+
+    var cx = document.getElementById('svgArea').width.baseVal.value / 2.0;
+    var cy = document.getElementById('svgArea').height.baseVal.value / 2.0;
+
     // Create an animations property, with arrays for each direction of animations.
     this.animations = {
       left: [],
@@ -201,93 +197,60 @@ module.exports = (function() {
     };
 
     //TODO modify according to center of door.
-    this.x = this.door.x+32;
-    this.y = this.door.y+32;
+    this.x = this.door.x + 32;
+    this.y = this.door.y + 32;
     this.angle = undefined;
-	
-	//determines change in x and y for every movment
-	if(this.x == cx)
-	{
-		if(this.y>cy)
-		{
-			this.angle = 270;
-		}
-		else 
-		{
-			this.angle = 90;
-		}
-	}
-	else if(this.y == cy)
-	{
-		if(this.x>cx)
-		{
-			this.angle = 0;
-		}
-		else 
-		{
-			this.angle = 180;
-		}
-	}
-	else if(this.x<cx)
-	{
-		if(this.y<cy)
-		{
-			this.angle = 135;
-		}
-		else
-		{
-			this.angle = 225;
-		}
-	}
-	else if(this.y<cy)
-	{
-		this.angle = 45;
-	}
-	else
-	{
-		this.angle = 315
-	}
-	this.angle = this.angle*Math.PI/180;
-	if(this.angle == 0)
-	{
-		this.dx = -1;
-		this.dy = 0;
-	}
-	else if(this.angle ==45)
-	{
-		this.dx = -Math.sqrt(2)/2;
-		this.dy = Math.sqrt(2)/2;
-	}
-	else if(this.angle ==90)
-	{
-		this.dx = 0;
-		this.dy = 1;
-	}
-	else if(this.angle ==135)
-	{
-		this.dx = Math.sqrt(2)/2;
-		this.dy = Math.sqrt(2)/2;
-	}
-	else if(this.angle ==180)
-	{
-		this.dx = 1;
-		this.dy = 0;
-	}
-	else if(this.angle ==225)
-	{
-		this.dx = Math.sqrt(2)/2;
-		this.dy = -Math.sqrt(2)/2;
-	}
-	else if(this.angle ==270)
-	{
-		this.dx = 0;
-		this.dy = -1;
-	}
-	else if(this.angle ==315)
-	{
-		this.dx = -Math.sqrt(2)/2;
-		this.dy = -Math.sqrt(2)/2;
-	}
+
+    //determines change in x and y for every movment
+    if (this.x == cx) {
+      if (this.y > cy) {
+        this.angle = 270;
+      } else {
+        this.angle = 90;
+      }
+    } else if (this.y == cy) {
+      if (this.x > cx) {
+        this.angle = 0;
+      } else {
+        this.angle = 180;
+      }
+    } else if (this.x < cx) {
+      if (this.y < cy) {
+        this.angle = 135;
+      } else {
+        this.angle = 225;
+      }
+    } else if (this.y < cy) {
+      this.angle = 45;
+    } else {
+      this.angle = 315
+    }
+    this.angle = this.angle * Math.PI / 180;
+    if (this.angle == 0) {
+      this.dx = -1;
+      this.dy = 0;
+    } else if (this.angle == 45) {
+      this.dx = -Math.sqrt(2) / 2;
+      this.dy = Math.sqrt(2) / 2;
+    } else if (this.angle == 90) {
+      this.dx = 0;
+      this.dy = 1;
+    } else if (this.angle == 135) {
+      this.dx = Math.sqrt(2) / 2;
+      this.dy = Math.sqrt(2) / 2;
+    } else if (this.angle == 180) {
+      this.dx = 1;
+      this.dy = 0;
+    } else if (this.angle == 225) {
+      this.dx = Math.sqrt(2) / 2;
+      this.dy = -Math.sqrt(2) / 2;
+    } else if (this.angle == 270) {
+      this.dx = 0;
+      this.dy = -1;
+    } else if (this.angle == 315) {
+      this.dx = -Math.sqrt(2) / 2;
+      this.dy = -Math.sqrt(2) / 2;
+    }
   }
 
   Monster.prototype.attacked = function(amount) {
@@ -303,9 +266,9 @@ module.exports = (function() {
   //n is the number of frames*numberofpixelsperframe since last update (dx & dy calculated for move of 1 pixel)
   Monster.prototype.doTurn = function(n) {
     //TODO MOVEMENT
-		//TODO - Check if in bounding box of hero
-		this.x += n*dx;
-		this.y += n*dy;
+    //TODO - Check if in bounding box of hero
+    this.x += n * dx;
+    this.y += n * dy;
     //TODO CHECK RANGE
 
     //TODO specials
@@ -378,6 +341,7 @@ module.exports = (function()
 		this.currentSelected = undefined;
 		this.currentUpgrade = undefined;
 		this.totalGold = 0;
+		this.defaultAddition = 100;
 
 
 		//////////////////////
@@ -437,25 +401,93 @@ module.exports = (function()
 		{
 			self.PurchaseBtn();
 		});
+
 		// =-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 		this.descriptionText = document.getElementById("Description_Text");
 		
-		this.goldText = document.getElementById('Gold_Text');
-		this.doorText = document.getElementById('Door_Cost');
-		this.attackText = document.getElementById('Attack_Cost');
-		this.defenseText = document.getElementById('Defense_Cost');
-		this.healthText = document.getElementById('Health_Cost');
-		this.otherOneText = document.getElementById('Other1_Cost');
-		this.otherTwoText = document.getElementById('Other2_Cost');
+		this.goldText = document.getElementById("Gold_Text");
+		this.doorText = document.getElementById("Door_Cost");
+		this.attackText = document.getElementById("Attack_Cost");
+		this.defenseText = document.getElementById("Defense_Cost");
+		this.healthText = document.getElementById("Health_Cost");
+		this.otherOneText = document.getElementById("Other1_Cost");
+		this.otherTwoText = document.getElementById("Other2_Cost");
 
 		this.SetGoldText();
 	}
 
+	/**
+	 * Function: SetGoldText
+	 * 
+	 * Sets the total gold text. essentially updates 
+	 * 		the player wallet
+	 *   
+	 */
 	ShopManager.prototype.SetGoldText = function()
 	{	
 		this.goldText.textContent = "Gold: " + this.totalGold;
 	};
+
+	/**
+	 * Function: SetDoorText
+	 * 
+	 * Sets the cost text under the door upgrade
+	 * 
+	 * Parameters:
+	 * 
+	 *   val - string that cost needs to be set to
+	 * 
+	 */
+	ShopManager.prototype.SetDoorText = function (val) 
+	{
+		this.doorText.textContent = val;
+	};
+
+	ShopManager.prototype.SetAttackText = function (val)
+	{
+		this.attackText.textContent = val;
+	};
+
+	ShopManager.prototype.SetDefenseText = function (val)
+	{
+		this.defenseText.textContent = val;
+	};
+
+	ShopManager.prototype.SetHealthText = function (val)
+	{
+		this.healthText.textContent = val;
+	};
+
+	ShopManager.prototype.SetOtherOneText = function (val)
+	{
+		this.otherOneText.textContent = val;
+	};
+
+	ShopManager.prototype.SetOtherTwoText = function (val)
+	{
+		this.otherTwoText.textContent = val;
+	};
+
+	/**
+	 * Function: AddGold
+	 * 
+	 * Essentially adds currency to player wallet.
+	 * 
+	 * Parameters:
+	 * 
+	 *   amt - {optional} the amount to be added, if not
+	 *         		supplied then it defaults to 
+	 *           	this.defaultAddition of shop 
+	 *            	manager
+	 * 
+	 */
+	ShopManager.prototype.AddGold = function(amt)
+	{
+		var val = amt || this.defaultAddition;
+		this.totalGold += val;
+	};
+
 
 	ShopManager.prototype.SetStatsManagerDelegates = function(attack, defense, health)
 	{
@@ -630,14 +662,14 @@ module.exports = (function()
 
 
 },{}],7:[function(require,module,exports){
-module.exports = (function(){
+module.exports = (function() {
 
   function Door(x, y, id) {
     this.x = x;
     this.y = y;
     this.id = id;
     this.open = false;
-    this.monster = false;
+    this.avaliable = false;
   }
 
   return Door;
