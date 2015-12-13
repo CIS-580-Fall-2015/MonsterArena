@@ -58,6 +58,7 @@ module.exports = (function()
 		this.currentSelected = undefined;
 		this.currentUpgrade = undefined;
 		this.totalGold = 0;
+		this.defaultAddition = 100;
 
 
 		//////////////////////
@@ -122,25 +123,86 @@ module.exports = (function()
 
 		this.descriptionText = document.getElementById("Description_Text");
 		
-		this.goldText = document.getElementById('Gold_Text');
-		this.doorText = document.getElementById('Door_Cost');
-		this.attackText = document.getElementById('Attack_Cost');
-		this.defenseText = document.getElementById('Defense_Cost');
-		this.healthText = document.getElementById('Health_Cost');
-		this.otherOneText = document.getElementById('Other1_Cost');
-		this.otherTwoText = document.getElementById('Other2_Cost');
+		this.goldText = document.getElementById("Gold_Text");
+		this.doorText = document.getElementById("Door_Cost");
+		this.attackText = document.getElementById("Attack_Cost");
+		this.defenseText = document.getElementById("Defense_Cost");
+		this.healthText = document.getElementById("Health_Cost");
+		this.otherOneText = document.getElementById("Other1_Cost");
+		this.otherTwoText = document.getElementById("Other2_Cost");
 
 		this.SetGoldText();
 	}
 
+	/**
+	 * Function: SetGoldText
+	 * 
+	 * Sets the total gold text. essentially updates 
+	 * 		the player wallet
+	 *   
+	 */
 	ShopManager.prototype.SetGoldText = function()
 	{	
 		this.goldText.textContent = "Gold: " + this.totalGold;
 	};
 
-	ShopManager.prototype.SetDoorText = function () 
+	/**
+	 * Function: SetDoorText
+	 * 
+	 * Sets the cost text under the door upgrade
+	 * 
+	 * Parameters:
+	 * 
+	 *   val - string that cost needs to be set to
+	 * 
+	 */
+	ShopManager.prototype.SetDoorText = function (val) 
 	{
-		
+		this.doorText.textContent = val;
+	};
+
+	ShopManager.prototype.SetAttackText = function (val)
+	{
+		this.attackText.textContent = val;
+	};
+
+	ShopManager.prototype.SetDefenseText = function (val)
+	{
+		this.defenseText.textContent = val;
+	};
+
+	ShopManager.prototype.SetHealthText = function (val)
+	{
+		this.healthText.textContent = val;
+	};
+
+	ShopManager.prototype.SetOtherOneText = function (val)
+	{
+		this.otherOneText.textContent = val;
+	};
+
+	ShopManager.prototype.SetOtherTwoText = function (val)
+	{
+		this.otherTwoText.textContent = val;
+	};
+
+	/**
+	 * Function: AddGold
+	 * 
+	 * Essentially adds currency to player wallet.
+	 * 
+	 * Parameters:
+	 * 
+	 *   amt - {optional} the amount to be added, if not
+	 *         		supplied then it defaults to 
+	 *           	this.defaultAddition of shop 
+	 *            	manager
+	 * 
+	 */
+	ShopManager.prototype.AddGold = function(amt)
+	{
+		var val = amt || this.defaultAddition;
+		this.totalGold += val;
 	};
 
 
