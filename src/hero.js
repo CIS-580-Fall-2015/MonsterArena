@@ -24,6 +24,10 @@ module.exports = (function(){
 	document.getElementById('health').max = this.health;
   }
 
+  Hero.prototype.addExp = function(amount) {
+    this.exp += amount;
+  }
+
   Hero.prototype.levelup = function() {
     this.health *= this.health_scale;
     this.attack *= this.attack_scale;

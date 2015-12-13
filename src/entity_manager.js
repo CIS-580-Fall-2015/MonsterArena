@@ -35,8 +35,24 @@ module.exports = (function() {
   }
 
   function update() {
+    var delete = false;
     for (var i = 0; i < monsters.length; i++) {
-      monsters[i].doTurn();
+      var e = monsters[i].doTurn();
+      if (e >= 0) {
+        delete = true;
+        hero.addExp(e);
+        delete monsters[i];
+      }
+    }
+    if (delete) {
+      var undef;
+      var temp = [];
+      for (var i = 0; i < monsters.length; i++) {
+        if (monsters[i] !== undef) {
+          temp.push(arr[i])
+        }
+      }
+      monsters = temp;
     }
   }
 
@@ -55,8 +71,7 @@ module.exports = (function() {
       }
     }
     if (d) {
-      var m = new Monster(stats, i);
-      d.avaliable = false;
+      var m = new Monster(stats, d);
       monsters.push(m);
     }
   }
