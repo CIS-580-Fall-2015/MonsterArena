@@ -18,7 +18,7 @@ module.exports = (function(){
     this.exp = 0;
     this.req_exp = 10;
     this.level = 0;
-    
+
     this.x = x;
     this.y = y;
   }
@@ -33,9 +33,8 @@ module.exports = (function(){
 
   Hero.prototype.attacked = function(amount) {
     //Temporary
-    var damage = amount - this.defense;
+    var damage = amount - this.defense / 2;
     this.health -= damage;
-    EntityManager.mod_blood(damage);
     if (this.health >= 0) {
       //TODO die
     }

@@ -2,6 +2,7 @@ module.exports = (function() {
 
   var Hero = require('./hero.js');
   var Door = require('./spawner');
+  var Monster = require('./monster.js');
   var doors = [];
   var monsters = [];
   var unlocked_doors = 1;
@@ -34,11 +35,13 @@ module.exports = (function() {
   }
 
   function update() {
-    //TODO generate information to render
+    for (var i = 0; i < monsters.length; i++) {
+      monsters[i].doTurn();
+    }
   }
 
   function open_door() {
-    if (unlocked_doors < 7) {
+    if (unlocked_doors < doors.length) {
       unlocked_doors++;
     }
   }
@@ -52,7 +55,7 @@ module.exports = (function() {
       }
     }
     if (d) {
-      var m = new Monster(stats, d);
+      var m = new Monster(stats, i);
       d.avaliable = false;
       monsters.push(m);
     }
@@ -61,6 +64,7 @@ module.exports = (function() {
   return {
     initialize: initialize,
     update: update,
+    open_door: open_door,
     spawn_monster: spawn_monster,
   };
 

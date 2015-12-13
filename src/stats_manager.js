@@ -5,10 +5,10 @@
  * Description: StatsManger for monster stats UI
  * 			in Monster Arena for CIS 580 final
  * 			project
- * 
+ *
  *
  * History:
- * 		December 06, 2015: 
+ * 		December 06, 2015:
  *  		-Date Created
  *  	December 7, 2015:
  *  		-Redid implementation away from Entity-style
@@ -16,7 +16,7 @@
  */
 module.exports = (function()
 {
-	
+
 	//////////////////////////////////////
 	// Value for outputting debug code. //
 	//////////////////////////////////////
@@ -118,7 +118,7 @@ module.exports = (function()
 		attackMinus1.setAttribute("stroke", "#000000");
 	}
 
-	function AttackMinus() 
+	function AttackMinus()
 	{
 		if (DEBUG) { console.log("StatsManager: Attack -1 Clicked"); }
 		if (attackVal > attackFloor)
@@ -136,7 +136,7 @@ module.exports = (function()
 		attackPlus2.setAttribute("stroke", "#000000");
 	}
 
-	function DefensePlus() 
+	function DefensePlus()
 	{
 		if (DEBUG) { console.log("StatsManager: Defense +1 Clicked"); }
 		if (defenseVal < defenseCap)
@@ -154,7 +154,7 @@ module.exports = (function()
 		defenseMinus1.setAttribute("stroke", "#000000");
 	}
 
-	function DefenseMinus() 
+	function DefenseMinus()
 	{
 		if (DEBUG) { console.log("StatsManager: Defense -1 Clicked"); }
 		if (defenseVal > defenseFloor)
@@ -172,7 +172,7 @@ module.exports = (function()
 		defensePlus2.setAttribute("stroke", "#000000");
 	}
 
-	function HealthPlus() 
+	function HealthPlus()
 	{
 		if (DEBUG) { console.log("StatsManager: Health +1 Clicked"); }
 		if (healthVal < healthCap)
@@ -191,7 +191,7 @@ module.exports = (function()
 	}
 
 
-	function HealthMinus() 
+	function HealthMinus()
 	{
 		if (DEBUG) { console.log("StatsManager: Health -1 Clicked."); }
 		if (healthVal > healthFloor)
@@ -255,13 +255,13 @@ module.exports = (function()
 	function SpawnMonster()
 	{
 		if (DEBUG) { console.log("StatsManager: SpawnMonster Clicked"); }
-		if (spawnDelegate == undefined)
+		if (spawnDelegate === undefined)
 		{
 			console.log("Spawn Delegate not set.");
 		}
 		else
 		{
-			spawnDelegate();
+			spawnDelegate(GetCurrentStats());
 		}
 	}
 
@@ -294,12 +294,3 @@ module.exports = (function()
 	};
 
 })();
-
-
-
-
-
-
-
-
-
