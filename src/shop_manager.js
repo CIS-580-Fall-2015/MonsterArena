@@ -60,6 +60,22 @@ module.exports = (function()
 		this.totalGold = 0;
 		this.defaultAddition = 100;
 
+		// Flags for greying out shop items
+		this.defenseSelectable = false;
+		this.doorSelectable = false;
+		this.attackSelectable = false;
+		this.healthSelectable = false;
+		this.otherOneSelectable = false;
+		this.otherTwoSelectable = false;
+
+		// Costs for each upgrade
+		this.doorCost = 500;
+		this.defenseCost = 500;
+		this.attackCost = 500;
+		this.healthCost = 500; 
+		this.otherOneCost = 500;
+		this.otherTwoCost = 500;
+
 
 		//////////////////////
 		// Hooks to the DOM //
@@ -121,17 +137,38 @@ module.exports = (function()
 
 		// =-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
+		
 		this.descriptionText = document.getElementById("Description_Text");
 		
 		this.goldText = document.getElementById("Gold_Text");
+
 		this.doorText = document.getElementById("Door_Cost");
+		this.doorText.textContent = this.doorCost;
+
 		this.attackText = document.getElementById("Attack_Cost");
+		this.attackText.textContent = this.attackCost;
+
 		this.defenseText = document.getElementById("Defense_Cost");
+		this.defenseText.textContent = this.defenseCost;
+
 		this.healthText = document.getElementById("Health_Cost");
+		this.healthText.textContent = this.healthCost;
+
 		this.otherOneText = document.getElementById("Other1_Cost");
+		this.otherOneText.textContent = this.otherOneCost;
+
 		this.otherTwoText = document.getElementById("Other2_Cost");
+		this.otherTwoText.textContent = this.otherTwoCost;
+
+		this.doorGrey = document.getElementById("Door_Grey");
+		this.attackGrey = document.getElementById("Attack_Grey");
+		this.healthGrey = document.getElementById("Health_Grey");
+		this.defenseGrey = document.getElementById("Defense_Grey");
+		this.otherOneGrey = document.getElementById("Other1_Grey");
+		this.otherTwoGrey = document.getElementById("Other2_Grey");
 
 		this.SetGoldText();
+
 	}
 
 	/**
@@ -146,44 +183,40 @@ module.exports = (function()
 		this.goldText.textContent = "Gold: " + this.totalGold;
 	};
 
-	/**
-	 * Function: SetDoorText
-	 * 
-	 * Sets the cost text under the door upgrade
-	 * 
-	 * Parameters:
-	 * 
-	 *   val - string that cost needs to be set to
-	 * 
-	 */
-	ShopManager.prototype.SetDoorText = function (val) 
+	ShopManager.prototype.SetDoorCost = function (val) 
 	{
-		this.doorText.textContent = val;
+		this.doorCost = val;
+		this.doorText.textContent = this.doorCost;
 	};
 
-	ShopManager.prototype.SetAttackText = function (val)
+	ShopManager.prototype.SetAttackCost = function (val)
 	{
-		this.attackText.textContent = val;
+		this.attackCost = val;
+		this.attackText.textContent = this.attackCost;
 	};
 
-	ShopManager.prototype.SetDefenseText = function (val)
+	ShopManager.prototype.SetDefenseCost = function (val)
 	{
-		this.defenseText.textContent = val;
+		this.defenseCost = val;
+		this.defenseText.textContent = this.defenseCost;
 	};
 
-	ShopManager.prototype.SetHealthText = function (val)
+	ShopManager.prototype.SetHealthCost = function (val)
 	{
-		this.healthText.textContent = val;
+		this.healthCost = val;
+		this.healthText.textContent = this.healthCost;
 	};
 
-	ShopManager.prototype.SetOtherOneText = function (val)
+	ShopManager.prototype.SetOtherOneCost = function (val)
 	{
-		this.otherOneText.textContent = val;
+		this.otherOneCost = val;
+		this.otherOneText.textContent = this.otherOneCost;
 	};
 
-	ShopManager.prototype.SetOtherTwoText = function (val)
+	ShopManager.prototype.SetOtherTwoCost = function (val)
 	{
-		this.otherTwoText.textContent = val;
+		this.otherTwoCost = val;
+		this.otherTwoText.textContent = this.otherTwoCost;
 	};
 
 	/**
@@ -203,6 +236,7 @@ module.exports = (function()
 	{
 		var val = amt || this.defaultAddition;
 		this.totalGold += val;
+		this.SetGoldText();
 	};
 
 
