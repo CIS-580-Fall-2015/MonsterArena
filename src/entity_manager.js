@@ -55,8 +55,7 @@ module.exports = (function() {
       }
     }
     if (d) {
-      var m = new Monster(stats, i);
-      d.avaliable = false;
+      var m = new Monster(stats, d);
       monsters.push(m);
     }
   }

@@ -6,13 +6,16 @@ module.exports = (function() {
 
   Monster.prototype = new Entity();
 
-  function Monster(stats, doorID) {
+  function Monster(stats, door) {
     this.health = stats.health;
     this.attack = stats.attack;
     this.defense = stats.defense;
-    this.doorID = doorID;
+    this.door = door;
+    this.door.avaliable = false;
     this.specials = stats.specials;
     this.state = 0;
+    this.x = this.door.x;
+    this.y = this.door.y;
 
     this.cx = document.getElementById('svgArea').width.baseVal.value / 2.0;
     this.cy = document.getElementById('svgArea').height.baseVal.value / 2.0;
@@ -75,6 +78,7 @@ module.exports = (function() {
     this.health -= damage - this.defense;
     if (this.health >= 0) {
       //TODO die
+      this.door.avaliable = true;
       return this.health + this.attack + this.defense;
     }
     return 0;
