@@ -14,8 +14,8 @@ module.exports = (function() {
     this.specials = stats.specials;
     this.state = 0;
 
-    var cx = document.getElementById('svgArea').width.baseVal.value / 2.0;
-    var cy = document.getElementById('svgArea').height.baseVal.value / 2.0;
+    this.cx = document.getElementById('svgArea').width.baseVal.value / 2.0;
+    this.cy = document.getElementById('svgArea').height.baseVal.value / 2.0;
 
     // Create an animations property, with arrays for each direction of animations.
     this.animations = {
@@ -29,25 +29,25 @@ module.exports = (function() {
     this.angle = undefined;
 
     //determines change in x and y for every movment
-    if (this.x == cx) {
-      if (this.y > cy) {
+    if (this.x == this.cx) {
+      if (this.y > this.cy) {
         this.angle = 270;
       } else {
         this.angle = 90;
       }
-    } else if (this.y == cy) {
-      if (this.x > cx) {
+    } else if (this.y == this.cy) {
+      if (this.x > this.cx) {
         this.angle = 0;
       } else {
         this.angle = 180;
       }
-    } else if (this.x < cx) {
-      if (this.y < cy) {
+    } else if (this.x < this.cx) {
+      if (this.y < this.cy) {
         this.angle = 135;
       } else {
         this.angle = 225;
       }
-    } else if (this.y < cy) {
+    } else if (this.y < this.cy) {
       this.angle = 45;
     } else {
       this.angle = 315;
@@ -92,10 +92,32 @@ module.exports = (function() {
 
   //n is the number of frames*numberofpixelsperframe since last update (dx & dy calculated for move of 1 pixel)
   Monster.prototype.doTurn = function(n) {
-    //TODO MOVEMENT
-    //TODO - Check if in bounding box of hero
-    this.x += n * dx;
-    this.y += n * dy;
+    //Check if movement needed based on which direction it is coming in from.
+    var a = math.floor(this.angle*180/Math.PI);
+	if(a==135||a==180||a==225){
+		if(this.x <=this.cx-96){
+			this.x += n * dx;
+			this.y += n * dy;
+		}
+	}
+	else if(a==45||a==0||a==315){
+		if(this.x>=this.cx+32){
+			this.x += n * dx;
+			this.y += n * dy;
+		}
+	}
+    else if(a==90){
+		if(this.y<=this.cy-96){
+			this.x += n * dx;
+			this.y += n * dy;
+		}
+	}
+	else if(a==270){
+		if(this.y>=this.cy+32){
+			this.x += n * dx;
+			this.y += n * dy;
+		}
+	}
     //TODO CHECK RANGE
 
     //TODO specials
