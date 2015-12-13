@@ -67,9 +67,10 @@ module.exports = (function()
 		this.healthSelectable = false;
 		this.otherOneSelectable = false;
 		this.otherTwoSelectable = false;
+		this.purchaseClickable = false;
 
 		// Costs for each upgrade
-		this.doorCost = 500;
+		this.doorCost = 501;
 		this.defenseCost = 500;
 		this.attackCost = 500;
 		this.healthCost = 500; 
@@ -135,6 +136,7 @@ module.exports = (function()
 			self.PurchaseBtn();
 		});
 
+
 		// =-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 		
@@ -166,6 +168,7 @@ module.exports = (function()
 		this.defenseGrey = document.getElementById("Defense_Grey");
 		this.otherOneGrey = document.getElementById("Other1_Grey");
 		this.otherTwoGrey = document.getElementById("Other2_Grey");
+		this.purchaseGrey = document.getElementById("Purchase_Grey");
 
 		this.SetGoldText();
 
@@ -236,7 +239,49 @@ module.exports = (function()
 	{
 		var val = amt || this.defaultAddition;
 		this.totalGold += val;
+		if (this.totalGold >= this.doorCost)
+		{
+			this.doorGrey.setAttribute("opacity", "0");
+			this.doorSelectable = true;
+		}
+		if (this.totalGold >= this.attackCost)
+		{
+			this.attackGrey.setAttribute("opacity", "0");
+			this.attackSelectable = true;
+		}
+		if (this.totalGold >= this.healthCost)
+		{
+			this.healthGrey.setAttribute("opacity", "0");
+			this.healthSelectable = true;
+		}
+		if (this.totalGold >= this.defenseCost)
+		{
+			this.defenseGrey.setAttribute("opacity", "0");
+			this.defenseSelectable = true;
+		}
+		if (this.totalGold >= this.otherOneCost)
+		{
+			this.otherOneGrey.setAttribute("opacity", "0");
+			this.otherOneSelectable = true;
+		}
+		if (this.totalGold >= this.otherTwoCost)
+		{
+			this.otherTwoGrey.setAttribute("opacity", "0");
+			this.otherTwoSelectable = true;
+		}
 		this.SetGoldText();
+	};
+
+	ShopManager.prototype.UpdatePurchaseBtn = function()
+	{
+		if (this.purchaseClickable)
+		{
+			this.purchaseGrey.setAttribute("opacity", "0");
+		}
+		else
+		{
+			this.purchaseGrey.setAttribute("opacity", "0.65");
+		}
 	};
 
 
@@ -264,6 +309,16 @@ module.exports = (function()
 			this.currentSelected = this.doorPlus.selected;
 			this.currentSelected.setAttribute("stroke-opacity", "100");
 		}
+		if (this.doorSelectable)
+		{
+			this.purchaseClickable = true;
+			this.UpdatePurchaseBtn();
+		}
+		else
+		{
+			this.purchaseClickable = false;
+			this.UpdatePurchaseBtn();
+		}
 	};
 
 	ShopManager.prototype.AttackPlus = function() 
@@ -281,6 +336,16 @@ module.exports = (function()
 		{
 			this.currentSelected = this.attackPlus.selected;
 			this.currentSelected.setAttribute("stroke-opacity", "100");
+		}
+		if (this.attackSelectable)
+		{
+			this.purchaseClickable = true;
+			this.UpdatePurchaseBtn();
+		}
+		else
+		{
+			this.purchaseClickable = false;
+			this.UpdatePurchaseBtn();
 		}
 	};
 
@@ -300,6 +365,16 @@ module.exports = (function()
 			this.currentSelected = this.healthPlus.selected;
 			this.currentSelected.setAttribute("stroke-opacity", "100");
 		}
+		if (this.healthSelectable)
+		{
+			this.purchaseClickable = true;
+			this.UpdatePurchaseBtn();
+		}
+		else
+		{
+			this.purchaseClickable = false;
+			this.UpdatePurchaseBtn();
+		}
 	};
 
 	ShopManager.prototype.DefensePlus = function() 
@@ -317,6 +392,16 @@ module.exports = (function()
 		{
 			this.currentSelected = this.defensePlus.selected;
 			this.currentSelected.setAttribute("stroke-opacity", "100");
+		}
+		if (this.defenseSelectable)
+		{
+			this.purchaseClickable = true;
+			this.UpdatePurchaseBtn();
+		}
+		else
+		{
+			this.purchaseClickable = false;
+			this.UpdatePurchaseBtn();
 		}
 	};
 
@@ -336,6 +421,16 @@ module.exports = (function()
 			this.currentSelected = this.otherOne.selected;
 			this.currentSelected.setAttribute("stroke-opacity", "100");
 		}
+		if (this.otherOneSelectable)
+		{
+			this.purchaseClickable = true;
+			this.UpdatePurchaseBtn();
+		}
+		else
+		{
+			this.purchaseClickable = false;
+			this.UpdatePurchaseBtn();
+		}
 	};
 
 	ShopManager.prototype.OtherTwo = function() 
@@ -354,41 +449,57 @@ module.exports = (function()
 			this.currentSelected = this.otherTwo.selected;
 			this.currentSelected.setAttribute("stroke-opacity", "100");
 		}
+		if (this.otherTwoSelectable)
+		{
+			this.purchaseClickable = true;
+			this.UpdatePurchaseBtn();
+		}
+		else
+		{
+			this.purchaseClickable = false;
+			this.UpdatePurchaseBtn();
+		}
 	};
 
 	ShopManager.prototype.PurchaseBtn = function() 
 	{
-		if (this.DEBUG) { console.log("ShopManager: PurchaseBtn Clicked"); }
-		console.log("Upgrade: " + this.Strings[this.currentUpgrade]);
-
-		/* eslint-disable */
-		switch (this.currentUpgrade)
+		if (this.purchaseClickable)
 		{
-			case 0: // Door
+			if (this.DEBUG) { console.log("ShopManager: PurchaseBtn Clicked"); }
+			console.log("Upgrade: " + this.Strings[this.currentUpgrade]);
 
-				break;
+			/* eslint-disable */
+			switch (this.currentUpgrade)
+			{
+				case 0: // Door
 
-			case 1: // Attack
-				this.increaseAttack();
-				break;
+					break;
 
-			case 2: // Health
-				this.increaseHealth();
-				break;
+				case 1: // Attack
+					this.increaseAttack();
+					break;
 
-			case 3: // Defense
-				this.increaseDefense();
-				break;
+				case 2: // Health
+					this.increaseHealth();
+					break;
 
-			case 4: // Other1
+				case 3: // Defense
+					this.increaseDefense();
+					break;
 
-				break;
+				case 4: // Other1
 
-			case 5: // Other2
+					break;
 
-				break;
+				case 5: // Other2
+					break;
+			}
+			/* eslint-enable */
 		}
-		/* eslint-enable */
+		else
+		{
+			if (this.DEBUG) { console.log("ShopManager: PurchaseBtn not clickable."); }
+		}
 	};
 
 
