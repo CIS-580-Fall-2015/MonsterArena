@@ -6,13 +6,24 @@ module.exports = (function() {
 
   Monster.prototype = new Entity();
 
+  var BOSS = {attack: 8, defense: 2, health: 5};
+
+  // Constructor
   function Monster(stats, door, isBoss) {
-    this.health = stats.health;
-    this.attack = stats.attack;
-    this.defense = stats.defense;
+    //Use BOSS stats if it's the leader
+    if (isBoss) {
+      this.health = BOSS.health;
+      this.attack = BOSS.attack;
+      this.defense = BOSS.defense;
+    } else {
+      this.health = stats.health;
+      this.attack = stats.attack;
+      this.defense = stats.defense;
+      this.specials = stats.specials;
+    }
+
     this.door = door;
     this.door.avaliable = false;
-    this.specials = stats.specials;
     this.state = 0;
     this.x = this.door.x;
     this.y = this.door.y;
@@ -74,6 +85,7 @@ module.exports = (function() {
     }
   }
 
+  // Handle monsters being attacked
   Monster.prototype.attacked = function(amount) {
     //Temporary
     this.health -= damage - this.defense;
@@ -89,6 +101,7 @@ module.exports = (function() {
     return -1;
   };
 
+  // Do the monsters turn
   //n is the number of frames*numberofpixelsperframe since last update (dx & dy calculated for move of 1 pixel)
   Monster.prototype.doTurn = function(n) {
     //Checks Range and does movment
