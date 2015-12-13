@@ -4,7 +4,7 @@
  * Script ID Data
  * ==============
  * File Name: AudioManager.js
- * Version Date: ad-2015-12-11 19:17:00
+ * Version Date: ad-2015-12-12 20:10:00
  * Contributors: Kyle Brown
  *
  * Documentation Language: English  (en){lkB-000-001}
@@ -50,16 +50,19 @@
  * Version Date				Version Number kb-4RGB-pixels() 	Comment
  * -----------				---------------------------------	-------
  * ad-2015-12-09 23:50:00	(0,0,1)(0,7,231)(1,12,9)(23,50,0)	AudioManager created
- *					00-00-01 | 00-07-E7 | 01-0C-09 | 17-32-00 
+ *			00-00-01 | 00-07-E7 | 01-0C-09 | 17-32-00 
  *
  * ad-2015-12-10 20:07:00	(0,0,1)(0,7,231)(1,12,10)(20,7,0)	Design outline
- *					00-00-01 | 00-07-E7 | 01-0C-0A | 14-07-00 
+ *			00-00-01 | 00-07-E7 | 01-0C-0A | 14-07-00 
  *
  * ad-2015-12-11 19:17:00	(0,0,1)(0,7,231)(1,12,11)(19,17,0)	Working Version
- *					00-00-01 | 00-07-E7 | 01-0C-0b | 13-10-00
+ *			00-00-01 | 00-07-E7 | 01-0C-0b | 13-10-00
  *
  * ad-2015-12-12 17:49:00	(0,0,1)(0,7,231)(1,12,12)(17,49,0)	Clean up
- *					00-00-01 | 00-07-E7 | 01-0C-0C | 11-31-00
+ *			00-00-01 | 00-07-E7 | 01-0C-0C | 11-31-00
+ *
+ * ad-2015-12-12 20:10:00   	(0,0,1)(0,7,231)(1,12,12)(20,10,0)	Naming fixes
+ *			0-00-01 | 00-07-E7 | 01-0C-0C | 14-01-00
  * =================
  * File Dependencies
  * =================
@@ -344,12 +347,12 @@ module.exports = (function()
 	}
 	
 	// Volume Control Functions
-	AudioManager.prototype.toggleMusicVolume = function ()
+	AudioManager.prototype.toggleMusic = function ()
 	{
 		if (this.DEBUG) { console.log("AudioManager: ToggleMusicVolume"); }
 		toggleMusic(this.musicElm, this.MAX_VOLUME_LVL, this.MIN_VOLUME_LVL, this.ZERO_VOLUME_LVL);
 	}
-	AudioManager.prototype.toggleEffectsVolume = function ()
+	AudioManager.prototype.toggleEffects = function ()
 	{
 		if (this.DEBUG) { console.log("AudioManager: ToggleEffectsVolume"); }
 		toggleMusic(this.soundElm, this.MAX_VOLUME_LVL, this.MIN_VOLUME_LVL, this.ZERO_VOLUME_LVL);
@@ -760,9 +763,10 @@ module.exports = (function()
 		this.healthSelectable = false;
 		this.otherOneSelectable = false;
 		this.otherTwoSelectable = false;
+		this.purchaseClickable = false;
 
 		// Costs for each upgrade
-		this.doorCost = 500;
+		this.doorCost = 501;
 		this.defenseCost = 500;
 		this.attackCost = 500;
 		this.healthCost = 500; 
@@ -828,6 +832,7 @@ module.exports = (function()
 			self.PurchaseBtn();
 		});
 
+
 		// =-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 		
@@ -859,6 +864,7 @@ module.exports = (function()
 		this.defenseGrey = document.getElementById("Defense_Grey");
 		this.otherOneGrey = document.getElementById("Other1_Grey");
 		this.otherTwoGrey = document.getElementById("Other2_Grey");
+		this.purchaseGrey = document.getElementById("Purchase_Grey");
 
 		this.SetGoldText();
 
@@ -929,8 +935,50 @@ module.exports = (function()
 	{
 		var val = amt || this.defaultAddition;
 		this.totalGold += val;
+		if (this.totalGold >= this.doorCost)
+		{
+			this.doorGrey.setAttribute('opacity', '0');
+			this.doorSelectable = true;
+		}
+		if (this.totalGold >= this.attackCost)
+		{
+			this.attackGrey.setAttribute('opacity', '0');
+			this.attackSelectable = true;
+		}
+		if (this.totalGold >= this.healthCost)
+		{
+			this.healthGrey.setAttribute('opacity', '0');
+			this.healthSelectable = true;
+		}
+		if (this.totalGold >= this.defenseCost)
+		{
+			this.defenseGrey.setAttribute('opacity', '0');
+			this.defenseSelectable = true;
+		}
+		if (this.totalGold >= this.otherOneCost)
+		{
+			this.otherOneGrey.setAttribute('opacity', '0');
+			this.otherOneSelectable = true;
+		}
+		if (this.totalGold >= this.otherTwoCost)
+		{
+			this.otherTwoGrey.setAttribute('opacity', '0');
+			this.otherTwoSelectable = true;
+		}
 		this.SetGoldText();
 	};
+
+	ShopManager.prototype.UpdatePurchaseBtn = function()
+	{
+		if (this.purchaseClickable)
+		{
+			this.purchaseGrey.setAttribute('opacity', '0');
+		}
+		else
+		{
+			this.purchaseGrey.setAttribute('opacity', '0.65');
+		}
+	}
 
 
 	ShopManager.prototype.SetStatsManagerDelegates = function(attack, defense, health)
@@ -957,6 +1005,16 @@ module.exports = (function()
 			this.currentSelected = this.doorPlus.selected;
 			this.currentSelected.setAttribute("stroke-opacity", "100");
 		}
+		if (this.doorSelectable)
+		{
+			this.purchaseClickable = true;
+			this.UpdatePurchaseBtn();
+		}
+		else
+		{
+			this.purchaseClickable = false;
+			this.UpdatePurchaseBtn();
+		}
 	};
 
 	ShopManager.prototype.AttackPlus = function() 
@@ -974,6 +1032,16 @@ module.exports = (function()
 		{
 			this.currentSelected = this.attackPlus.selected;
 			this.currentSelected.setAttribute("stroke-opacity", "100");
+		}
+		if (this.attackSelectable)
+		{
+			this.purchaseClickable = true;
+			this.UpdatePurchaseBtn();
+		}
+		else
+		{
+			this.purchaseClickable = false;
+			this.UpdatePurchaseBtn();
 		}
 	};
 
@@ -993,6 +1061,16 @@ module.exports = (function()
 			this.currentSelected = this.healthPlus.selected;
 			this.currentSelected.setAttribute("stroke-opacity", "100");
 		}
+		if (this.healthSelectable)
+		{
+			this.purchaseClickable = true;
+			this.UpdatePurchaseBtn();
+		}
+		else
+		{
+			this.purchaseClickable = false;
+			this.UpdatePurchaseBtn();
+		}
 	};
 
 	ShopManager.prototype.DefensePlus = function() 
@@ -1010,6 +1088,16 @@ module.exports = (function()
 		{
 			this.currentSelected = this.defensePlus.selected;
 			this.currentSelected.setAttribute("stroke-opacity", "100");
+		}
+		if (this.defenseSelectable)
+		{
+			this.purchaseClickable = true;
+			this.UpdatePurchaseBtn();
+		}
+		else
+		{
+			this.purchaseClickable = false;
+			this.UpdatePurchaseBtn();
 		}
 	};
 
@@ -1029,6 +1117,16 @@ module.exports = (function()
 			this.currentSelected = this.otherOne.selected;
 			this.currentSelected.setAttribute("stroke-opacity", "100");
 		}
+		if (this.otherOneSelectable)
+		{
+			this.purchaseClickable = true;
+			this.UpdatePurchaseBtn();
+		}
+		else
+		{
+			this.purchaseClickable = false;
+			this.UpdatePurchaseBtn();
+		}
 	};
 
 	ShopManager.prototype.OtherTwo = function() 
@@ -1047,41 +1145,58 @@ module.exports = (function()
 			this.currentSelected = this.otherTwo.selected;
 			this.currentSelected.setAttribute("stroke-opacity", "100");
 		}
+		if (this.otherTwoSelectable)
+		{
+			this.purchaseClickable = true;
+			this.UpdatePurchaseBtn();
+		}
+		else
+		{
+			this.purchaseClickable = false;
+			this.UpdatePurchaseBtn();
+		}
 	};
 
 	ShopManager.prototype.PurchaseBtn = function() 
 	{
-		if (this.DEBUG) { console.log("ShopManager: PurchaseBtn Clicked"); }
-		console.log("Upgrade: " + this.Strings[this.currentUpgrade]);
-
-		/* eslint-disable */
-		switch (this.currentUpgrade)
+		if (this.purchaseClickable)
 		{
-			case 0: // Door
+			if (this.DEBUG) { console.log("ShopManager: PurchaseBtn Clicked"); }
+			console.log("Upgrade: " + this.Strings[this.currentUpgrade]);
 
-				break;
+			/* eslint-disable */
+			switch (this.currentUpgrade)
+			{
+				case 0: // Door
 
-			case 1: // Attack
-				this.increaseAttack();
-				break;
+					break;
 
-			case 2: // Health
-				this.increaseHealth();
-				break;
+				case 1: // Attack
+					this.increaseAttack();
+					break;
 
-			case 3: // Defense
-				this.increaseDefense();
-				break;
+				case 2: // Health
+					this.increaseHealth();
+					break;
 
-			case 4: // Other1
+				case 3: // Defense
+					this.increaseDefense();
+					break;
 
-				break;
+				case 4: // Other1
 
-			case 5: // Other2
+					break;
 
-				break;
+				case 5: // Other2
+					console.log("Stuff");
+					break;
+			}
+			/* eslint-enable */
 		}
-		/* eslint-enable */
+		else
+		{
+			if (this.DEBUG) { console.log("ShopManager: PurchaseBtn not clickable."); }
+		}
 	};
 
 
