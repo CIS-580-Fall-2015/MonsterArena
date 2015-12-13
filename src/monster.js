@@ -6,11 +6,11 @@ module.exports = (function() {
 
   Monster.prototype = new Entity();
 
-  function Monster(stats, door) {
+  function Monster(stats, doorID) {
     this.health = stats.health;
     this.attack = stats.attack;
     this.defense = stats.defense;
-    this.door = door;
+    this.doorID = doorID;
     this.specials = stats.specials;
     this.state = 0;
 
@@ -50,10 +50,10 @@ module.exports = (function() {
     } else if (this.y < cy) {
       this.angle = 45;
     } else {
-      this.angle = 315
+      this.angle = 315;
     }
     this.angle = this.angle * Math.PI / 180;
-    if (this.angle == 0) {
+    if (this.angle === 0) {
       this.dx = -1;
       this.dy = 0;
     } else if (this.angle == 45) {

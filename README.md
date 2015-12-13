@@ -29,8 +29,33 @@ Keep compiling simple!
    * Monster Updating/Rendering
    * Monster Spawning
 * Monster/Hero interaction
-* Hero Spawning
+* ~~Hero Spawning~~
 
+## Audio Manager
+Added audio containers in HTML. Add to molule via
+
+```AudioManager = require('./AudioManager.js')```
+
+Public Functions:
+* playIdleMusic
+* playBattleMusic
+* playWinMusic
+* playLoseMusic
+* playLevelUpSFX
+* playUpgradeSFX
+* playBuffSFX
+* playDebuffSFX
+* playClickSFX
+* toggleMusic
+* toggleEffects
+ 
+Added 4 svg images, in img folder for icons for toggling sound.
+  
+TO BE IMPLEMENTED... 
+* add icons for music and sound effects toggling in UI and call functions toggleMusic() and toggleEffects() on click.
+* Wherever the wave starts, call playBattleMusic(), and ends call playIdleMusic().
+* Wherever sound effects need to be implemented, call that sound effect function.
+    
 
 ## Contributors
 
