@@ -544,15 +544,11 @@ module.exports = (function(){
   };
 
   Hero.prototype.attacked = function(amount) {
-	//testing health bar
-	var bar = document.getElementById('health');
-	//
     //Temporary
     var damage = amount - this.defense / 2;
     this.health -= damage;
 	//testing health bar
-	bar.value = this.health;
-	//
+	document.getElementById('health').value = this.health;
     if (this.health >= 0) {
       //TODO die
     }
