@@ -17,6 +17,12 @@ module.exports = (function() {
   // The Boss Monster Entity.
   var Boss =
   {
+    // Create an animations property, with arrays for each direction of animations.
+    this.animations = {
+      left: [],
+      right: []
+    };
+
     // The height and width for one frame.
     this.HEIGHT = 98;
     this.WIDTH = 124;
@@ -39,6 +45,12 @@ module.exports = (function() {
   // The Bosser Monster Entity.
   var Bosser =
   {
+    // Create an animations property, with arrays for each direction of animations.
+    this.animations = {
+      left: [],
+      right: []
+    };
+
     // The height and width for one frame.
     this.HEIGHT = 100;
     this.WIDTH = 86;
@@ -62,6 +74,12 @@ module.exports = (function() {
   // The Bossest Monster Entity.
   var Bossest =
   {
+    // Create an animations property, with arrays for each direction of animations.
+    this.animations = {
+      left: [],
+      right: []
+    };
+
     // The height and width for one frame.
     this.HEIGHT = 100;
     this.WIDTH = 116;
@@ -83,6 +101,12 @@ module.exports = (function() {
   // The Creepo Monster Entity.
   var Creepo =
   {
+    // Create an animations property, with arrays for each direction of animations.
+    this.animations = {
+      left: [],
+      right: []
+    };
+
     // The sprite size (It's a square 64 pixels x 64 pixels)
     this.SIZE = 64;
 
@@ -115,6 +139,12 @@ module.exports = (function() {
   // The Gunner Monster Entity.
   var Gunner =
   {
+    // Create an animations property, with arrays for each direction of animations.
+    this.animations = {
+      left: [],
+      right: []
+    };
+
     // The sprite size (It's a square 64 pixels x 64 pixels)
     this.SIZE = 64;
 
@@ -147,6 +177,12 @@ module.exports = (function() {
   // The Puncher Monster Entity.
   var Puncher =
   {
+    // Create an animations property, with arrays for each direction of animations.
+    this.animations = {
+      left: [],
+      right: []
+    };
+
     // The sprite size (It's a square 64 pixels x 64 pixels)
     this.SIZE = 64;
 
@@ -179,6 +215,12 @@ module.exports = (function() {
   // The Skully Monster Entity.
   var Skully =
   {
+    // Create an animations property, with arrays for each direction of animations.
+    this.animations = {
+      left: [],
+      right: []
+    };
+
     // The sprite size (It's a square 64 pixels x 64 pixels)
     this.SIZE = 64;
 
@@ -211,6 +253,12 @@ module.exports = (function() {
   // The Snappy Monster Entity.
   var Snappy =
   {
+    // Create an animations property, with arrays for each direction of animations.
+    this.animations = {
+      left: [],
+      right: []
+    };
+
     // The sprite size (It's a square 64 pixels x 64 pixels)
     this.SIZE = 64;
 
@@ -243,6 +291,12 @@ module.exports = (function() {
   // The Wingy Monster Entity.
   var Wingy =
   {
+    // Create an animations property, with arrays for each direction of animations.
+    this.animations = {
+      left: [],
+      right: []
+    };
+
     // The sprite size (It's a square 64 pixels x 64 pixels)
     this.SIZE = 64;
 
@@ -300,16 +354,32 @@ module.exports = (function() {
     this.cx = document.getElementById('svgArea').width.baseVal.value / 2.0;
     this.cy = document.getElementById('svgArea').height.baseVal.value / 2.0;
 
-    // Create an animations property, with arrays for each direction of animations.
-    this.animations = {
-      left: [],
-      right: []
-    };
-
     //TODO modify according to center of door.
     this.x = this.door.x + 32;
     this.y = this.door.y + 32;
     this.angle = undefined;
+
+    // Set the direction of the monster.
+    if (this.x < this.cx)
+    {
+      this.isLeft = false;
+    }
+    else if (this.x > this.cx)
+    {
+      this.isLeft = true;
+    }
+    else
+    {
+      var ranNum = Math.floor((Math.random() * 2));
+      if (ranNum == 0)
+      {
+        this.isLeft = false;
+      }
+      else
+      {
+        this.isLeft = true;
+      }
+    }
 
     //determines change in x and y for every movment
     if (this.x == this.cx) {
@@ -400,16 +470,17 @@ module.exports = (function() {
     //TODO specials
   };
 
+  // Renders the monster on the canvas via the animation engine.
   Monster.prototype.render = function(context)
   {
-    // Draw the Robo-Killer (and the correct animation).
+    // Draw the Monster (and the correct animation).
     if (this.isLeft)
     {
-      this.animations.left[this.state].render(context, this.currentX, this.currentY);
+      this.animations.left[this.state].render(context, this.x, this.y);
     }
     else
     {
-      this.animations.right[this.state].render(context, this.currentX, this.currentY);
+      this.animations.right[this.state].render(context, this.x, this.y);
     }
   };
 
