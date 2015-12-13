@@ -7,6 +7,8 @@ module.exports = (function() {
   var monsters = [];
   var unlocked_doors = 1;
 
+  var add_gold;
+
   var hero;
 
   // Value followed by scaling

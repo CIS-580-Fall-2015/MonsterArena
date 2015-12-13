@@ -1,11 +1,11 @@
-module.exports = (function(){
+module.exports = (function() {
   var Entity = require('./entity.js');
 
   Hero.prototype = new Entity();
 
 
 
-  function Hero(stats, x, y, EntityManager){
+  function Hero(stats, x, y, EntityManager) {
     this.health = stats.health[0];
     this.health_scale = stats.health[1];
     this.attack = stats.attack[0];
@@ -21,7 +21,7 @@ module.exports = (function(){
 
     this.x = x;
     this.y = y;
-	document.getElementById('health').max = this.health;
+    document.getElementById('health').max = this.health;
   }
 
   Hero.prototype.addExp = function(amount) {
@@ -37,15 +37,16 @@ module.exports = (function(){
   };
 
   Hero.prototype.attacked = function(amount) {
-	//testing health bar
-	var bar = document.getElementById('health');
-	//
+    //testing health bar
+    var bar = document.getElementById('health');
+    //
     //Temporary
     var damage = amount - this.defense / 2;
     this.health -= damage;
-	//testing health bar
-	bar.value = this.health;
-	//
+    //TODO error handle
+    this.EntityManager.add_gold(damage);
+    //testing health bar
+    bar.value = this.health;
     if (this.health >= 0) {
       //TODO die
     }
@@ -58,6 +59,6 @@ module.exports = (function(){
     //TODO TARGET MONSTER AND ATTACK
   };
 
-   return Hero;
+  return Hero;
 
 }());
