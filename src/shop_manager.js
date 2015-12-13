@@ -29,7 +29,7 @@ module.exports = (function()
 			ATTACK: 1,
 			HEALTH: 2,
 			DEFENSE: 3,
-			OTHER1: 4,
+			SPECIAL: 4,
 			OTHER2: 5,
 		};
 		Object.freeze(this.Upgrades);
@@ -40,7 +40,7 @@ module.exports = (function()
 			1: "ATTACK",
 			2: "HEALTH",
 			3: "DEFENSE",
-			4: "OTHER1",
+			4: "SPECIAL",
 			5: "OTHER2",
 		};
 		Object.freeze(this.Strings);
@@ -59,13 +59,15 @@ module.exports = (function()
 		this.currentUpgrade = undefined;
 		this.totalGold = 0;
 		this.defaultAddition = 100;
+		this.specialProgression = ["taunt_special", "critical_special", "magic_special"];
+		this.specialIndex = 0;
 
 		// Flags for greying out shop items
 		this.defenseSelectable = false;
 		this.doorSelectable = false;
 		this.attackSelectable = false;
 		this.healthSelectable = false;
-		this.otherOneSelectable = false;
+		this.specialSelectable = false;
 		this.otherTwoSelectable = false;
 		this.purchaseClickable = false;
 
@@ -74,7 +76,7 @@ module.exports = (function()
 		this.defenseCost = 500;
 		this.attackCost = 500;
 		this.healthCost = 500; 
-		this.otherOneCost = 500;
+		this.specialCost = 500;
 		this.otherTwoCost = 500;
 
 
@@ -114,12 +116,11 @@ module.exports = (function()
 			self.DefensePlus();
 		});
 
-		this.otherOne = document.getElementById("Other1");
-		this.otherOne.descText = "Desc of Other 1";
-		this.otherOne.selected = document.getElementById("Other1_Selected");
-		this.otherOne.addEventListener("click", function(e)
+		this.special = document.getElementById("Special");
+		this.special.selected = document.getElementById("Special_Selected");
+		this.special.addEventListener("click", function(e)
 		{
-			self.OtherOne();
+			self.Special();
 		});
 
 		this.otherTwo = document.getElementById("Other2");
@@ -135,6 +136,8 @@ module.exports = (function()
 		{
 			self.PurchaseBtn();
 		});
+
+		this.currentSpecial = document.getElementById(this.specialProgression[this.specialIndex]);
 
 
 		// =-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -156,8 +159,8 @@ module.exports = (function()
 		this.healthText = document.getElementById("Health_Cost");
 		this.healthText.textContent = this.healthCost;
 
-		this.otherOneText = document.getElementById("Other1_Cost");
-		this.otherOneText.textContent = this.otherOneCost;
+		this.specialText = document.getElementById("Special_Cost");
+		this.specialText.textContent = this.specialCost;
 
 		this.otherTwoText = document.getElementById("Other2_Cost");
 		this.otherTwoText.textContent = this.otherTwoCost;
@@ -166,7 +169,7 @@ module.exports = (function()
 		this.attackGrey = document.getElementById("Attack_Grey");
 		this.healthGrey = document.getElementById("Health_Grey");
 		this.defenseGrey = document.getElementById("Defense_Grey");
-		this.otherOneGrey = document.getElementById("Other1_Grey");
+		this.specialGrey = document.getElementById("Special_Grey");
 		this.otherTwoGrey = document.getElementById("Other2_Grey");
 		this.purchaseGrey = document.getElementById("Purchase_Grey");
 
@@ -210,10 +213,10 @@ module.exports = (function()
 		this.healthText.textContent = this.healthCost;
 	};
 
-	ShopManager.prototype.SetOtherOneCost = function (val)
+	ShopManager.prototype.SetSpecialCost = function (val)
 	{
-		this.otherOneCost = val;
-		this.otherOneText.textContent = this.otherOneCost;
+		this.specialCost = val;
+		this.specialText.textContent = this.specialCost;
 	};
 
 	ShopManager.prototype.SetOtherTwoCost = function (val)
@@ -259,10 +262,10 @@ module.exports = (function()
 			this.defenseGrey.setAttribute("opacity", "0");
 			this.defenseSelectable = true;
 		}
-		if (this.totalGold >= this.otherOneCost)
+		if (this.totalGold >= this.specialCost)
 		{
-			this.otherOneGrey.setAttribute("opacity", "0");
-			this.otherOneSelectable = true;
+			this.specialGrey.setAttribute("opacity", "0");
+			this.specialSelectable = true;
 		}
 		if (this.totalGold >= this.otherTwoCost)
 		{
@@ -405,23 +408,23 @@ module.exports = (function()
 		}
 	};
 
-	ShopManager.prototype.OtherOne = function() 
+	ShopManager.prototype.Special = function() 
 	{
-		if (this.DEBUG) { console.log("ShopManager: Other1 Clicked"); }
-		this.descriptionText.textContent = this.otherOne.descText;
+		if (this.DEBUG) { console.log("ShopManager: Special Clicked"); }
+		this.descriptionText.textContent = this.currentSpecial.getAttribute('desc');
 		this.currentUpgrade = this.Upgrades.OTHER1;
 		if (this.currentSelected != undefined)
 		{
 			this.currentSelected.setAttribute("stroke-opacity", "0");
-			this.currentSelected = this.otherOne.selected;
+			this.currentSelected = this.special.selected;
 			this.currentSelected.setAttribute("stroke-opacity", "100");
 		}
 		else
 		{
-			this.currentSelected = this.otherOne.selected;
+			this.currentSelected = this.special.selected;
 			this.currentSelected.setAttribute("stroke-opacity", "100");
 		}
-		if (this.otherOneSelectable)
+		if (this.specialSelectable)
 		{
 			this.purchaseClickable = true;
 			this.UpdatePurchaseBtn();
