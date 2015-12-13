@@ -937,32 +937,32 @@ module.exports = (function()
 		this.totalGold += val;
 		if (this.totalGold >= this.doorCost)
 		{
-			this.doorGrey.setAttribute('opacity', '0');
+			this.doorGrey.setAttribute("opacity", "0");
 			this.doorSelectable = true;
 		}
 		if (this.totalGold >= this.attackCost)
 		{
-			this.attackGrey.setAttribute('opacity', '0');
+			this.attackGrey.setAttribute("opacity", "0");
 			this.attackSelectable = true;
 		}
 		if (this.totalGold >= this.healthCost)
 		{
-			this.healthGrey.setAttribute('opacity', '0');
+			this.healthGrey.setAttribute("opacity", "0");
 			this.healthSelectable = true;
 		}
 		if (this.totalGold >= this.defenseCost)
 		{
-			this.defenseGrey.setAttribute('opacity', '0');
+			this.defenseGrey.setAttribute("opacity", "0");
 			this.defenseSelectable = true;
 		}
 		if (this.totalGold >= this.otherOneCost)
 		{
-			this.otherOneGrey.setAttribute('opacity', '0');
+			this.otherOneGrey.setAttribute("opacity", "0");
 			this.otherOneSelectable = true;
 		}
 		if (this.totalGold >= this.otherTwoCost)
 		{
-			this.otherTwoGrey.setAttribute('opacity', '0');
+			this.otherTwoGrey.setAttribute("opacity", "0");
 			this.otherTwoSelectable = true;
 		}
 		this.SetGoldText();
@@ -972,13 +972,13 @@ module.exports = (function()
 	{
 		if (this.purchaseClickable)
 		{
-			this.purchaseGrey.setAttribute('opacity', '0');
+			this.purchaseGrey.setAttribute("opacity", "0");
 		}
 		else
 		{
-			this.purchaseGrey.setAttribute('opacity', '0.65');
+			this.purchaseGrey.setAttribute("opacity", "0.65");
 		}
-	}
+	};
 
 
 	ShopManager.prototype.SetStatsManagerDelegates = function(attack, defense, health)
@@ -1188,7 +1188,6 @@ module.exports = (function()
 					break;
 
 				case 5: // Other2
-					console.log("Stuff");
 					break;
 			}
 			/* eslint-enable */
