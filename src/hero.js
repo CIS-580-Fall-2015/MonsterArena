@@ -1,11 +1,13 @@
-module.exports = (function(){
+module.exports = (function() {
   var Entity = require('./entity.js');
 
   Hero.prototype = new Entity();
 
-
-
-  function Hero(stats, x, y, EntityManager){
+  // Hero Constructor
+  // Stats is object keys = stats, values = [stat, scale_factor]
+  // x/y positions
+  // Entity Manager
+  function Hero(stats, x, y, EntityManager) {
     this.health = stats.health[0];
     this.health_scale = stats.health[1];
     this.attack = stats.attack[0];
@@ -21,25 +23,43 @@ module.exports = (function(){
 
     this.x = x;
     this.y = y;
+    document.getElementById('health').max = this.health;
   }
 
+  // Adds experiance, uncapped
+  Hero.prototype.addExp = function(amount) {
+    this.exp += amount;
+  }
+
+  // Levelups the hero's stats based
+  // on scaling factor
   Hero.prototype.levelup = function() {
     this.health *= this.health_scale;
     this.attack *= this.attack_scale;
     this.defense *= this.defense_scale;
     this.req_exp ^= this.exp_scale;
     this.exp = 0;
+    this.level++;
   };
 
+  // Updates health bar, adds gold based on damage
   Hero.prototype.attacked = function(amount) {
+    //testing health bar
+    var bar = document.getElementById('health');
+    //
     //Temporary
     var damage = amount - this.defense / 2;
     this.health -= damage;
+    //TODO error handle
+    this.EntityManager.add_gold(damage);
+    //testing health bar
+    bar.value = this.health;
     if (this.health >= 0) {
       //TODO die
     }
   };
 
+  // Targets and attacks monsters
   Hero.prototype.doTurn = function() {
     if (this.exp >= this.req_exp) {
       this.levelup();
@@ -47,6 +67,6 @@ module.exports = (function(){
     //TODO TARGET MONSTER AND ATTACK
   };
 
-   return Hero;
+  return Hero;
 
 }());

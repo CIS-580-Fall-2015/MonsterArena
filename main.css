@@ -1,3 +1,10 @@
+progress.health {
+
+}
+progress.health::-webkit-progress-value{
+	background:red;
+}
+
 #toplevel {
   width: 100%;
   height: 595px;
@@ -14,12 +21,20 @@
 }
 #toplevel #arena {
   width: 590px;
-  height: 340px;
+  height: 595px;
   float: left;
   margin: 0 auto;
   margin-top: 127.5px;
   padding: 0 0 0 0;
   display: inline-block;
+}
+#toplevel #arena #health{
+	-webkit-apperance: none;
+	apperance: none;
+	background: red;
+}
+#toplevel #arena #health::-webkit-progress-value{
+	background: red;
 }
 #toplevel #shop {
   width: 295px;
