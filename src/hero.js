@@ -43,6 +43,8 @@ module.exports = (function() {
     //Temporary
     var damage = amount - this.defense / 2;
     this.health -= damage;
+    //TODO error handle
+    this.EntityManager.add_gold(damage);
     //testing health bar
     bar.value = this.health;
     if (this.health >= 0) {

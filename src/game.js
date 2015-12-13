@@ -11,6 +11,8 @@ window.onload = function() {
   StatsManager = require('./stats_manager.js');
   AudioManager = require('./AudioManager.js');
 
+  EntityManager.add_gold = ShopManager.AddGold;
+
   StatsManager.SetSpawnDelegate = EntityManager.spawn_monster;
 
 
