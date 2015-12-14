@@ -16,8 +16,12 @@ window.onload = function() {
   StatsManager.SetSpawnDelegate = EntityManager.spawn_monster;
 
 
-  ShopManager.SetStatsManagerDelegates(StatsManager.IncreaseAttackCap,
-    StatsManager.IncreaseDefenseCap, StatsManager.IncreaseHealthCap);
+  ShopManager.SetStatsManagerDelegates(
+                                      StatsManager.IncreaseAttackCap,
+                                      StatsManager.IncreaseDefenseCap, 
+                                      StatsManager.IncreaseHealthCap,
+                                      StatsManager.AddSpecial
+                                      );
 
   AudioManager.playIdleMusic();
 
