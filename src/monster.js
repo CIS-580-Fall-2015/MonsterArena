@@ -3,7 +3,7 @@
  */
 module.exports = (function() {
   var Entity = require('./entity.js'),
-    Animation = require('./animation.js');;
+  Animation = require('./animation.js');;
 
   // States for the monster.
   const WALKING = 0;
@@ -15,7 +15,8 @@ module.exports = (function() {
   var availableBosses = [];
 
   // The Boss Monster Entity.
-  var Boss = {
+  var Boss =
+  {
     // Create an animations property, with arrays for each direction of animations.
     this.animations = {
       left: [],
@@ -42,7 +43,8 @@ module.exports = (function() {
   availableBosses.push(Boss);
 
   // The Bosser Monster Entity.
-  var Bosser = {
+  var Bosser =
+  {
     // Create an animations property, with arrays for each direction of animations.
     this.animations = {
       left: [],
@@ -70,7 +72,8 @@ module.exports = (function() {
   availableBosses.push(Bosser);
 
   // The Bossest Monster Entity.
-  var Bossest = {
+  var Bossest =
+  {
     // Create an animations property, with arrays for each direction of animations.
     this.animations = {
       left: [],
@@ -96,7 +99,8 @@ module.exports = (function() {
   availableBosses.push(Bossest);
 
   // The Creepo Monster Entity.
-  var Creepo = {
+  var Creepo =
+  {
     // Create an animations property, with arrays for each direction of animations.
     this.animations = {
       left: [],
@@ -133,7 +137,8 @@ module.exports = (function() {
   availableRegMonsters.push(Creepo);
 
   // The Gunner Monster Entity.
-  var Gunner = {
+  var Gunner =
+  {
     // Create an animations property, with arrays for each direction of animations.
     this.animations = {
       left: [],
@@ -170,7 +175,8 @@ module.exports = (function() {
   availableRegMonsters.push(Gunner);
 
   // The Puncher Monster Entity.
-  var Puncher = {
+  var Puncher =
+  {
     // Create an animations property, with arrays for each direction of animations.
     this.animations = {
       left: [],
@@ -207,7 +213,8 @@ module.exports = (function() {
   availableRegMonsters.push(Puncher);
 
   // The Skully Monster Entity.
-  var Skully = {
+  var Skully =
+  {
     // Create an animations property, with arrays for each direction of animations.
     this.animations = {
       left: [],
@@ -244,7 +251,8 @@ module.exports = (function() {
   availableRegMonsters.push(Skully);
 
   // The Snappy Monster Entity.
-  var Snappy = {
+  var Snappy =
+  {
     // Create an animations property, with arrays for each direction of animations.
     this.animations = {
       left: [],
@@ -281,7 +289,8 @@ module.exports = (function() {
   availableRegMonsters.push(Snappy);
 
   // The Wingy Monster Entity.
-  var Wingy = {
+  var Wingy =
+  {
     // Create an animations property, with arrays for each direction of animations.
     this.animations = {
       left: [],
@@ -319,11 +328,7 @@ module.exports = (function() {
 
   Monster.prototype = new Entity();
 
-  var BOSS = {
-    attack: 8,
-    defense: 2,
-    health: 5
-  };
+  var BOSS = {attack: 8, defense: 2, health: 5};
 
   // Constructor
   function Monster(stats, door, isBoss) {
@@ -357,15 +362,23 @@ module.exports = (function() {
     this.angle = undefined;
 
     // Set the direction of the monster.
-    if (this.x < this.cx) {
+    if (this.x < this.cx)
+    {
       this.isLeft = false;
-    } else if (this.x > this.cx) {
+    }
+    else if (this.x > this.cx)
+    {
       this.isLeft = true;
-    } else {
+    }
+    else
+    {
       var ranNum = Math.floor((Math.random() * 2));
-      if (ranNum == 0) {
+      if (ranNum == 0)
+      {
         this.isLeft = false;
-      } else {
+      }
+      else
+      {
         this.isLeft = true;
       }
     }
@@ -460,11 +473,15 @@ module.exports = (function() {
   };
 
   // Renders the monster on the canvas via the animation engine.
-  Monster.prototype.render = function(context) {
+  Monster.prototype.render = function(context)
+  {
     // Draw the Monster (and the correct animation).
-    if (this.isLeft) {
+    if (this.isLeft)
+    {
       this.sprite.animations.left[this.state].render(context, this.x, this.y);
-    } else {
+    }
+    else
+    {
       this.sprite.animations.right[this.state].render(context, this.x, this.y);
     }
   };
