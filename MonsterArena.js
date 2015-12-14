@@ -605,8 +605,12 @@ window.onload = function() {
   StatsManager.SetSpawnDelegate = EntityManager.spawn_monster;
 
 
-  ShopManager.SetStatsManagerDelegates(StatsManager.IncreaseAttackCap,
-    StatsManager.IncreaseDefenseCap, StatsManager.IncreaseHealthCap);
+  ShopManager.SetStatsManagerDelegates(
+                                      StatsManager.IncreaseAttackCap,
+                                      StatsManager.IncreaseDefenseCap, 
+                                      StatsManager.IncreaseHealthCap,
+                                      StatsManager.AddSpecial
+                                      );
 
   AudioManager.playIdleMusic();
 
@@ -867,14 +871,16 @@ module.exports = (function() {
   var BossMovement = new Image();
   BossMovement.src = './img/monsters/Boss/Boss-Movement.png';
   var animations = {};
+  animations.right = [];
+  animations.left = [];
 
   // The right-facing animations. ALL OF THESE ANIMATIONS ARE THE SAME. IMPLEMENTED FOR THE SAKE OF CONSISTANCY.
-  animations.right[WALKING] = new Animation(BossMovement, WIDTH, HEIGHT, 0, 0, 2); // TODO Specific Timing may need to be adjusted.
-  animations.right[ATTACKING] = new Animation(BossMovement, WIDTH, HEIGHT, 0, 0, 2); // TODO Specific Timing may need to be adjusted.
+  animations.right.push(new Animation(BossMovement, WIDTH, HEIGHT, 0, 0, 2)); // TODO Specific Timing may need to be adjusted.
+  animations.right.push(new Animation(BossMovement, WIDTH, HEIGHT, 0, 0, 2)); // TODO Specific Timing may need to be adjusted.
 
   //The left-facing animations
-  animations.left[WALKING] = new Animation(BossMovement, WIDTH, HEIGHT, 0, 0, 2); // TODO Specific Timing may need to be adjusted.
-  animations.left[ATTACKING] = new Animation(BossMovement, WIDTH, HEIGHT, 0, 0, 2); // TODO Specific Timing may need to be adjusted.
+  animations.left.push(new Animation(BossMovement, WIDTH, HEIGHT, 0, 0, 2)); // TODO Specific Timing may need to be adjusted.
+  animations.left.push(new Animation(BossMovement, WIDTH, HEIGHT, 0, 0, 2)); // TODO Specific Timing may need to be adjusted.
 
   return animations;
 
@@ -899,14 +905,16 @@ module.exports = (function() {
   var BosserMovement = new Image();
   BosserMovement.src = './img/monsters/Bosser/Bosser-Movement.png';
   var animations = {};
+  animations.right = [];
+  animations.left = [];
 
   // The right-facing animations. ALL OF THESE ANIMATIONS ARE THE SAME. IMPLEMENTED FOR THE SAKE OF CONSISTANCY.
-  animations.right[WALKING] = new Animation(BosserMovement, WIDTH, HEIGHT, 0, 0, 2); // TODO Specific Timing may need to be adjusted.
-  animations.right[ATTACKING] = new Animation(BosserMovement, WIDTH, HEIGHT, 0, 0, 2); // TODO Specific Timing may need to be adjusted.
+  animations.right.push(new Animation(BosserMovement, WIDTH, HEIGHT, 0, 0, 2)); // @TODO: Specific Timing may need to be adjusted.
+  animations.right.push(new Animation(BosserMovement, WIDTH, HEIGHT, 0, 0, 2)); // @TODO Specific Timing may need to be adjusted.
 
   //The left-facing animations
-  animations.left[WALKING] = new Animation(BosserMovement, WIDTH, HEIGHT, 0, 0, 2); // TODO Specific Timing may need to be adjusted.
-  animations.left[ATTACKING] = new Animation(BosserMovement, WIDTH, HEIGHT, 0, 0, 2); // TODO Specific Timing may need to be adjusted.
+  animations.left.push(new Animation(BosserMovement, WIDTH, HEIGHT, 0, 0, 2)); // @TODO Specific Timing may need to be adjusted.
+  animations.left.push(new Animation(BosserMovement, WIDTH, HEIGHT, 0, 0, 2)); // @TODO Specific Timing may need to be adjusted.
 
   return animations;
 
@@ -1272,12 +1280,13 @@ module.exports = (function()
 	};
 
 
-	ShopManager.prototype.SetStatsManagerDelegates = function(attack, defense, health)
+	ShopManager.prototype.SetStatsManagerDelegates = function(attack, defense, health, special)
 	{
 		if (this.DEBUG) { console.log("ShopManager: StatsManager delegates being set."); }
 		this.increaseAttack = attack;
 		this.increaseDefense = defense;
 		this.increaseHealth = health;
+		this.addSpecial = special;
 	};
 
 	ShopManager.prototype.DoorPlus = function() 
@@ -1512,7 +1521,7 @@ module.exports = (function()
 					break;
 
 				case 4: // Special
-					// @TODO: Add special to stats manager
+					var spec = this.specialProgression[this.specialIndex];
 					document.getElementById(this.specialProgression[this.specialIndex]).
 							setAttribute("opacity", "0");
 					this.specialIndex++;
@@ -1531,6 +1540,7 @@ module.exports = (function()
 						this.UpdatePurchaseBtn();	
 					}
 					this.UpdateItemGrey();
+					this.addSpecial("stats_" + spec.substring(5));
 					break;
 
 				case 5: // Other2
@@ -1630,10 +1640,10 @@ module.exports = (function()
 	var spawnDelegate = undefined;
 	var specialList = [
 						"stats_none_special", 
-						"stats_critical_special", 
-						"stats_magic_special", 
-						"stats_taunt_special", 
-						"stats_defense_special",
+						// "stats_critical_special", 
+						// "stats_magic_special", 
+						// "stats_taunt_special", 
+						// "stats_defense_special",
 					];
 	var specialIndex = 0;
 
@@ -1848,6 +1858,10 @@ module.exports = (function()
 		UpdateSpecial(-1);
 	}
 
+	///////////////////////
+	// Exposed Functions //
+	///////////////////////
+
 	function IncreaseAttackCap(val)
 	{
 		if (DEBUG) { console.log("StatsManager: Increasing Attack Cap"); }
@@ -1868,19 +1882,12 @@ module.exports = (function()
 		var amt = val || 1;
 		healthCap += amt;
 	}
-
-	/////////////////////
-	// Getters/Setters //
-	/////////////////////
+	
 	function SetSpawnDelegate(val)
 	{
 		spawnDelegate = val;
 	}
 
-
-	///////////////////////
-	// Exposed Functions //
-	///////////////////////
 	function SpawnMonster()
 	{
 		if (DEBUG) { console.log("StatsManager: SpawnMonster Clicked"); }
@@ -1892,6 +1899,11 @@ module.exports = (function()
 		{
 			spawnDelegate(GetCurrentStats());
 		}
+	}
+
+	function AddSpecial(specialName)
+	{
+		specialList.push(specialName);
 	}
 
 	function GetCurrentStats()
@@ -1920,6 +1932,7 @@ module.exports = (function()
 		IncreaseAttackCap: IncreaseAttackCap,
 		IncreaseDefenseCap: IncreaseDefenseCap,
 		IncreaseHealthCap: IncreaseHealthCap,
+		AddSpecial: AddSpecial,
 	};
 
 })();
