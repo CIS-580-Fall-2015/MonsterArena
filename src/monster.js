@@ -4,18 +4,38 @@
 module.exports = (function() {
   var Entity = require('./entity.js');
 
+  // boss = animation {} for monsters\Boss.js
+  var boss = require('./monsters/Boss.js'),
+  bosser = require('./monsters/Bosser.js');
+  //TODO Other animations
+
   Monster.prototype = new Entity();
 
-  function Monster(stats, doorID) {
-    this.health = stats.health;
-    this.attack = stats.attack;
-    this.defense = stats.defense;
-    this.doorID = doorID;
-    this.specials = stats.specials;
-    this.state = 0;
+  var BOSS = {attack: 8, defense: 2, health: 5};
 
-    var cx = document.getElementById('svgArea').width.baseVal.value / 2.0;
-    var cy = document.getElementById('svgArea').height.baseVal.value / 2.0;
+  // Constructor
+  function Monster(stats, door, isBoss) {
+    //Use BOSS stats if it's the leader
+    if (isBoss) {
+      this.health = BOSS.health;
+      this.attack = BOSS.attack;
+      this.defense = BOSS.defense;
+    } else {
+      this.health = stats.health;
+      this.attack = stats.attack;
+      this.defense = stats.defense;
+      this.specials = stats.specials;
+    }
+
+    this.door = door;
+    this.door.avaliable = false;
+    this.state = 0;
+    this.x = this.door.x;
+    this.y = this.door.y;
+    this.isBoss = isBoss;
+
+    this.cx = document.getElementById('svgArea').width.baseVal.value / 2.0;
+    this.cy = document.getElementById('svgArea').height.baseVal.value / 2.0;
 
     // Create an animations property, with arrays for each direction of animations.
     this.animations = {
@@ -29,74 +49,90 @@ module.exports = (function() {
     this.angle = undefined;
 
     //determines change in x and y for every movment
-    if (this.x == cx) {
-      if (this.y > cy) {
+    if (this.x == this.cx) {
+      if (this.y > this.cy) {
         this.angle = 270;
+        this.dx = 0;
+        this.dy = -1;
       } else {
         this.angle = 90;
+        this.dx = 0;
+        this.dy = 1;
       }
-    } else if (this.y == cy) {
-      if (this.x > cx) {
-        this.angle = 0;
+    } else if (this.y == this.cy) {
+      if (this.x > this.cx) {
+        this.angle = 0 * Math.PI / 180;
+        this.dx = -1;
+        this.dy = 0;
       } else {
         this.angle = 180;
+        this.dx = 1;
+        this.dy = 0;
       }
-    } else if (this.x < cx) {
-      if (this.y < cy) {
+    } else if (this.x < this.cx) {
+      if (this.y < this.cy) {
         this.angle = 135;
+        this.dx = Math.sqrt(2) / 2;
+        this.dy = Math.sqrt(2) / 2;
       } else {
         this.angle = 225;
+        this.dx = Math.sqrt(2) / 2;
+        this.dy = -Math.sqrt(2) / 2;
       }
-    } else if (this.y < cy) {
+    } else if (this.y < this.cy) {
       this.angle = 45;
-    } else {
-      this.angle = 315;
-    }
-    this.angle = this.angle * Math.PI / 180;
-    if (this.angle === 0) {
-      this.dx = -1;
-      this.dy = 0;
-    } else if (this.angle == 45) {
       this.dx = -Math.sqrt(2) / 2;
       this.dy = Math.sqrt(2) / 2;
-    } else if (this.angle == 90) {
-      this.dx = 0;
-      this.dy = 1;
-    } else if (this.angle == 135) {
-      this.dx = Math.sqrt(2) / 2;
-      this.dy = Math.sqrt(2) / 2;
-    } else if (this.angle == 180) {
-      this.dx = 1;
-      this.dy = 0;
-    } else if (this.angle == 225) {
-      this.dx = Math.sqrt(2) / 2;
-      this.dy = -Math.sqrt(2) / 2;
-    } else if (this.angle == 270) {
-      this.dx = 0;
-      this.dy = -1;
-    } else if (this.angle == 315) {
+    } else {
+      this.angle = 315;
       this.dx = -Math.sqrt(2) / 2;
       this.dy = -Math.sqrt(2) / 2;
     }
   }
 
+  // Handle monsters being attacked
   Monster.prototype.attacked = function(amount) {
     //Temporary
     this.health -= damage - this.defense;
     if (this.health >= 0) {
       //TODO die
-      return this.health + this.attack + this.defense;
+      this.door.avaliable = true;
+      if (this.isBoss) {
+        return 0;
+      } else {
+        return this.health + this.attack + this.defense;
+      }
     }
-    return 0;
+    return -1;
   };
 
+  // Do the monsters turn
   //n is the number of frames*numberofpixelsperframe since last update (dx & dy calculated for move of 1 pixel)
   Monster.prototype.doTurn = function(n) {
-    //TODO MOVEMENT
-    //TODO - Check if in bounding box of hero
-    this.x += n * dx;
-    this.y += n * dy;
-    //TODO CHECK RANGE
+    //Checks Range and does movment
+    //Check if movement needed based on which direction it is coming in from.
+    var a = math.floor(this.angle);
+    if (a == 135 || a == 180 || a == 225) {
+      if (this.x <= this.cx - 96) {
+        this.x += n * this.dx;
+        this.y += n * this.dy;
+      }
+    } else if (a == 45 || a == 0 || a == 315) {
+      if (this.x >= this.cx + 32) {
+        this.x += n * this.dx;
+        this.y += n * this.dy;
+      }
+    } else if (a == 90) {
+      if (this.y <= this.cy - 96) {
+        this.x += n * this.dx;
+        this.y += n * this.dy;
+      }
+    } else if (a == 270) {
+      if (this.y >= this.cy + 32) {
+        this.x += n * this.dx;
+        this.y += n * this.dy;
+      }
+    }
 
     //TODO specials
 

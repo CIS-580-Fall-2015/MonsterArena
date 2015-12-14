@@ -12,23 +12,16 @@ Keep compiling simple!
 ## TODO
 
 * Index page  
-    * ~~Need to incorporate arena area between menus~~
-    * fix arena sizing
+    * arena/canvas work for rendering
 * Menu states
-* ~~Stats UI~~
-* ~~Shop UI~~ (mostly)  
-    * ~~Selection highlighting~~
-    * ~~Assigning delegates to handle updating~~ (paritally)
-    * Final two upgrade options
-    * Cost grey/available
-* ~~UI Design~~
-* UI Icons
+* Shop UI (95% finished)
+    * Assign delegates for boss/door upgrades
 * Monster sprites
-   * Monster Movment
+   * ~~Monster Movement~~
    * Monster Animation
    * Monster Updating/Rendering
-   * Monster Spawning
-* Monster/Hero interaction
+   * ~~Monster Spawning~~
+* **Monster/Hero interaction**
 * ~~Hero Spawning~~
 
 ## Audio Manager
@@ -48,14 +41,14 @@ Public Functions:
 * playClickSFX
 * toggleMusic
 * toggleEffects
- 
+
 Added 4 svg images, in img folder for icons for toggling sound.
-  
-TO BE IMPLEMENTED... 
+
+TO BE IMPLEMENTED...
 * add icons for music and sound effects toggling in UI and call functions toggleMusic() and toggleEffects() on click.
 * Wherever the wave starts, call playBattleMusic(), and ends call playIdleMusic().
 * Wherever sound effects need to be implemented, call that sound effect function.
-    
+
 
 ## Contributors
 
@@ -65,5 +58,3 @@ TO BE IMPLEMENTED...
 * Richard Petrie (rap1011@ksu.edu)
 * David Barnes III (dbarnes3@ksu.edu)
 * E.N. Speer (ispeer@ksu.edu)
-
-

@@ -5,18 +5,20 @@
  * Description: StatsManger for monster stats UI
  * 			in Monster Arena for CIS 580 final
  * 			project
- * 
+ *
  *
  * History:
- * 		December 06, 2015: 
+ * 		December 06, 2015:
  *  		-Date Created
  *  	December 7, 2015:
  *  		-Redid implementation away from Entity-style
  *  			because javascript scope is stupid.
+ *     December 13, 2015:
+ *     		- Whole bunch of stuff because i forgot to update this list
  */
 module.exports = (function()
 {
-	
+
 	//////////////////////////////////////
 	// Value for outputting debug code. //
 	//////////////////////////////////////
@@ -45,6 +47,16 @@ module.exports = (function()
 	var healthVal = startingHealthVal;
 	var specialContent = undefined;
 	var spawnDelegate = undefined;
+	/* eslint-disable */
+	var specialList = [
+						"stats_none_special", 
+						// "stats_critical_special", 
+						// "stats_magic_special", 
+						// "stats_taunt_special", 
+						// "stats_defense_special",
+					];
+	/* eslint-enable */
+	var specialIndex = 0;
 
 	////////////////
 	// Text hooks //
@@ -57,6 +69,9 @@ module.exports = (function()
 
 	var healthText = document.getElementById("Health_Text");
 	healthText.textContent = healthVal;
+
+	var specialText = document.getElementById("Special_Desc");
+	specialText.textContent = "No special";
 
 	////////////////////////
 	// Button Click Hooks //
@@ -118,7 +133,7 @@ module.exports = (function()
 		attackMinus1.setAttribute("stroke", "#000000");
 	}
 
-	function AttackMinus() 
+	function AttackMinus()
 	{
 		if (DEBUG) { console.log("StatsManager: Attack -1 Clicked"); }
 		if (attackVal > attackFloor)
@@ -136,7 +151,7 @@ module.exports = (function()
 		attackPlus2.setAttribute("stroke", "#000000");
 	}
 
-	function DefensePlus() 
+	function DefensePlus()
 	{
 		if (DEBUG) { console.log("StatsManager: Defense +1 Clicked"); }
 		if (defenseVal < defenseCap)
@@ -154,7 +169,7 @@ module.exports = (function()
 		defenseMinus1.setAttribute("stroke", "#000000");
 	}
 
-	function DefenseMinus() 
+	function DefenseMinus()
 	{
 		if (DEBUG) { console.log("StatsManager: Defense -1 Clicked"); }
 		if (defenseVal > defenseFloor)
@@ -172,7 +187,7 @@ module.exports = (function()
 		defensePlus2.setAttribute("stroke", "#000000");
 	}
 
-	function HealthPlus() 
+	function HealthPlus()
 	{
 		if (DEBUG) { console.log("StatsManager: Health +1 Clicked"); }
 		if (healthVal < healthCap)
@@ -191,7 +206,7 @@ module.exports = (function()
 	}
 
 
-	function HealthMinus() 
+	function HealthMinus()
 	{
 		if (DEBUG) { console.log("StatsManager: Health -1 Clicked."); }
 		if (healthVal > healthFloor)
@@ -209,15 +224,54 @@ module.exports = (function()
 		healthPlus2.setAttribute("stroke", "#000000");
 	}
 
+	// 1 is up
+	// -1 is down
+	function UpdateSpecial(dir)
+	{
+		var current = document.getElementById(specialList[specialIndex]);
+		current.setAttribute("opacity", "0");
+		if (dir == 1)
+		{
+			if (specialIndex < specialList.length - 1)
+			{
+				specialIndex++;
+			}
+			else
+			{
+				specialIndex = 0;
+			}
+		}
+		if (dir == -1)
+		{
+			if (specialIndex > 0)
+			{
+				specialIndex--;
+			}
+			else
+			{
+				specialIndex = specialList.length - 1;
+			}
+		}
+		current = document.getElementById(specialList[specialIndex]);
+		current.setAttribute("opacity", "1");
+		specialText.textContent = current.getAttribute("desc");
+	}
+
 	function SpecialUp()
 	{
 		if (DEBUG) { console.log("StatsManager: Special Up Clicked."); }
+		UpdateSpecial(1);
 	}
 
 	function SpecialDown()
 	{
 		if (DEBUG) { console.log("StatsManager: Special Down Clicked."); }
+		UpdateSpecial(-1);
 	}
+
+	///////////////////////
+	// Exposed Functions //
+	///////////////////////
 
 	function IncreaseAttackCap(val)
 	{
@@ -239,30 +293,28 @@ module.exports = (function()
 		var amt = val || 1;
 		healthCap += amt;
 	}
-
-	/////////////////////
-	// Getters/Setters //
-	/////////////////////
+	
 	function SetSpawnDelegate(val)
 	{
 		spawnDelegate = val;
 	}
 
-
-	///////////////////////
-	// Exposed Functions //
-	///////////////////////
 	function SpawnMonster()
 	{
 		if (DEBUG) { console.log("StatsManager: SpawnMonster Clicked"); }
-		if (spawnDelegate == undefined)
+		if (spawnDelegate === undefined)
 		{
 			console.log("Spawn Delegate not set.");
 		}
 		else
 		{
-			spawnDelegate();
+			spawnDelegate(GetCurrentStats());
 		}
+	}
+
+	function AddSpecial(specialName)
+	{
+		specialList.push(specialName);
 	}
 
 	function GetCurrentStats()
@@ -291,15 +343,7 @@ module.exports = (function()
 		IncreaseAttackCap: IncreaseAttackCap,
 		IncreaseDefenseCap: IncreaseDefenseCap,
 		IncreaseHealthCap: IncreaseHealthCap,
+		AddSpecial: AddSpecial,
 	};
 
 })();
-
-
-
-
-
-
-
-
-

@@ -2,6 +2,7 @@
   width: 100%;
   height: 595px;
   display: inline-block;
+  text-align: center;
 }
 #toplevel #spawner {
   width: 295px;
@@ -9,18 +10,24 @@
   float: left;
   padding: 0 0 0 0;
   margin: 0 auto;
+  display: inline-block;
 }
 #toplevel #arena {
   width: 590px;
   height: 340px;
   float: left;
-  /*
-		background-image: url('./img/arena3.png');
-		background-size: contain;
-		*/
   margin: 0 auto;
   margin-top: 127.5px;
   padding: 0 0 0 0;
+  display: inline-block;
+}
+#toplevel #arena #health {
+  -webkit-apperance: none;
+  apperance: none;
+  background: red;
+}
+#toplevel #arena #health::-webkit-progress-value {
+  background: red;
 }
 #toplevel #shop {
   width: 295px;
@@ -28,4 +35,8 @@
   float: left;
   padding: 0 0 0 0;
   margin: 0 auto;
+  display: inline-block;
+}
+progress.health::-webkit-progress-value {
+  background: red;
 }
