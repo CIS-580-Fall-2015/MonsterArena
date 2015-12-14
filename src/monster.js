@@ -4,6 +4,11 @@
 module.exports = (function() {
   var Entity = require('./entity.js');
 
+  // boss = animation {} for monsters\Boss.js
+  var boss = require('./monsters/Boss.js'),
+  bosser = require('./monsters/Bosser.js');
+  //TODO Other animations
+
   Monster.prototype = new Entity();
 
   var BOSS = {attack: 8, defense: 2, health: 5};

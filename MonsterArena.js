@@ -367,6 +367,82 @@ module.exports = (function()
 
 
 },{}],2:[function(require,module,exports){
+/* Sprite sheet animation engine. Ported from DiggyHole, an open source game located at:
+   https://github.com/CIS-580-Fall-2015/diggy-hole
+*/
+
+module.exports = function () {
+
+
+  function Animation(image, width, height, top, left, numberOfFrames, secondsPerFrame, playItOnce, donePlayingCallback, reverse) {
+    this.frameIndex = 0,
+        this.time = 0,
+        this.secondsPerFrame = secondsPerFrame || (1 / 16),
+        this.numberOfFrames = numberOfFrames || 1;
+
+    this.width = width;
+    this.height = height;
+    this.image = image;
+
+    this.drawLocationX = top || 0;
+    this.drawLocationY = left || 0;
+
+    this.playItOnce = playItOnce;
+    this.donePlayingCallback = donePlayingCallback;
+    this.reversalFactor = 1;
+    if(reverse) this.reversalFactor = -1;
+  }
+
+  Animation.prototype.setStats = function (frameCount, locationX, locationY) {
+    this.numberOfFrames = frameCount;
+    this.drawLocationY = locationY;
+    this.drawLocationX = locationX;
+  };
+
+  Animation.prototype.update = function (elapsedTime, tilemap) {
+    this.time += elapsedTime;
+
+    // Update animation
+    if (this.time > this.secondsPerFrame) {
+      if (this.time > this.secondsPerFrame) this.time -= this.secondsPerFrame;
+
+      // If the current frame index is in range
+      if (this.frameIndex < this.numberOfFrames - 1) {
+        this.frameIndex += 1;
+      } else {
+        if (!this.playItOnce)
+          this.frameIndex = 0;
+
+        if (this.donePlayingCallback) {
+          this.donePlayingCallback();
+
+          //once we call the callback, destroy it so it cannot be called again
+          this.donePlayingCallback = null;
+        }
+      }
+    }
+  };
+
+  Animation.prototype.render = function (ctx, x, y) {
+
+    // Draw the current frame
+    ctx.drawImage(
+        this.image,
+        this.drawLocationX + (this.frameIndex * this.reversalFactor * this.width),
+        this.drawLocationY,
+        this.width,
+        this.height,
+        x,
+        y,
+        this.width,
+        this.height);
+  };
+
+  return Animation;
+
+}();
+
+},{}],3:[function(require,module,exports){
 /* Base class for all game entities,
  * implemented as a common JS module
  */
@@ -394,7 +470,7 @@ module.exports = (function(){
 
 }());
 
-},{}],3:[function(require,module,exports){
+},{}],4:[function(require,module,exports){
 module.exports = (function() {
 
   var Hero = require('./hero.js');
@@ -403,6 +479,10 @@ module.exports = (function() {
   var doors = [];
   var monsters = [];
   var unlocked_doors = 1;
+
+  var spawn_boss_interval;
+
+  var add_gold;
 
   var hero;
 
@@ -418,6 +498,7 @@ module.exports = (function() {
   var ARENA_HEIGHT; //TODO
   var OFFSET = 64;
 
+  // Builds the door array and places the hero
   function initialize() {
     doors[0] = new Door(ARENA_WIDTH / 2, OFFSET); // North
     doors[1] = new Door(ARENA_WIDTH - OFFSET, ARENA_HEIGHT / 2); // East
@@ -429,8 +510,12 @@ module.exports = (function() {
     doors[7] = new Door(ARENA_WIDTH * 0.25, ARENA_HEIGHT * 0.25); // North-West
 
     hero = new Hero(HERO_STATS, ARENA_WIDTH / 2 - 32, ARENA_HEIGHT / 2 - 32, this);
+
+    spawn_boss_interval = setInterval(spawn_boss, 5000);
   }
 
+  // Runs all the turns, adds exp when neccesary
+  // Clears array of dead monsters
   function update() {
     var del = false;
     for (var i = 0; i < monsters.length; i++) {
@@ -453,12 +538,14 @@ module.exports = (function() {
     }
   }
 
+  // For door upgrades
   function open_door() {
     if (unlocked_doors < doors.length) {
       unlocked_doors++;
     }
   }
 
+  // Spawns a monster at an open door
   function spawn_monster(stats) {
     var d = null;
     for (var i = 1; i > unlocked_doors; i++) {
@@ -473,6 +560,23 @@ module.exports = (function() {
     }
   }
 
+  //Spawns the boss monster out of door[0]
+  function spawn_boss() {
+    var found = false;
+    for (var i = 0; i > monsters.length; i++) {
+      if (monsters[i].isBoss) {
+        found = true;
+        break;
+      }
+    }
+
+    if (!found) {
+      var b = new Monster(null, doors[0], true);
+      monsters.push(b);
+    }
+  }
+
+
   return {
     initialize: initialize,
     update: update,
@@ -482,7 +586,7 @@ module.exports = (function() {
 
 }());
 
-},{"./hero.js":5,"./monster.js":6,"./spawner":8}],4:[function(require,module,exports){
+},{"./hero.js":6,"./monster.js":7,"./spawner":11}],5:[function(require,module,exports){
 window.onload = function() {
 
   // The width & height of the screen
@@ -495,6 +599,8 @@ window.onload = function() {
   ShopManager = require('./shop_manager.js');
   StatsManager = require('./stats_manager.js');
   AudioManager = require('./AudioManager.js');
+
+  EntityManager.add_gold = ShopManager.AddGold;
 
   StatsManager.SetSpawnDelegate = EntityManager.spawn_monster;
 
@@ -522,16 +628,17 @@ window.onload = function() {
 
 }
 
-},{"./AudioManager.js":1,"./entity_manager.js":3,"./hero.js":5,"./shop_manager.js":7,"./stats_manager.js":9}],5:[function(require,module,exports){
-module.exports = (function(){
+},{"./AudioManager.js":1,"./entity_manager.js":4,"./hero.js":6,"./shop_manager.js":10,"./stats_manager.js":12}],6:[function(require,module,exports){
+module.exports = (function() {
   var Entity = require('./entity.js');
 
   Hero.prototype = new Entity();
 
-
-
-  
-  function Hero(stats, x, y, EntityManager){
+  // Hero Constructor
+  // Stats is object keys = stats, values = [stat, scale_factor]
+  // x/y positions
+  // Entity Manager
+  function Hero(stats, x, y, EntityManager) {
     this.health = stats.health[0];
     this.health_scale = stats.health[1];
     this.attack = stats.attack[0];
@@ -547,32 +654,43 @@ module.exports = (function(){
 
     this.x = x;
     this.y = y;
-	document.getElementById('health').max = this.health;
+    document.getElementById('health').max = this.health;
   }
 
+  // Adds experiance, uncapped
   Hero.prototype.addExp = function(amount) {
     this.exp += amount;
   }
 
+  // Levelups the hero's stats based
+  // on scaling factor
   Hero.prototype.levelup = function() {
     this.health *= this.health_scale;
     this.attack *= this.attack_scale;
     this.defense *= this.defense_scale;
     this.req_exp ^= this.exp_scale;
     this.exp = 0;
+    this.level++;
   };
 
+  // Updates health bar, adds gold based on damage
   Hero.prototype.attacked = function(amount) {
+    //testing health bar
+    var bar = document.getElementById('health');
+    //
     //Temporary
     var damage = amount - this.defense / 2;
     this.health -= damage;
-	//testing health bar
-	document.getElementById('health').value = this.health;
+    //TODO error handle
+    this.EntityManager.add_gold(damage);
+    //testing health bar
+    bar.value = this.health;
     if (this.health >= 0) {
       //TODO die
     }
   };
 
+  // Targets and attacks monsters
   Hero.prototype.doTurn = function() {
     if (this.exp >= this.req_exp) {
       this.levelup();
@@ -580,26 +698,42 @@ module.exports = (function(){
     //TODO TARGET MONSTER AND ATTACK
   };
 
-   return Hero;
+  return Hero;
 
 }());
 
-},{"./entity.js":2}],6:[function(require,module,exports){
+},{"./entity.js":3}],7:[function(require,module,exports){
 /* Base class for each monster.
  * It inherits from the generic entity class.
  */
 module.exports = (function() {
   var Entity = require('./entity.js');
 
+  //Set animation to boss with this.animation = new boss()
+  var boss = require('./monsters/Boss.js'),
+  bosser = require('./monsters/Bosser.js');
+  //TODO Other animations
+
   Monster.prototype = new Entity();
 
+  var BOSS = {attack: 8, defense: 2, health: 5};
+
+  // Constructor
   function Monster(stats, door, isBoss) {
-    this.health = stats.health;
-    this.attack = stats.attack;
-    this.defense = stats.defense;
+    //Use BOSS stats if it's the leader
+    if (isBoss) {
+      this.health = BOSS.health;
+      this.attack = BOSS.attack;
+      this.defense = BOSS.defense;
+    } else {
+      this.health = stats.health;
+      this.attack = stats.attack;
+      this.defense = stats.defense;
+      this.specials = stats.specials;
+    }
+
     this.door = door;
     this.door.avaliable = false;
-    this.specials = stats.specials;
     this.state = 0;
     this.x = this.door.x;
     this.y = this.door.y;
@@ -661,6 +795,7 @@ module.exports = (function() {
     }
   }
 
+  // Handle monsters being attacked
   Monster.prototype.attacked = function(amount) {
     //Temporary
     this.health -= damage - this.defense;
@@ -676,6 +811,7 @@ module.exports = (function() {
     return -1;
   };
 
+  // Do the monsters turn
   //n is the number of frames*numberofpixelsperframe since last update (dx & dy calculated for move of 1 pixel)
   Monster.prototype.doTurn = function(n) {
     //Checks Range and does movment
@@ -712,7 +848,73 @@ module.exports = (function() {
 
 }());
 
-},{"./entity.js":2}],7:[function(require,module,exports){
+},{"./entity.js":3,"./monsters/Boss.js":8,"./monsters/Bosser.js":9}],8:[function(require,module,exports){
+/* Boss Monster Entity.
+ */
+module.exports = (function() {
+  var Animation = require('../animation.js');
+
+  // States for the monster
+  const WALKING = 0;
+  const ATTACKING = 1;
+
+  // The sprite HEIGHT (One frame).
+  const HEIGHT = 98;
+  // The sprite WIDTH (One frame).
+  const WIDTH = 124;
+
+  // The movement sprite sheet for the boss. It is simple, with walking and attacking being the same animation.
+  var BossMovement = new Image();
+  BossMovement.src = './img/monsters/Boss/Boss-Movement.png';
+  var animations = {};
+
+    // The right-facing animations. ALL OF THESE ANIMATIONS ARE THE SAME. IMPLEMENTED FOR THE SAKE OF CONSISTANCY.
+    animations.right[WALKING] = new Animation(BossMovement, WIDTH, HEIGHT, 0, 0, 2); // TODO Specific Timing may need to be adjusted.
+    animations.right[ATTACKING] = new Animation(BossMovement, WIDTH, HEIGHT, 0, 0, 2); // TODO Specific Timing may need to be adjusted.
+
+    //The left-facing animations
+    animations.left[WALKING] = new Animation(BossMovement, WIDTH, HEIGHT, 0, 0, 2); // TODO Specific Timing may need to be adjusted.
+    animations.left[ATTACKING] = new Animation(BossMovement, WIDTH, HEIGHT, 0, 0, 2); // TODO Specific Timing may need to be adjusted.
+
+
+
+  return animations;
+
+}());
+
+},{"../animation.js":2}],9:[function(require,module,exports){
+/* Bosser Monster Entity.
+ */
+module.exports = (function() {
+  var Animation = require('../animation.js');
+
+  // States for the monster
+  const WALKING = 0;
+  const ATTACKING = 1;
+
+  // The sprite HEIGHT (One frame).
+  const HEIGHT = 100;
+  // The sprite WIDTH (One frame).
+  const WIDTH = 86;
+
+  // The movement sprite sheet for the bosser. It is simple, with walking and attacking being the same animation.
+  var BosserMovement = new Image();
+  BosserMovement.src = './img/monsters/Bosser/Bosser-Movement.png';
+  var animations = {};
+
+  // The right-facing animations. ALL OF THESE ANIMATIONS ARE THE SAME. IMPLEMENTED FOR THE SAKE OF CONSISTANCY.
+  animations.right[WALKING] = new Animation(BosserMovement, WIDTH, HEIGHT, 0, 0, 2); // TODO Specific Timing may need to be adjusted.
+  animations.right[ATTACKING] = new Animation(BosserMovement, WIDTH, HEIGHT, 0, 0, 2); // TODO Specific Timing may need to be adjusted.
+
+  //The left-facing animations
+  animations.left[WALKING] = new Animation(BosserMovement, WIDTH, HEIGHT, 0, 0, 2); // TODO Specific Timing may need to be adjusted.
+  animations.left[ATTACKING] = new Animation(BosserMovement, WIDTH, HEIGHT, 0, 0, 2); // TODO Specific Timing may need to be adjusted.
+
+  return animations;
+
+}());
+
+},{"../animation.js":2}],10:[function(require,module,exports){
 /* Author: Nic Johnson
  *
  * Title: ShopManager.js
@@ -1241,7 +1443,7 @@ module.exports = (function()
 
 
 
-},{}],8:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 module.exports = (function() {
 
   function Door(x, y) {
@@ -1254,7 +1456,7 @@ module.exports = (function() {
 
 }());
 
-},{}],9:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 /* Author: Nic Johnson
  *
  * Title: StatsManager.js
@@ -1592,4 +1794,4 @@ module.exports = (function()
 
 })();
 
-},{}]},{},[4]);
+},{}]},{},[5]);
