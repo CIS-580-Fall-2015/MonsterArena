@@ -355,6 +355,7 @@ module.exports = (function()
 		this.UpdateAgainstWallet();
 		this.UpdateSelectable();
 
+		/* eslint-disable */
 		switch (this.currentUpgrade)
 		{
 			case 0: // Door
@@ -399,6 +400,7 @@ module.exports = (function()
 				}
 				break;
 		}
+		/* eslint-enable */
 		this.UpdatePurchaseBtn();
 
 		if (this.doorSelectable)
