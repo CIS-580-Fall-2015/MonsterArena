@@ -357,12 +357,13 @@ module.exports = (function()
 	};
 
 
-	ShopManager.prototype.SetStatsManagerDelegates = function(attack, defense, health)
+	ShopManager.prototype.SetStatsManagerDelegates = function(attack, defense, health, special)
 	{
 		if (this.DEBUG) { console.log("ShopManager: StatsManager delegates being set."); }
 		this.increaseAttack = attack;
 		this.increaseDefense = defense;
 		this.increaseHealth = health;
+		this.addSpecial = special;
 	};
 
 	ShopManager.prototype.DoorPlus = function() 
@@ -597,7 +598,7 @@ module.exports = (function()
 					break;
 
 				case 4: // Special
-					// @TODO: Add special to stats manager
+					var spec = this.specialProgression[this.specialIndex];
 					document.getElementById(this.specialProgression[this.specialIndex]).
 							setAttribute("opacity", "0");
 					this.specialIndex++;
@@ -616,6 +617,7 @@ module.exports = (function()
 						this.UpdatePurchaseBtn();	
 					}
 					this.UpdateItemGrey();
+					this.addSpecial("stats_" + spec.substring(5));
 					break;
 
 				case 5: // Other2
