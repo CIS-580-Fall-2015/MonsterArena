@@ -17,7 +17,7 @@ Keep compiling simple!
 * Shop UI (95% finished)
     * Assign delegates for boss/door upgrades
 * Monster sprites
-   * Monster Movement
+   * ~~Monster Movement~~
    * Monster Animation
    * Monster Updating/Rendering
    * ~~Monster Spawning~~
