@@ -62,6 +62,7 @@ module.exports = (function()
 		this.currentUpgrade = undefined;
 		this.totalGold = 0;
 		this.defaultAddition = 100;
+		/* eslint-disable */
 		this.specialProgression = [
 									"shop_taunt_special", 
 									"shop_defense_special", 
@@ -69,6 +70,7 @@ module.exports = (function()
 									"shop_magic_special",
 									"shop_none_special",
 									];
+		/* eslint-enable */
 		this.specialIndex = 0;
 
 		// Flags for greying out shop items
@@ -342,7 +344,7 @@ module.exports = (function()
 		{
 			this.otherTwoGrey.setAttribute("opacity", "0.65");
 		}
-	}
+	};
 
 	ShopManager.prototype.UpdatePurchaseBtn = function()
 	{
@@ -481,7 +483,7 @@ module.exports = (function()
 	ShopManager.prototype.Special = function() 
 	{
 		if (this.DEBUG) { console.log("ShopManager: Special Clicked"); }
-		this.descriptionText.textContent = this.currentSpecial.getAttribute('desc');
+		this.descriptionText.textContent = this.currentSpecial.getAttribute("desc");
 		this.currentUpgrade = this.Upgrades.SPECIAL;
 		if (this.currentSelected != undefined)
 		{
@@ -563,7 +565,7 @@ module.exports = (function()
 		}
 		this.UpdateItemGrey();
 		this.SetGoldText();
-	}
+	};
 
 	ShopManager.prototype.PurchaseBtn = function() 
 	{

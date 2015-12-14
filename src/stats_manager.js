@@ -47,6 +47,7 @@ module.exports = (function()
 	var healthVal = startingHealthVal;
 	var specialContent = undefined;
 	var spawnDelegate = undefined;
+	/* eslint-disable */
 	var specialList = [
 						"stats_none_special", 
 						// "stats_critical_special", 
@@ -54,6 +55,7 @@ module.exports = (function()
 						// "stats_taunt_special", 
 						// "stats_defense_special",
 					];
+	/* eslint-enable */
 	var specialIndex = 0;
 
 	////////////////
