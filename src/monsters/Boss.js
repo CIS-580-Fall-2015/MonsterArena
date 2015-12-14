@@ -16,14 +16,16 @@ module.exports = (function() {
   var BossMovement = new Image();
   BossMovement.src = './img/monsters/Boss/Boss-Movement.png';
   var animations = {};
+  animations.right = [];
+  animations.left = [];
 
   // The right-facing animations. ALL OF THESE ANIMATIONS ARE THE SAME. IMPLEMENTED FOR THE SAKE OF CONSISTANCY.
-  animations.right[WALKING] = new Animation(BossMovement, WIDTH, HEIGHT, 0, 0, 2); // TODO Specific Timing may need to be adjusted.
-  animations.right[ATTACKING] = new Animation(BossMovement, WIDTH, HEIGHT, 0, 0, 2); // TODO Specific Timing may need to be adjusted.
+  animations.right.push(new Animation(BossMovement, WIDTH, HEIGHT, 0, 0, 2)); // TODO Specific Timing may need to be adjusted.
+  animations.right.push(new Animation(BossMovement, WIDTH, HEIGHT, 0, 0, 2)); // TODO Specific Timing may need to be adjusted.
 
   //The left-facing animations
-  animations.left[WALKING] = new Animation(BossMovement, WIDTH, HEIGHT, 0, 0, 2); // TODO Specific Timing may need to be adjusted.
-  animations.left[ATTACKING] = new Animation(BossMovement, WIDTH, HEIGHT, 0, 0, 2); // TODO Specific Timing may need to be adjusted.
+  animations.left.push(new Animation(BossMovement, WIDTH, HEIGHT, 0, 0, 2)); // TODO Specific Timing may need to be adjusted.
+  animations.left.push(new Animation(BossMovement, WIDTH, HEIGHT, 0, 0, 2)); // TODO Specific Timing may need to be adjusted.
 
   return animations;
 
