@@ -2,7 +2,7 @@ module.exports = (function() {
 
   var Hero = require('./hero.js');
   var Door = require('./spawner');
-  var Monster = require('./monster.js');
+  //var Monster = require('./monster.js');
   var doors = [];
   var monsters = [];
   var unlocked_doors = 1;
@@ -82,8 +82,8 @@ module.exports = (function() {
       }
     }
     if (d) {
-      var m = new Monster(stats, d);
-      monsters.push(m);
+      // var m = new Monster(stats, d);
+      // monsters.push(m);
     }
   }
 
@@ -98,8 +98,8 @@ module.exports = (function() {
     }
 
     if (!found) {
-      var b = new Monster(null, doors[0], true);
-      monsters.push(b);
+      // var b = new Monster(null, doors[0], true);
+      // monsters.push(b);
     }
   }
 

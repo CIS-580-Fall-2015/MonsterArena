@@ -475,7 +475,7 @@ module.exports = (function() {
 
   var Hero = require('./hero.js');
   var Door = require('./spawner');
-  var Monster = require('./monster.js');
+  //var Monster = require('./monster.js');
   var doors = [];
   var monsters = [];
   var unlocked_doors = 1;
@@ -555,8 +555,8 @@ module.exports = (function() {
       }
     }
     if (d) {
-      var m = new Monster(stats, d);
-      monsters.push(m);
+      // var m = new Monster(stats, d);
+      // monsters.push(m);
     }
   }
 
@@ -571,8 +571,13 @@ module.exports = (function() {
     }
 
     if (!found) {
+<<<<<<< HEAD
       var b = new Monster(null, doors[0], true);
       monsters.push(b);
+=======
+      // var b = new Monster(null, doors[0], true);
+      // monsters.push(b);
+>>>>>>> origin/master
     }
   }
 
@@ -586,7 +591,11 @@ module.exports = (function() {
 
 }());
 
+<<<<<<< HEAD
 },{"./hero.js":6,"./monster.js":7,"./spawner":11}],5:[function(require,module,exports){
+=======
+},{"./hero.js":5,"./spawner":7}],4:[function(require,module,exports){
+>>>>>>> origin/master
 window.onload = function() {
 
   // The width & height of the screen
@@ -628,7 +637,11 @@ window.onload = function() {
 
 }
 
+<<<<<<< HEAD
 },{"./AudioManager.js":1,"./entity_manager.js":4,"./hero.js":6,"./shop_manager.js":10,"./stats_manager.js":12}],6:[function(require,module,exports){
+=======
+},{"./AudioManager.js":1,"./entity_manager.js":3,"./hero.js":5,"./shop_manager.js":6,"./stats_manager.js":8}],5:[function(require,module,exports){
+>>>>>>> origin/master
 module.exports = (function() {
   var Entity = require('./entity.js');
 
@@ -702,6 +715,7 @@ module.exports = (function() {
 
 }());
 
+<<<<<<< HEAD
 },{"./entity.js":3}],7:[function(require,module,exports){
 /* Base class for each monster.
  * It inherits from the generic entity class.
@@ -915,6 +929,9 @@ module.exports = (function() {
 }());
 
 },{"../animation.js":2}],10:[function(require,module,exports){
+=======
+},{"./entity.js":2}],6:[function(require,module,exports){
+>>>>>>> origin/master
 /* Author: Nic Johnson
  *
  * Title: ShopManager.js
@@ -926,6 +943,9 @@ module.exports = (function() {
  * History:
  * 		December 08, 2015: 
  *  		-Date Created
+ *  	December 13, 2015:
+ *  		-Whole bunch of stuff because i forgot to update this list
+ *  		-Subtracting gold on purchase
  */
 
 module.exports = (function()
@@ -976,7 +996,13 @@ module.exports = (function()
 		this.currentUpgrade = undefined;
 		this.totalGold = 0;
 		this.defaultAddition = 100;
-		this.specialProgression = ["taunt_special", "critical_special", "magic_special"];
+		this.specialProgression = [
+									"shop_taunt_special", 
+									"shop_defense_special", 
+									"shop_critical_special", 
+									"shop_magic_special",
+									"shop_none_special",
+									];
 		this.specialIndex = 0;
 
 		// Flags for greying out shop items
@@ -987,6 +1013,14 @@ module.exports = (function()
 		this.specialSelectable = false;
 		this.otherTwoSelectable = false;
 		this.purchaseClickable = false;
+
+		// Flags for finished upgrade path
+		this.doorDone = false;
+		this.defenseDone = false;
+		this.attackDone = false;
+		this.healthDone = false; 
+		this.specialDone = false;
+		this.otherTwoDone = false;
 
 		// Costs for each upgrade
 		this.doorCost = 501;
@@ -1159,38 +1193,90 @@ module.exports = (function()
 	{
 		var val = amt || this.defaultAddition;
 		this.totalGold += val;
-		if (this.totalGold >= this.doorCost)
+		if (this.totalGold >= this.doorCost && !this.doorDone)
 		{
-			this.doorGrey.setAttribute("opacity", "0");
 			this.doorSelectable = true;
 		}
-		if (this.totalGold >= this.attackCost)
+		if (this.totalGold >= this.attackCost && !this.attackDone)
 		{
-			this.attackGrey.setAttribute("opacity", "0");
 			this.attackSelectable = true;
 		}
-		if (this.totalGold >= this.healthCost)
+		if (this.totalGold >= this.healthCost && !this.healthDone)
 		{
-			this.healthGrey.setAttribute("opacity", "0");
 			this.healthSelectable = true;
 		}
-		if (this.totalGold >= this.defenseCost)
+		if (this.totalGold >= this.defenseCost && !this.defenseDone)
 		{
-			this.defenseGrey.setAttribute("opacity", "0");
 			this.defenseSelectable = true;
 		}
-		if (this.totalGold >= this.specialCost)
+		if (this.totalGold >= this.specialCost && !this.specialDone)
 		{
-			this.specialGrey.setAttribute("opacity", "0");
 			this.specialSelectable = true;
 		}
-		if (this.totalGold >= this.otherTwoCost)
+		if (this.totalGold >= this.otherTwoCost && !this.otherTwoDone)
 		{
-			this.otherTwoGrey.setAttribute("opacity", "0");
 			this.otherTwoSelectable = true;
 		}
+		this.UpdateItemGrey();
 		this.SetGoldText();
 	};
+
+	ShopManager.prototype.UpdateItemGrey = function()
+	{
+		if (this.doorSelectable && !this.doorDone)
+		{
+			this.doorGrey.setAttribute("opacity", "0");
+		}
+		else
+		{
+			this.doorGrey.setAttribute("opacity", "0.65");
+		}
+
+		if (this.attackSelectable && !this.attackDone)
+		{
+			this.attackGrey.setAttribute("opacity", "0");
+		}
+		else
+		{
+			this.attackGrey.setAttribute("opacity", "0.65");
+		}
+
+		if (this.healthSelectable && !this.healthDone)
+		{
+			this.healthGrey.setAttribute("opacity", "0");
+		}
+		else
+		{
+			this.healthGrey.setAttribute("opacity", "0.65");
+		}
+
+		if (this.defenseSelectable && !this.defenseDone)
+		{
+			this.defenseGrey.setAttribute("opacity", "0");
+		}
+		else
+		{
+			this.defenseGrey.setAttribute("opacity", "0.65");
+		}
+
+		if (this.specialSelectable && !this.specialDone)
+		{
+			this.specialGrey.setAttribute("opacity", "0");
+		}
+		else
+		{
+			this.specialGrey.setAttribute("opacity", "0.65");
+		}
+
+		if (this.otherTwoSelectable && !this.otherTwoDone)
+		{
+			this.otherTwoGrey.setAttribute("opacity", "0");
+		}
+		else
+		{
+			this.otherTwoGrey.setAttribute("opacity", "0.65");
+		}
+	}
 
 	ShopManager.prototype.UpdatePurchaseBtn = function()
 	{
@@ -1329,7 +1415,7 @@ module.exports = (function()
 	{
 		if (this.DEBUG) { console.log("ShopManager: Special Clicked"); }
 		this.descriptionText.textContent = this.currentSpecial.getAttribute('desc');
-		this.currentUpgrade = this.Upgrades.OTHER1;
+		this.currentUpgrade = this.Upgrades.SPECIAL;
 		if (this.currentSelected != undefined)
 		{
 			this.currentSelected.setAttribute("stroke-opacity", "0");
@@ -1341,7 +1427,7 @@ module.exports = (function()
 			this.currentSelected = this.special.selected;
 			this.currentSelected.setAttribute("stroke-opacity", "100");
 		}
-		if (this.specialSelectable)
+		if (this.specialSelectable && !this.specialDone)
 		{
 			this.purchaseClickable = true;
 			this.UpdatePurchaseBtn();
@@ -1381,6 +1467,37 @@ module.exports = (function()
 		}
 	};
 
+	ShopManager.prototype.SubtractGold = function(amt)
+	{
+		this.totalGold -= amt;
+		if (this.totalGold < this.doorCost && !this.doorDone)
+		{
+			this.doorSelectable = false;
+		}
+		if (this.totalGold < this.attackCost && !this.attackDone)
+		{
+			this.attackSelectable = false;
+		}
+		if (this.totalGold < this.healthCost && !this.healthDone)
+		{
+			this.healthSelectable = false;
+		}
+		if (this.totalGold < this.defenseCost && !this.defenseDone)
+		{
+			this.defenseSelectable = false;
+		}
+		if (this.totalGold < this.specialCost && !this.specialDone)
+		{
+			this.specialSelectable = false;
+		}
+		if (this.totalGold < this.otherTwoCost && !this.otherTwoDone)
+		{
+			this.otherTwoSelectable = false;
+		}
+		this.UpdateItemGrey();
+		this.SetGoldText();
+	}
+
 	ShopManager.prototype.PurchaseBtn = function() 
 	{
 		if (this.purchaseClickable)
@@ -1397,18 +1514,42 @@ module.exports = (function()
 
 				case 1: // Attack
 					this.increaseAttack();
+					this.SubtractGold(this.attackCost);
+					// @TODO: increment cost
 					break;
 
 				case 2: // Health
 					this.increaseHealth();
+					this.SubtractGold(this.healthCost);
+					// @TODO: increment cost
 					break;
 
 				case 3: // Defense
 					this.increaseDefense();
+					this.SubtractGold(this.defenseCost);
+					// @TODO: increment cost
 					break;
 
-				case 4: // Other1
-
+				case 4: // Special
+					// @TODO: Add special to stats manager
+					document.getElementById(this.specialProgression[this.specialIndex]).
+							setAttribute("opacity", "0");
+					this.specialIndex++;
+					console.log(this.specialIndex);
+					var s = document.getElementById(this.specialProgression[this.specialIndex]);
+					s.setAttribute("opacity", "1");
+					this.currentSpecial = s;
+					this.descriptionText.textContent = s.getAttribute('desc');
+					this.SubtractGold(this.specialCost);
+					// @TODO: increment cost
+					if (this.specialIndex == this.specialProgression.length - 1)
+					{
+						this.specialDone = true;
+						this.specialSelectable = false;
+						this.purchaseClickable = false;
+						this.UpdatePurchaseBtn();	
+					}
+					this.UpdateItemGrey();
 					break;
 
 				case 5: // Other2
@@ -1443,7 +1584,11 @@ module.exports = (function()
 
 
 
+<<<<<<< HEAD
 },{}],11:[function(require,module,exports){
+=======
+},{}],7:[function(require,module,exports){
+>>>>>>> origin/master
 module.exports = (function() {
 
   function Door(x, y) {
@@ -1456,7 +1601,11 @@ module.exports = (function() {
 
 }());
 
+<<<<<<< HEAD
 },{}],12:[function(require,module,exports){
+=======
+},{}],8:[function(require,module,exports){
+>>>>>>> origin/master
 /* Author: Nic Johnson
  *
  * Title: StatsManager.js
@@ -1472,6 +1621,8 @@ module.exports = (function() {
  *  	December 7, 2015:
  *  		-Redid implementation away from Entity-style
  *  			because javascript scope is stupid.
+ *     December 13, 2015:
+ *     		- Whole bunch of stuff because i forgot to update this list
  */
 module.exports = (function()
 {
@@ -1504,7 +1655,13 @@ module.exports = (function()
 	var healthVal = startingHealthVal;
 	var specialContent = undefined;
 	var spawnDelegate = undefined;
-	var specialList = ["none_special","critical_special", "magic_special", "taunt_special"];
+	var specialList = [
+						"stats_none_special", 
+						"stats_critical_special", 
+						"stats_magic_special", 
+						"stats_taunt_special", 
+						"stats_defense_special",
+					];
 	var specialIndex = 0;
 
 	////////////////

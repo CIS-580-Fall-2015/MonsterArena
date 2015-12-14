@@ -9,6 +9,9 @@
  * History:
  * 		December 08, 2015: 
  *  		-Date Created
+ *  	December 13, 2015:
+ *  		-Whole bunch of stuff because i forgot to update this list
+ *  		-Subtracting gold on purchase
  */
 
 module.exports = (function()
@@ -59,7 +62,13 @@ module.exports = (function()
 		this.currentUpgrade = undefined;
 		this.totalGold = 0;
 		this.defaultAddition = 100;
-		this.specialProgression = ["taunt_special", "critical_special", "magic_special"];
+		this.specialProgression = [
+									"shop_taunt_special", 
+									"shop_defense_special", 
+									"shop_critical_special", 
+									"shop_magic_special",
+									"shop_none_special",
+									];
 		this.specialIndex = 0;
 
 		// Flags for greying out shop items
@@ -70,6 +79,14 @@ module.exports = (function()
 		this.specialSelectable = false;
 		this.otherTwoSelectable = false;
 		this.purchaseClickable = false;
+
+		// Flags for finished upgrade path
+		this.doorDone = false;
+		this.defenseDone = false;
+		this.attackDone = false;
+		this.healthDone = false; 
+		this.specialDone = false;
+		this.otherTwoDone = false;
 
 		// Costs for each upgrade
 		this.doorCost = 501;
@@ -242,38 +259,90 @@ module.exports = (function()
 	{
 		var val = amt || this.defaultAddition;
 		this.totalGold += val;
-		if (this.totalGold >= this.doorCost)
+		if (this.totalGold >= this.doorCost && !this.doorDone)
 		{
-			this.doorGrey.setAttribute("opacity", "0");
 			this.doorSelectable = true;
 		}
-		if (this.totalGold >= this.attackCost)
+		if (this.totalGold >= this.attackCost && !this.attackDone)
 		{
-			this.attackGrey.setAttribute("opacity", "0");
 			this.attackSelectable = true;
 		}
-		if (this.totalGold >= this.healthCost)
+		if (this.totalGold >= this.healthCost && !this.healthDone)
 		{
-			this.healthGrey.setAttribute("opacity", "0");
 			this.healthSelectable = true;
 		}
-		if (this.totalGold >= this.defenseCost)
+		if (this.totalGold >= this.defenseCost && !this.defenseDone)
 		{
-			this.defenseGrey.setAttribute("opacity", "0");
 			this.defenseSelectable = true;
 		}
-		if (this.totalGold >= this.specialCost)
+		if (this.totalGold >= this.specialCost && !this.specialDone)
 		{
-			this.specialGrey.setAttribute("opacity", "0");
 			this.specialSelectable = true;
 		}
-		if (this.totalGold >= this.otherTwoCost)
+		if (this.totalGold >= this.otherTwoCost && !this.otherTwoDone)
 		{
-			this.otherTwoGrey.setAttribute("opacity", "0");
 			this.otherTwoSelectable = true;
 		}
+		this.UpdateItemGrey();
 		this.SetGoldText();
 	};
+
+	ShopManager.prototype.UpdateItemGrey = function()
+	{
+		if (this.doorSelectable && !this.doorDone)
+		{
+			this.doorGrey.setAttribute("opacity", "0");
+		}
+		else
+		{
+			this.doorGrey.setAttribute("opacity", "0.65");
+		}
+
+		if (this.attackSelectable && !this.attackDone)
+		{
+			this.attackGrey.setAttribute("opacity", "0");
+		}
+		else
+		{
+			this.attackGrey.setAttribute("opacity", "0.65");
+		}
+
+		if (this.healthSelectable && !this.healthDone)
+		{
+			this.healthGrey.setAttribute("opacity", "0");
+		}
+		else
+		{
+			this.healthGrey.setAttribute("opacity", "0.65");
+		}
+
+		if (this.defenseSelectable && !this.defenseDone)
+		{
+			this.defenseGrey.setAttribute("opacity", "0");
+		}
+		else
+		{
+			this.defenseGrey.setAttribute("opacity", "0.65");
+		}
+
+		if (this.specialSelectable && !this.specialDone)
+		{
+			this.specialGrey.setAttribute("opacity", "0");
+		}
+		else
+		{
+			this.specialGrey.setAttribute("opacity", "0.65");
+		}
+
+		if (this.otherTwoSelectable && !this.otherTwoDone)
+		{
+			this.otherTwoGrey.setAttribute("opacity", "0");
+		}
+		else
+		{
+			this.otherTwoGrey.setAttribute("opacity", "0.65");
+		}
+	}
 
 	ShopManager.prototype.UpdatePurchaseBtn = function()
 	{
@@ -412,7 +481,7 @@ module.exports = (function()
 	{
 		if (this.DEBUG) { console.log("ShopManager: Special Clicked"); }
 		this.descriptionText.textContent = this.currentSpecial.getAttribute('desc');
-		this.currentUpgrade = this.Upgrades.OTHER1;
+		this.currentUpgrade = this.Upgrades.SPECIAL;
 		if (this.currentSelected != undefined)
 		{
 			this.currentSelected.setAttribute("stroke-opacity", "0");
@@ -424,7 +493,7 @@ module.exports = (function()
 			this.currentSelected = this.special.selected;
 			this.currentSelected.setAttribute("stroke-opacity", "100");
 		}
-		if (this.specialSelectable)
+		if (this.specialSelectable && !this.specialDone)
 		{
 			this.purchaseClickable = true;
 			this.UpdatePurchaseBtn();
@@ -464,6 +533,37 @@ module.exports = (function()
 		}
 	};
 
+	ShopManager.prototype.SubtractGold = function(amt)
+	{
+		this.totalGold -= amt;
+		if (this.totalGold < this.doorCost && !this.doorDone)
+		{
+			this.doorSelectable = false;
+		}
+		if (this.totalGold < this.attackCost && !this.attackDone)
+		{
+			this.attackSelectable = false;
+		}
+		if (this.totalGold < this.healthCost && !this.healthDone)
+		{
+			this.healthSelectable = false;
+		}
+		if (this.totalGold < this.defenseCost && !this.defenseDone)
+		{
+			this.defenseSelectable = false;
+		}
+		if (this.totalGold < this.specialCost && !this.specialDone)
+		{
+			this.specialSelectable = false;
+		}
+		if (this.totalGold < this.otherTwoCost && !this.otherTwoDone)
+		{
+			this.otherTwoSelectable = false;
+		}
+		this.UpdateItemGrey();
+		this.SetGoldText();
+	}
+
 	ShopManager.prototype.PurchaseBtn = function() 
 	{
 		if (this.purchaseClickable)
@@ -480,18 +580,42 @@ module.exports = (function()
 
 				case 1: // Attack
 					this.increaseAttack();
+					this.SubtractGold(this.attackCost);
+					// @TODO: increment cost
 					break;
 
 				case 2: // Health
 					this.increaseHealth();
+					this.SubtractGold(this.healthCost);
+					// @TODO: increment cost
 					break;
 
 				case 3: // Defense
 					this.increaseDefense();
+					this.SubtractGold(this.defenseCost);
+					// @TODO: increment cost
 					break;
 
-				case 4: // Other1
-
+				case 4: // Special
+					// @TODO: Add special to stats manager
+					document.getElementById(this.specialProgression[this.specialIndex]).
+							setAttribute("opacity", "0");
+					this.specialIndex++;
+					console.log(this.specialIndex);
+					var s = document.getElementById(this.specialProgression[this.specialIndex]);
+					s.setAttribute("opacity", "1");
+					this.currentSpecial = s;
+					this.descriptionText.textContent = s.getAttribute('desc');
+					this.SubtractGold(this.specialCost);
+					// @TODO: increment cost
+					if (this.specialIndex == this.specialProgression.length - 1)
+					{
+						this.specialDone = true;
+						this.specialSelectable = false;
+						this.purchaseClickable = false;
+						this.UpdatePurchaseBtn();	
+					}
+					this.UpdateItemGrey();
 					break;
 
 				case 5: // Other2
