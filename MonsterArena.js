@@ -475,7 +475,7 @@ module.exports = (function() {
 
   var Hero = require('./hero.js');
   var Door = require('./spawner');
-  //var Monster = require('./monster.js');
+  var Monster = require('./monster.js');
   var doors = [];
   var monsters = [];
   var unlocked_doors = 1;
@@ -529,9 +529,9 @@ module.exports = (function() {
     if (del) {
       var undef;
       var temp = [];
-      for (var i = 0; i < monsters.length; i++) {
+      for (i = 0; i < monsters.length; i++) {
         if (monsters[i] !== undef) {
-          temp.push(arr[i])
+          temp.push(monsters[i]);
         }
       }
       monsters = temp;
@@ -555,8 +555,8 @@ module.exports = (function() {
       }
     }
     if (d) {
-      // var m = new Monster(stats, d);
-      // monsters.push(m);
+      var m = new Monster(stats, d);
+      monsters.push(m);
     }
   }
 
@@ -571,13 +571,8 @@ module.exports = (function() {
     }
 
     if (!found) {
-<<<<<<< HEAD
       var b = new Monster(null, doors[0], true);
       monsters.push(b);
-=======
-      // var b = new Monster(null, doors[0], true);
-      // monsters.push(b);
->>>>>>> origin/master
     }
   }
 
@@ -591,11 +586,7 @@ module.exports = (function() {
 
 }());
 
-<<<<<<< HEAD
 },{"./hero.js":6,"./monster.js":7,"./spawner":11}],5:[function(require,module,exports){
-=======
-},{"./hero.js":5,"./spawner":7}],4:[function(require,module,exports){
->>>>>>> origin/master
 window.onload = function() {
 
   // The width & height of the screen
@@ -637,11 +628,7 @@ window.onload = function() {
 
 }
 
-<<<<<<< HEAD
 },{"./AudioManager.js":1,"./entity_manager.js":4,"./hero.js":6,"./shop_manager.js":10,"./stats_manager.js":12}],6:[function(require,module,exports){
-=======
-},{"./AudioManager.js":1,"./entity_manager.js":3,"./hero.js":5,"./shop_manager.js":6,"./stats_manager.js":8}],5:[function(require,module,exports){
->>>>>>> origin/master
 module.exports = (function() {
   var Entity = require('./entity.js');
 
@@ -715,7 +702,6 @@ module.exports = (function() {
 
 }());
 
-<<<<<<< HEAD
 },{"./entity.js":3}],7:[function(require,module,exports){
 /* Base class for each monster.
  * It inherits from the generic entity class.
@@ -723,7 +709,7 @@ module.exports = (function() {
 module.exports = (function() {
   var Entity = require('./entity.js');
 
-  //Set animation to boss with this.animation = new boss()
+  // boss = animation {} for monsters\Boss.js
   var boss = require('./monsters/Boss.js'),
   bosser = require('./monsters/Bosser.js');
   //TODO Other animations
@@ -882,15 +868,13 @@ module.exports = (function() {
   BossMovement.src = './img/monsters/Boss/Boss-Movement.png';
   var animations = {};
 
-    // The right-facing animations. ALL OF THESE ANIMATIONS ARE THE SAME. IMPLEMENTED FOR THE SAKE OF CONSISTANCY.
-    animations.right[WALKING] = new Animation(BossMovement, WIDTH, HEIGHT, 0, 0, 2); // TODO Specific Timing may need to be adjusted.
-    animations.right[ATTACKING] = new Animation(BossMovement, WIDTH, HEIGHT, 0, 0, 2); // TODO Specific Timing may need to be adjusted.
+  // The right-facing animations. ALL OF THESE ANIMATIONS ARE THE SAME. IMPLEMENTED FOR THE SAKE OF CONSISTANCY.
+  animations.right[WALKING] = new Animation(BossMovement, WIDTH, HEIGHT, 0, 0, 2); // TODO Specific Timing may need to be adjusted.
+  animations.right[ATTACKING] = new Animation(BossMovement, WIDTH, HEIGHT, 0, 0, 2); // TODO Specific Timing may need to be adjusted.
 
-    //The left-facing animations
-    animations.left[WALKING] = new Animation(BossMovement, WIDTH, HEIGHT, 0, 0, 2); // TODO Specific Timing may need to be adjusted.
-    animations.left[ATTACKING] = new Animation(BossMovement, WIDTH, HEIGHT, 0, 0, 2); // TODO Specific Timing may need to be adjusted.
-
-
+  //The left-facing animations
+  animations.left[WALKING] = new Animation(BossMovement, WIDTH, HEIGHT, 0, 0, 2); // TODO Specific Timing may need to be adjusted.
+  animations.left[ATTACKING] = new Animation(BossMovement, WIDTH, HEIGHT, 0, 0, 2); // TODO Specific Timing may need to be adjusted.
 
   return animations;
 
@@ -929,9 +913,6 @@ module.exports = (function() {
 }());
 
 },{"../animation.js":2}],10:[function(require,module,exports){
-=======
-},{"./entity.js":2}],6:[function(require,module,exports){
->>>>>>> origin/master
 /* Author: Nic Johnson
  *
  * Title: ShopManager.js
@@ -1584,11 +1565,7 @@ module.exports = (function()
 
 
 
-<<<<<<< HEAD
 },{}],11:[function(require,module,exports){
-=======
-},{}],7:[function(require,module,exports){
->>>>>>> origin/master
 module.exports = (function() {
 
   function Door(x, y) {
@@ -1601,11 +1578,7 @@ module.exports = (function() {
 
 }());
 
-<<<<<<< HEAD
 },{}],12:[function(require,module,exports){
-=======
-},{}],8:[function(require,module,exports){
->>>>>>> origin/master
 /* Author: Nic Johnson
  *
  * Title: StatsManager.js
