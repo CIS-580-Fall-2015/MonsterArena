@@ -13,6 +13,8 @@
  *  	December 7, 2015:
  *  		-Redid implementation away from Entity-style
  *  			because javascript scope is stupid.
+ *     December 13, 2015:
+ *     		- Whole bunch of stuff because i forgot to update this list
  */
 module.exports = (function()
 {
@@ -45,7 +47,13 @@ module.exports = (function()
 	var healthVal = startingHealthVal;
 	var specialContent = undefined;
 	var spawnDelegate = undefined;
-	var specialList = ["none_special","critical_special", "magic_special", "taunt_special"];
+	var specialList = [
+						"stats_none_special", 
+						"stats_critical_special", 
+						"stats_magic_special", 
+						"stats_taunt_special", 
+						"stats_defense_special",
+					];
 	var specialIndex = 0;
 
 	////////////////
