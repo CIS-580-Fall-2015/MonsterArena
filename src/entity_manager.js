@@ -95,7 +95,7 @@ module.exports = (function() {
       }
 
       //Hero attacks
-      if (monsters[0].inRange == true) {
+      if (monsters[0].inRange) {
         if (!dodge) {
           var e = monsters[0].attacked(hero.attack);
           if (e >= 0) {

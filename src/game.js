@@ -33,7 +33,7 @@ window.onload = function()
       EntityManager.upgrade_boss
     );
 
-    ShopManager.AddGold(15000);
+    ShopManager.AddGold(150000);
 
     EntityManager.initialize();
     canvas = document.getElementById("monsters");

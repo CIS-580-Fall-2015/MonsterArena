@@ -127,6 +127,8 @@ module.exports = (function() {
       this.dx = -Math.sqrt(2) / 2;
       this.dy = -Math.sqrt(2) / 2;
     }
+	this.x -= 32;
+	this.y -= 32;
   }
 
   // Handle monsters being attacked
@@ -136,7 +138,7 @@ module.exports = (function() {
     if (DEBUG) {
       console.log("Monster attacked! Health: " + this.health);
     }
-    if (this.health >= 0) {
+    if (this.health <= 0) {
       if (DEBUG) {
         console.log("It died!");
       }
@@ -157,44 +159,46 @@ module.exports = (function() {
     //Check if movement needed based on which direction it is coming in from.
 
     if (!this.inRange) {
-      var a = Math.floor(this.angle);
-      if (a == 135 || a == 180 || a == 225) {
-        if (this.x <= this.cx - 96) {
-          this.x += n * this.dx;
-          this.y += n * this.dy;
-        }
-        else
-        {
-          this.inRangex = true;
-        }
-      } else if (a == 45 || a == 0 || a == 315) {
-        if (this.x >= this.cx + 32) {
-          this.x += n * this.dx;
-          this.y += n * this.dy;
-        }
-        else
-        {
-          this.inRangex = true;
-        }
-      } else if (a == 90) {
-        if (this.y <= this.cy - 96) {
-          this.x += n * this.dx;
-          this.y += n * this.dy;
-        }
-        else
-        {
-          this.inRangey = true;
-        }
-      } else if (a == 270) {
-        if (this.y >= this.cy + 32) {
-          this.x += n * this.dx;
-          this.y += n * this.dy;
-        }
-        else
-        {
-          this.inRangey = true;
-        }
-      }
+		var a = this.angle;
+		var x = this.x;
+		var y = this.y;
+		if(a==135||a==225){
+			if(this.x<199||this.y>344){
+				this.x += n*this.dx;
+				this.y += n*this.dy;
+			} else{
+				this.inRangex = true;
+				this.inRangey = true;
+			}
+		}else if(a==45||a==315){
+			if(this.x>327||this.y>312){
+				this.x += n*this.dx;
+				this.y += n*this.dy;
+			}
+			else{
+				this.inRangex = true;
+				this.inRangey = true;
+			}
+		}else if(a==0||a==180){
+			if(x<199||x>312)
+			{
+				this.x += n*this.dx;
+				this.y += n*this.dy;
+			}
+			else{
+				this.inRangex = true;
+				this.inRangey = true;
+			}
+		}else if(a==90||a==270){
+			if(y<184||y>312){
+				this.x += n*this.dx;
+				this.y += n*this.dy;
+			}
+			else{
+				this.inRangex = true;
+				this.inRangey = true;
+			}
+		}
     }
     if (this.inRangex && this.inRangey)
     {
