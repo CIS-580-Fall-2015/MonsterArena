@@ -500,14 +500,14 @@ module.exports = (function() {
 
   // Builds the door array and places the hero
   function initialize() {
-    doors[0] = new Door(ARENA_WIDTH / 2, OFFSET); // North
-    doors[1] = new Door(ARENA_WIDTH - OFFSET, ARENA_HEIGHT / 2); // East
-    doors[2] = new Door(ARENA_WIDTH / 2, ARENA_HEIGHT - OFFSET); //South
-    doors[3] = new Door(OFFSET, ARENA_HEIGHT / 2); // West
-    doors[4] = new Door(ARENA_WIDTH * 0.75, ARENA_HEIGHT * 0.25); // North-East
-    doors[5] = new Door(ARENA_WIDTH * 0.75, ARENA_HEIGHT * 0.75); // South-East
-    doors[6] = new Door(ARENA_WIDTH * 0.25, ARENA_HEIGHT * 0.75); // South-West
-    doors[7] = new Door(ARENA_WIDTH * 0.25, ARENA_HEIGHT * 0.25); // North-West
+    doors.push(new Door(ARENA_WIDTH / 2, OFFSET)); // North
+    doors.push(new Door(ARENA_WIDTH - OFFSET, ARENA_HEIGHT / 2)); // East
+    doors.push(new Door(ARENA_WIDTH / 2, ARENA_HEIGHT - OFFSET)); //South
+    doors.push(new Door(OFFSET, ARENA_HEIGHT / 2)); // West
+    doors.push(new Door(ARENA_WIDTH * 0.75, ARENA_HEIGHT * 0.25)); // North-East
+    doors.push(new Door(ARENA_WIDTH * 0.75, ARENA_HEIGHT * 0.75)); // South-East
+    doors.push(new Door(ARENA_WIDTH * 0.25, ARENA_HEIGHT * 0.75)); // South-West
+    doors.push(new Door(ARENA_WIDTH * 0.25, ARENA_HEIGHT * 0.25)); // North-West
 
     hero = new Hero(HERO_STATS, ARENA_WIDTH / 2 - 32, ARENA_HEIGHT / 2 - 32, this);
 
@@ -517,6 +517,10 @@ module.exports = (function() {
   // Runs all the turns, adds exp when neccesary
   // Clears array of dead monsters
   function update() {
+    // Hero level and regeneration
+    hero.doTurn();
+
+
     //All monsters attack hero
     for (var i = 0; i < monsters.length; i++) {
       if (monsters[i].range) {
@@ -644,10 +648,11 @@ module.exports = (function() {
 
 }());
 
-},{"./hero.js":6,"./monster.js":8,"./spawner":19}],5:[function(require,module,exports){
-module.exports = function() {
-
-  var Hero = require('./hero.js'),
+},{"./hero.js":6,"./monster.js":7,"./spawner":18}],5:[function(require,module,exports){
+// module.exports = function() {
+window.onload = function()
+{
+    Hero = require('./hero.js'),
     EntityManager = require('./entity_manager.js'),
     ShopManager = require('./shop_manager.js'),
     StatsManager = require('./stats_manager.js'),
@@ -681,7 +686,7 @@ module.exports = function() {
 
 
   var update = function(elapsedTime) {
-    //EntityManager.update();
+    EntityManager.update();
   };
 
   var load = function(sm) {
@@ -711,18 +716,27 @@ module.exports = function() {
     EntityManager.render(ctx);
   };
 
-  return {
-    load: load,
-    update: update,
-    render: render,
-    keyUp: keyUp,
-    keyDown: keyDown,
-    exit: exit
+  var loop = function()
+  {
+    update();
+    render();
+    window.requestAnimationFrame(loop);
   }
+  window.requestAnimationFrame(loop);
+}
 
-}();
+//   return {
+//     load: load,
+//     update: update,
+//     render: render,
+//     keyUp: keyUp,
+//     keyDown: keyDown,
+//     exit: exit
+//   }
 
-},{"./AudioManager.js":1,"./entity_manager.js":4,"./hero.js":6,"./shop_manager.js":18,"./stats_manager.js":21}],6:[function(require,module,exports){
+// }();
+
+},{"./AudioManager.js":1,"./entity_manager.js":4,"./hero.js":6,"./shop_manager.js":17,"./stats_manager.js":19}],6:[function(require,module,exports){
 module.exports = (function() {
   var Entity = require('./entity.js');
 
@@ -804,48 +818,6 @@ module.exports = (function() {
 }());
 
 },{"./entity.js":3}],7:[function(require,module,exports){
-// Wait for the window to load completely
-window.onload = function() {
-  
-  var gameTime = 0,
-      gameState = [];
-    
-  var pushState = function(state) {
-    state.load({pushState: pushState, popState: popState});
-    gameState.push(state);
-  }
-  
-  var popState = function() {
-    state = gameState.pop(); 
-    if(state) state.exit();
-    return state;
-  }
-  
-  var game = require('./game');
-  pushState(game);
-  
-  var splashScreen = require('./splash-screen');
-  pushState(splashScreen);
-  
-  // Event handlers for key events
-  window.onkeydown = function(event) {
-    gameState[gameState.length-1].keyDown(event);
-  }
-  window.onkeyup = function(event) {
-    gameState[gameState.length-1].keyUp(event);
-  }
-  
-  function loop(newTime) {
-    var elapsedTime = (newTime - gameTime) / 1000;
-    gameTime = newTime;
-    gameState[gameState.length-1].update(elapsedTime);
-    gameState[gameState.length-1].render(elapsedTime);
-    window.requestAnimationFrame(loop);
-  }
-  window.requestAnimationFrame(loop);
-  
-};
-},{"./game":5,"./splash-screen":20}],8:[function(require,module,exports){
 /* Base class for each monster.
  * It inherits from the generic entity class.
  */
@@ -1033,7 +1005,7 @@ module.exports = (function() {
 
 }());
 
-},{"./entity.js":3,"./monsters/Boss.js":9,"./monsters/Bosser.js":10,"./monsters/Bossest.js":11,"./monsters/Creepo.js":12,"./monsters/Gunner.js":13,"./monsters/Puncher.js":14,"./monsters/Skully.js":15,"./monsters/Snappy.js":16,"./monsters/Wingy.js":17}],9:[function(require,module,exports){
+},{"./entity.js":3,"./monsters/Boss.js":8,"./monsters/Bosser.js":9,"./monsters/Bossest.js":10,"./monsters/Creepo.js":11,"./monsters/Gunner.js":12,"./monsters/Puncher.js":13,"./monsters/Skully.js":14,"./monsters/Snappy.js":15,"./monsters/Wingy.js":16}],8:[function(require,module,exports){
 /* Boss Monster Entity.
  */
 module.exports = (function() {
@@ -1068,7 +1040,7 @@ module.exports = (function() {
 
 }());
 
-},{"../animation.js":2}],10:[function(require,module,exports){
+},{"../animation.js":2}],9:[function(require,module,exports){
 /* Bosser Monster Entity.
  */
 module.exports = (function() {
@@ -1103,7 +1075,7 @@ module.exports = (function() {
 
 }());
 
-},{"../animation.js":2}],11:[function(require,module,exports){
+},{"../animation.js":2}],10:[function(require,module,exports){
 /* Bossest Monster Entity.
  */
 module.exports = (function() {
@@ -1138,7 +1110,7 @@ module.exports = (function() {
 
 }());
 
-},{"../animation.js":2}],12:[function(require,module,exports){
+},{"../animation.js":2}],11:[function(require,module,exports){
 /* Creepo Monster Entity.
  */
 module.exports = (function() {
@@ -1183,7 +1155,7 @@ module.exports = (function() {
 
 }());
 
-},{"../animation.js":2}],13:[function(require,module,exports){
+},{"../animation.js":2}],12:[function(require,module,exports){
 /* Gunner Monster Entity.
  */
 module.exports = (function() {
@@ -1228,7 +1200,7 @@ module.exports = (function() {
 
 }());
 
-},{"../animation.js":2}],14:[function(require,module,exports){
+},{"../animation.js":2}],13:[function(require,module,exports){
 /* Puncher Monster Entity.
  */
 module.exports = (function() {
@@ -1273,7 +1245,7 @@ module.exports = (function() {
 
 }());
 
-},{"../animation.js":2}],15:[function(require,module,exports){
+},{"../animation.js":2}],14:[function(require,module,exports){
 /* Skully Monster Entity.
  */
 module.exports = (function() {
@@ -1318,7 +1290,7 @@ module.exports = (function() {
 
 }());
 
-},{"../animation.js":2}],16:[function(require,module,exports){
+},{"../animation.js":2}],15:[function(require,module,exports){
 /* Snappy Monster Entity.
  */
 module.exports = (function() {
@@ -1363,7 +1335,7 @@ module.exports = (function() {
 
 }());
 
-},{"../animation.js":2}],17:[function(require,module,exports){
+},{"../animation.js":2}],16:[function(require,module,exports){
 /* Wingy Monster Entity.
  */
 module.exports = (function() {
@@ -1408,7 +1380,7 @@ module.exports = (function() {
 
 }());
 
-},{"../animation.js":2}],18:[function(require,module,exports){
+},{"../animation.js":2}],17:[function(require,module,exports){
 /* Author: Nic Johnson
  *
  * Title: ShopManager.js
@@ -2181,7 +2153,7 @@ module.exports = (function()
 
 
 
-},{}],19:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 module.exports = (function() {
 
   function Door(x, y) {
@@ -2194,73 +2166,7 @@ module.exports = (function() {
 
 }());
 
-},{}],20:[function(require,module,exports){
-/* MainMenu GameState module
- * Authors:
- * - Ian Speer, Austin Boerger
- */
-module.exports = (function (){
-  var menu = document.getElementById("splash-screen"),
-      stateManager;
-
-  /*
-   * The load() method initializes the menu 
-   * and tells the DOM to render the menu HTML
-   * parameters:
-   * - sm the state manager
-   */
-  var load = function(sm) {
-    stateManager = sm;
-    menu.style.display = "flex";
-  }
-  
-  /*
-   * The exit() method hides the menu
-   */
-  var exit = function() {
-    menu.style.display = "none";
-  }
-    
-  /* 
-   * The update() method updates the menu
-   * (in this case, a no-op)
-   */
-  var update = function() {}
-  
-  /* 
-   * The render() method renders the menu
-   * (in this case, a no-op as the menu is 
-   * HTML elements renderd by the DOM)
-   */
-  var render = function() {}
-    
-  /* 
-   * The keyDown() method handles 
-   * the key down event for the menu.
-   */
-  var keyDown = function(event) {
-    switch(event.keyCode) {
-      case 13: // ENTER
-        event.preventDefault();
-		stateManager.popState();
-        break;
-    }
-  }
-  
-  /* The keyUp() method handles the key up event */
-  function keyUp(event) {}
-  
-  return {
-    load: load,
-    exit: exit,
-    update: update,
-    render: render,
-    keyDown: keyDown,
-    keyUp: keyUp
-  }
-  
-})();
-},{}],21:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 /* Author: Nic Johnson
  *
  * Title: StatsManager.js
@@ -2611,4 +2517,4 @@ module.exports = (function()
 
 })();
 
-},{}]},{},[7]);
+},{}]},{},[5]);
