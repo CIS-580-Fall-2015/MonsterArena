@@ -15,9 +15,9 @@ module.exports = (function() {
 
   // Value followed by scaling
   var HERO_STATS = {
-    health: [2, 1.2],
-    attack: [3, 1.2],
-    defense: [2, 1.1],
+    health: [40, 1.05],
+    attack: [5, 1.2],
+    defense: [3, 1.1],
     exp: [0, 1.2]
   };
 

@@ -16,6 +16,7 @@ module.exports = (function() {
     this.defense_scale = stats.defense[1];
     this.exp_scale = stats.exp[1];
     this.EntityManager = EntityManager;
+    this.maxHealth = this.health;
 
     this.exp = 0;
     this.req_exp = 10;
@@ -26,7 +27,7 @@ module.exports = (function() {
     document.getElementById('health').max = this.health;
   }
 
-  // Adds experiance, uncapped
+  // Adds experiance, uncapped.
   Hero.prototype.addExp = function(amount) {
     this.exp += amount;
   }
@@ -34,29 +35,32 @@ module.exports = (function() {
   // Levelups the hero's stats based
   // on scaling factor
   Hero.prototype.levelup = function() {
-    this.health *= this.health_scale;
+    var t = this.maxHealth;
+    this.maxHealth *= this.maxHealth_scale;
     this.attack *= this.attack_scale;
     this.defense *= this.defense_scale;
     this.req_exp ^= this.exp_scale;
     this.exp = 0;
     this.level++;
+    document.getElementById('health').max = this.maxHealth;
   };
 
   // Updates health bar, adds gold based on damage
   Hero.prototype.attacked = function(amount) {
     //testing health bar
     var bar = document.getElementById('health');
-    //
-    //Temporary
+
     var damage = amount - this.defense / 2;
     this.health -= damage;
-    //TODO error handle
+
     this.EntityManager.add_gold(damage);
     //testing health bar
-    bar.value = this.health;
+
     if (this.health >= 0) {
       //TODO die
     }
+
+    bar.value = this.health;
   };
 
   // Targets and attacks monsters
@@ -64,7 +68,10 @@ module.exports = (function() {
     if (this.exp >= this.req_exp) {
       this.levelup();
     }
-    //TODO TARGET MONSTER AND ATTACK
+    this.health += this.maxHealth / 5;
+    if (this.health > this.maxHealth) {
+      this.health = this.maxHealth;
+    }
   };
 
   return Hero;
