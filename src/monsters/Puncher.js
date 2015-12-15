@@ -12,19 +12,19 @@ module.exports = (function() {
 
   // The right walking Puncher spritesheet
   var PuncherWalkRight = new Image();
-  PuncherWalkRight.src = './img/monsters/Puncher/Puncher_Walk_Right.png';
+  PuncherWalkRight.src = './img/monsters/Puncher/Puncher-Walk-Right.png';
 
   // The left walking Puncher spritesheet
   var PuncherWalkLeft = new Image();
-  PuncherWalkLeft.src = "./img/monsters/Puncher/Puncher_Walk_Left.png";
+  PuncherWalkLeft.src = "./img/monsters/Puncher/Puncher-Walk-Left.png";
 
   // The right attacking Puncher spritesheet
   var PuncherAttackRight = new Image();
-  PuncherAttackRight.src = "./img/monsters/Puncher/Puncher_Attack_Right.png";
+  PuncherAttackRight.src = "./img/monsters/Puncher/Puncher-Attack-Right.png";
 
   // The left attacking Puncher spritesheet
   var PuncherAttackLeft = new Image();
-  PuncherAttackLeft.src = "./img/monsters/Puncher/Puncher_Attack_Left.png";
+  PuncherAttackLeft.src = "./img/monsters/Puncher/Puncher-Attack-Left.png";
 
   var animations = {};
   animations.right = [];

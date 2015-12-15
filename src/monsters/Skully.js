@@ -12,19 +12,19 @@ module.exports = (function() {
 
   // The right walking Skully spritesheet
   var SkullyWalkRight = new Image();
-  SkullyWalkRight.src = './img/monsters/Skully/Skully_Walk_Right.png';
+  SkullyWalkRight.src = './img/monsters/Skully/Skully-Walk-Right.png';
 
   // The left walking Skully spritesheet
   var SkullyWalkLeft = new Image();
-  SkullyWalkLeft.src = "./img/monsters/Skully/Skully_Walk_Left.png";
+  SkullyWalkLeft.src = "./img/monsters/Skully/Skully-Walk-Left.png";
 
   // The right attacking Skully spritesheet
   var SkullyAttackRight = new Image();
-  SkullyAttackRight.src = "./img/monsters/Skully/Skully_Attack_Right.png";
+  SkullyAttackRight.src = "./img/monsters/Skully/Skully-Attack-Right.png";
 
   // The left attacking Skully spritesheet
   var SkullyAttackLeft = new Image();
-  SkullyAttackLeft.src = "./img/monsters/Skully/Skully_Attack_Left.png";
+  SkullyAttackLeft.src = "./img/monsters/Skully/Skully-Attack-Left.png";
 
   var animations = {};
   animations.right = [];
