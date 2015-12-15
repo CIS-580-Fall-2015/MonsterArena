@@ -17,6 +17,10 @@ module.exports = (function() {
     this.exp_scale = stats.exp[1];
     this.EntityManager = EntityManager;
     this.maxHealth = this.health;
+    this.img = new Image();
+    this.img.src = "./img/test_player.png";
+    this.width = 32;
+    this.height = 32;
 
     this.exp = 0;
     this.req_exp = 10;
@@ -72,6 +76,14 @@ module.exports = (function() {
     if (this.health > this.maxHealth) {
       this.health = this.maxHealth;
     }
+  };
+
+  Hero.prototype.render = function(cntx)
+  {
+    cntx.drawImage(
+      this.img,
+      this.x,
+      this.y);
   };
 
   return Hero;

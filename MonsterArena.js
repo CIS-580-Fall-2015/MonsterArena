@@ -511,16 +511,21 @@ module.exports = (function() {
 
     hero = new Hero(HERO_STATS, ARENA_WIDTH / 2 - 32, ARENA_HEIGHT / 2 - 32, this);
 
-    spawn_boss_interval = setInterval(spawn_boss, 5000);
+    //spawn_boss_interval = setInterval(spawn_boss, 5000);
   }
 
   // Runs all the turns, adds exp when neccesary
   // Clears array of dead monsters
-  function update() {
+  function update(elapsedTime) {
     var del = false;
 
     // Hero level and regeneration
     hero.doTurn();
+    for(var i = 0; i < monsters.length; i++)
+    {
+      monsters[i].doTurn(1);
+      monsters[i].update(elapsedTime);
+    }
     if (monsters.length != 0) {
       //All monsters attack hero
       for (var i = 0; i < monsters.length; i++) {
@@ -585,12 +590,13 @@ module.exports = (function() {
     if (unlocked_doors < doors.length) {
       unlocked_doors++;
     }
+    console.log("EM Doors open: " + unlocked_doors);
   }
 
   // Spawns a monster at an open door
   function spawn_monster(stats) {
     var d = null;
-    for (var i = 1; i > unlocked_doors; i++) {
+    for (var i = 1; i < unlocked_doors; i++) {
       if (doors[i].avaliable) {
         d = doors[i];
         break;
@@ -599,6 +605,9 @@ module.exports = (function() {
     if (d) {
       var m = new Monster(stats, d);
       monsters.push(m);
+      console.log("Spawning monster at door " + i);
+    } else {
+      console.log("EM no doors avaliable");
     }
   }
 
@@ -631,11 +640,13 @@ module.exports = (function() {
 
   // Renders all the monsters with the given context.
   function render(ctx) {
+    ctx.clearRect(0, 0, 590, 560);
     for (var i = 0; i < monsters.length; i++) {
       if (monsters[i]) {
         monsters[i].render(ctx);
       }
     }
+    hero.render(ctx);
   }
 
 
@@ -646,7 +657,8 @@ module.exports = (function() {
     spawn_monster: spawn_monster,
     upgrade_boss: upgrade_boss,
     render: render,
-    monsters: monsters
+    monsters: monsters,
+    doors: doors
   };
 
 }());
@@ -654,13 +666,16 @@ module.exports = (function() {
 },{"./hero.js":6,"./monster.js":7,"./spawner":18}],5:[function(require,module,exports){
 // module.exports = function() {
 window.onload = function()
-{
+{ 
+    gameTime = 0;
+    canvas = document.getElementById("monsters");
+    canvas.width = 590;
+    canvas.height = 560;
     Hero = require('./hero.js'),
     EntityManager = require('./entity_manager.js'),
     ShopManager = require('./shop_manager.js'),
     StatsManager = require('./stats_manager.js'),
     AudioManager = require('./AudioManager.js')
-    canvas = document.getElementById("monsters");
     ctx = canvas.getContext("2d");
 
   var load = function(sm) {
@@ -696,7 +711,7 @@ window.onload = function()
 
 
   var update = function(elapsedTime) {
-    EntityManager.update();
+    EntityManager.update(elapsedTime);
   };
 
   var keyUp = function(e) {
@@ -715,9 +730,11 @@ window.onload = function()
     EntityManager.render(ctx);
   };
 
-  var loop = function()
+  var loop = function(newTime)
   {
-    update();
+    var elapsedTime = (newTime - gameTime) / 1000;
+    gameTime = newTime;
+    update(elapsedTime);
     render();
     window.requestAnimationFrame(loop);
   }
@@ -755,6 +772,10 @@ module.exports = (function() {
     this.exp_scale = stats.exp[1];
     this.EntityManager = EntityManager;
     this.maxHealth = this.health;
+    this.img = new Image();
+    this.img.src = "./img/test_player.png";
+    this.width = 32;
+    this.height = 32;
 
     this.exp = 0;
     this.req_exp = 10;
@@ -812,6 +833,14 @@ module.exports = (function() {
     }
   };
 
+  Hero.prototype.render = function(cntx)
+  {
+    cntx.drawImage(
+      this.img,
+      this.x,
+      this.y);
+  };
+
   return Hero;
 
 }());
@@ -831,7 +860,7 @@ module.exports = (function() {
   var boss = require('./monsters/Boss.js'),
     bosser = require('./monsters/Bosser.js'),
   bossest = require('./monsters/Bossest.js'),
-    creepo = require('./monsters/Creepo.js')
+    creepo = require('./monsters/Creepo.js'),
   gunner = require('./monsters/Gunner.js'),
     puncher = require('./monsters/Puncher.js'),
     skully = require('./monsters/Skully.js'),
@@ -871,7 +900,7 @@ module.exports = (function() {
       this.attack = stats.attack;
       this.defense = stats.defense;
       this.special = stats.special;
-      this.animations = availableRegMonsters[Math.floor((Math.random() * 7))]; // Pick one of the six regular sprites at random.
+      this.animations = availableRegMonsters[Math.floor(Math.random() * (availableRegMonsters.length) )]; // Pick one of the six regular sprites at random.
     }
 
     this.door = door;
@@ -886,8 +915,8 @@ module.exports = (function() {
     this.cy = document.getElementById('monsters').height / 2.0;
 
     //TODO modify according to center of door.
-    this.x = this.door.x + 32;
-    this.y = this.door.y + 32;
+    this.x = this.door.x;
+    this.y = this.door.y;
     this.angle = undefined;
 
     // Set the direction of the monster.
@@ -947,9 +976,9 @@ module.exports = (function() {
   }
 
   // Handle monsters being attacked
-  Monster.prototype.attacked = function(amount) {
+  Monster.prototype.attacked = function(damage) {
     //Temporary
-    this.health -= damage - this.defense;
+    this.health -= damage - this.defense / 2;
     if (this.health >= 0) {
       //TODO die
       this.door.avaliable = true;
@@ -967,31 +996,57 @@ module.exports = (function() {
   Monster.prototype.doTurn = function(n) {
     //Checks Range and does movment
     //Check if movement needed based on which direction it is coming in from.
+    var inRangex = false;
+    var inRangey = false;
     if (!this.inRange) {
-      var a = math.floor(this.angle);
+      var a = Math.floor(this.angle);
       if (a == 135 || a == 180 || a == 225) {
         if (this.x <= this.cx - 96) {
           this.x += n * this.dx;
           this.y += n * this.dy;
+        }
+        else
+        {
+          inRange = true;
         }
       } else if (a == 45 || a == 0 || a == 315) {
         if (this.x >= this.cx + 32) {
           this.x += n * this.dx;
           this.y += n * this.dy;
         }
+        else
+        {
+          inRange = true;
+        }
       } else if (a == 90) {
         if (this.y <= this.cy - 96) {
           this.x += n * this.dx;
           this.y += n * this.dy;
+        }
+        else
+        {
+          inRange = true;
         }
       } else if (a == 270) {
         if (this.y >= this.cy + 32) {
           this.x += n * this.dx;
           this.y += n * this.dy;
         }
-      } else {
-        this.inRange = true;
-      }
+        else
+        {
+          inRange = true;
+        }
+      } 
+    }
+    // if (inRangex && inRangey)
+    // {
+
+    //   this.inRange = true;
+    //   this.state = ATTACKING;
+    // }
+    if (this.inRange)
+    {
+      this.state = ATTACKING;
     }
 
   };
@@ -1003,6 +1058,18 @@ module.exports = (function() {
       this.animations.left[this.state].render(context, this.x, this.y);
     } else {
       this.animations.right[this.state].render(context, this.x, this.y);
+    }
+  };
+
+  Monster.prototype.update = function(elapsedTime)
+  { 
+    if(this.isLeft)
+    {
+      this.animations.left[this.state].update(elapsedTime);
+    }
+    else
+    {
+      this.animations.right[this.state].update(elapsedTime);
     }
   };
 
@@ -1198,8 +1265,8 @@ module.exports = (function() {
   animations.right.push(new Animation(GunnerAttackRight, SIZE, SIZE, 0, 0, 8)); // ATTACKING // TODO Specific Timing may need to be adjusted.
 
   //The left-facing animations
-  animations.right.push(new Animation(GunnerWalkLeft, SIZE, SIZE, 0, 0, 8)); // WALKING // TODO Specific Timing may need to be adjusted.
-  animations.right.push(new Animation(GunnerAttackLeft, SIZE, SIZE, 0, 0, 8)); // ATTACKING // TODO Specific Timing may need to be adjusted.
+  animations.left.push(new Animation(GunnerWalkLeft, SIZE, SIZE, 0, 0, 8)); // WALKING // TODO Specific Timing may need to be adjusted.
+  animations.left.push(new Animation(GunnerAttackLeft, SIZE, SIZE, 0, 0, 8)); // ATTACKING // TODO Specific Timing may need to be adjusted.
 
   return animations;
 
@@ -2164,7 +2231,7 @@ module.exports = (function() {
   function Door(x, y) {
     this.x = x;
     this.y = y;
-    this.avaliable = false;
+    this.avaliable = true;
   }
 
   return Door;
