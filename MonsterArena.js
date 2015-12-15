@@ -706,6 +706,8 @@ window.onload = function()
       EntityManager.upgrade_boss
     );
 
+    ShopManager.AddGold(15000);
+
     EntityManager.initialize();
     canvas = document.getElementById("monsters");
     ctx = canvas.getContext("2d");
@@ -842,10 +844,7 @@ module.exports = (function() {
 
   Hero.prototype.render = function(cntx)
   {
-    cntx.drawImage(
-      this.img,
-      this.x,
-      this.y);
+    cntx.fillRect(this.x, this.y, 64, 64);
   };
 
   return Hero;
