@@ -652,7 +652,7 @@ module.exports = (function() {
 // module.exports = function() {
 window.onload = function()
 {
-  var Hero = require('./hero.js'),
+    Hero = require('./hero.js'),
     EntityManager = require('./entity_manager.js'),
     ShopManager = require('./shop_manager.js'),
     StatsManager = require('./stats_manager.js'),
