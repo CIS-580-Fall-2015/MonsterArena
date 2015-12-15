@@ -159,7 +159,7 @@ module.exports = (function() {
         }
         else
         {
-          inRange = true;
+          this.inRange = true;
         }
       } else if (a == 45 || a == 0 || a == 315) {
         if (this.x >= this.cx + 32) {
@@ -168,7 +168,7 @@ module.exports = (function() {
         }
         else
         {
-          inRange = true;
+          this.inRange = true;
         }
       } else if (a == 90) {
         if (this.y <= this.cy - 96) {
@@ -177,7 +177,7 @@ module.exports = (function() {
         }
         else
         {
-          inRange = true;
+          this.inRange = true;
         }
       } else if (a == 270) {
         if (this.y >= this.cy + 32) {
@@ -186,7 +186,7 @@ module.exports = (function() {
         }
         else
         {
-          inRange = true;
+          this.inRange = true;
         }
       } 
     }
