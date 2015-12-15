@@ -45,7 +45,7 @@ module.exports = (function (){
     switch(event.keyCode) {
       case 13: // ENTER
         event.preventDefault();
-		stateManager.popState();
+		    stateManager.popState();
         break;
     }
   }
