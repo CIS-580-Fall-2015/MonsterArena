@@ -59,7 +59,7 @@ module.exports = (function() {
           //Heal
           damage = monsters[i].attack;
 
-          if (monsters[i].special = "heal") {
+          if (monsters[i].special == "heal") {
             monsters[0].health += damage;
             continue;
           }
@@ -67,7 +67,7 @@ module.exports = (function() {
           r = Math.random();
 
           //Check crit
-          if (monsters[i].special = "crit") {
+          if (monsters[i].special == "crit") {
             if (r > .9) {
               damage *= 2;
             }
@@ -75,7 +75,7 @@ module.exports = (function() {
           hero.attacked(damage);
 
           //Check Taunt
-          if (monsters[i].special = "taunt") {
+          if (monsters[i].special == "taunt") {
             if (r > .5) {
               monsters.unshft(monsters[i]);
               del = true;
@@ -87,7 +87,7 @@ module.exports = (function() {
 
       //Check dodge
       var dodge = false;
-      if (monsters[0].special = "dodge") {
+      if (monsters[0].special == "dodge") {
         var r = Math.random()
         if (r < .85) {
           dodge = true;
@@ -95,7 +95,7 @@ module.exports = (function() {
       }
 
       //Hero attacks
-      if (monsters[0].inRange = true) {
+      if (monsters[0].inRange == true) {
         if (!dodge) {
           var e = monsters[0].attacked(hero.attack);
           if (e >= 0) {
