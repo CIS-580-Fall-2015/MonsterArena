@@ -568,7 +568,7 @@ module.exports = (function() {
       }
 
       //Hero attacks
-      if (monsters[0].inRange = true) {
+      if (monsters[0].inRange) {
         if (!dodge) {
           var e = monsters[0].attacked(hero.attack);
           if (e >= 0) {
@@ -602,6 +602,7 @@ module.exports = (function() {
 
   // Spawns a monster at an open door
   function spawn_monster(stats) {
+    console.log("EM: Monster Spawned. Stats: \nA: " + stats.attack + "\nD: " + stats.defense + "\nH: " + stats.health );
     var d = null;
     for (var i = 1; i < unlocked_doors; i++) {
       if (doors[i].avaliable) {
@@ -706,7 +707,7 @@ window.onload = function()
       EntityManager.upgrade_boss
     );
 
-    ShopManager.AddGold(15000);
+    ShopManager.AddGold(150000);
 
     EntityManager.initialize();
     canvas = document.getElementById("monsters");
@@ -908,6 +909,7 @@ module.exports = (function() {
       this.special = stats.special;
       this.animations = availableRegMonsters[Math.floor(Math.random() * (availableRegMonsters.length) )]; // Pick one of the six regular sprites at random.
     }
+    console.log("MONSTER: Stats: \nA: " + stats.attack + "\nD: " + stats.defense + "\nH: " + stats.health );
 
     this.door = door;
     this.door.avaliable = false;
@@ -987,7 +989,7 @@ module.exports = (function() {
   Monster.prototype.attacked = function(damage) {
     //Temporary
     this.health -= damage - this.defense / 2;
-    if (this.health >= 0) {
+    if (this.health <= 0) {
       this.door.avaliable = true;
       if (this.isBoss) {
         return 0;
