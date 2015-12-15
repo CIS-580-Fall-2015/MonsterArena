@@ -1,8 +1,7 @@
 /* Wingy Monster Entity.
  */
 module.exports = (function() {
-  var Monster = require('./monster.js'),
-  Animation = require('./animation.js');
+  var Animation = require('../animation.js');
 
   // States for the monster
   const WALKING = 0;
@@ -27,25 +26,18 @@ module.exports = (function() {
   var WingyAttackLeft = new Image();
   WingyAttackLeft.src = "./img/monsters/Wingy/Wingy_Attack_Left.png";
 
-  function Wingy()
-  {
-    // TODO Needs Proper Parameters and Assignment of Properties
+  var animations = {};
+  animations.right = [];
+  animations.left = [];s
 
-    // The right-facing animations.
-    this.animations.right[WALKING] = new Animation(WingyWalkRight, SIZE, SIZE, 0, 0, 5); // TODO Specific Timing may need to be adjusted.
-    this.animations.right[ATTACKING] = new Animation(WingyAttackRight, SIZE, SIZE, 0, 0, 5); // TODO Specific Timing may need to be adjusted.
+  // The right-facing animations.
+  animations.right.push(new Animation(WingyWalkRight, SIZE, SIZE, 0, 0, 5)); // WALKING // TODO Specific Timing may need to be adjusted.
+  animations.right.push(new Animation(WingyAttackRight, SIZE, SIZE, 0, 0, 5)); // ATTACKING // TODO Specific Timing may need to be adjusted.
 
-    //The left-facing animations
-    this.animations.left[WALKING] = new Animation(WingyWalkLeft, SIZE, SIZE, 0, 0, 5); // TODO Specific Timing may need to be adjusted.
-    this.animations.left[ATTACKING] = new Animation(WingyAttackLeft, SIZE, SIZE, 0, 0, 5); // TODO Specific Timing may need to be adjusted.
-  }
+  //The left-facing animations
+  animations.left.push(new Animation(WingyWalkLeft, SIZE, SIZE, 0, 0, 5)); // WALKING // TODO Specific Timing may need to be adjusted.
+  animations.left.push(new Animation(WingyAttackLeft, SIZE, SIZE, 0, 0, 5)); // ATTACKING // TODO Specific Timing may need to be adjusted.
 
-  // Inherits from Monster.
-  Wingy.prototype = new Monster();
-
-  // TODO Add other functions/methods.
-
-
-  return Wingy;
+  return animations;
 
 }());

@@ -586,7 +586,7 @@ module.exports = (function() {
 
 }());
 
-},{"./hero.js":6,"./monster.js":7,"./spawner":11}],5:[function(require,module,exports){
+},{"./hero.js":6,"./monster.js":7,"./spawner":18}],5:[function(require,module,exports){
 window.onload = function() {
 
   // The width & height of the screen
@@ -632,7 +632,7 @@ window.onload = function() {
 
 }
 
-},{"./AudioManager.js":1,"./entity_manager.js":4,"./hero.js":6,"./shop_manager.js":10,"./stats_manager.js":12}],6:[function(require,module,exports){
+},{"./AudioManager.js":1,"./entity_manager.js":4,"./hero.js":6,"./shop_manager.js":17,"./stats_manager.js":19}],6:[function(require,module,exports){
 module.exports = (function() {
   var Entity = require('./entity.js');
 
@@ -715,8 +715,14 @@ module.exports = (function() {
 
   // boss = animation {} for monsters\Boss.js
   var boss = require('./monsters/Boss.js'),
-  bosser = require('./monsters/Bosser.js');
-  //TODO Other animations
+  bosser = require('./monsters/Bosser.js').
+  bossest = require('./monsters/Bossest.js'),
+  creepo = require('./monsters/Creepo.js')
+  gunner = require('./monsters/Gunner.js'),
+  puncher = require('./monsters/Puncher.js'),
+  skully = require('./monsters/Skully.js'),
+  snappy = require('./monsters/Snappy.js'),
+  wingy = require('./monsters/Wingy.js');
 
   Monster.prototype = new Entity();
 
@@ -852,7 +858,7 @@ module.exports = (function() {
 
 }());
 
-},{"./entity.js":3,"./monsters/Boss.js":8,"./monsters/Bosser.js":9}],8:[function(require,module,exports){
+},{"./entity.js":3,"./monsters/Boss.js":8,"./monsters/Bosser.js":9,"./monsters/Bossest.js":10,"./monsters/Creepo.js":11,"./monsters/Gunner.js":12,"./monsters/Puncher.js":13,"./monsters/Skully.js":14,"./monsters/Snappy.js":15,"./monsters/Wingy.js":16}],8:[function(require,module,exports){
 /* Boss Monster Entity.
  */
 module.exports = (function() {
@@ -870,17 +876,18 @@ module.exports = (function() {
   // The movement sprite sheet for the boss. It is simple, with walking and attacking being the same animation.
   var BossMovement = new Image();
   BossMovement.src = './img/monsters/Boss/Boss-Movement.png';
+
   var animations = {};
   animations.right = [];
   animations.left = [];
 
   // The right-facing animations. ALL OF THESE ANIMATIONS ARE THE SAME. IMPLEMENTED FOR THE SAKE OF CONSISTANCY.
-  animations.right.push(new Animation(BossMovement, WIDTH, HEIGHT, 0, 0, 2)); // TODO Specific Timing may need to be adjusted.
-  animations.right.push(new Animation(BossMovement, WIDTH, HEIGHT, 0, 0, 2)); // TODO Specific Timing may need to be adjusted.
+  animations.right.push(new Animation(BossMovement, WIDTH, HEIGHT, 0, 0, 2)); // WALKING // TODO Specific Timing may need to be adjusted.
+  animations.right.push(new Animation(BossMovement, WIDTH, HEIGHT, 0, 0, 2)); // ATTACKING // TODO Specific Timing may need to be adjusted.
 
   //The left-facing animations
-  animations.left.push(new Animation(BossMovement, WIDTH, HEIGHT, 0, 0, 2)); // TODO Specific Timing may need to be adjusted.
-  animations.left.push(new Animation(BossMovement, WIDTH, HEIGHT, 0, 0, 2)); // TODO Specific Timing may need to be adjusted.
+  animations.left.push(new Animation(BossMovement, WIDTH, HEIGHT, 0, 0, 2)); // WALKING // TODO Specific Timing may need to be adjusted.
+  animations.left.push(new Animation(BossMovement, WIDTH, HEIGHT, 0, 0, 2)); // ATTACKING // TODO Specific Timing may need to be adjusted.
 
   return animations;
 
@@ -909,18 +916,323 @@ module.exports = (function() {
   animations.left = [];
 
   // The right-facing animations. ALL OF THESE ANIMATIONS ARE THE SAME. IMPLEMENTED FOR THE SAKE OF CONSISTANCY.
-  animations.right.push(new Animation(BosserMovement, WIDTH, HEIGHT, 0, 0, 2)); // @TODO: Specific Timing may need to be adjusted.
-  animations.right.push(new Animation(BosserMovement, WIDTH, HEIGHT, 0, 0, 2)); // @TODO Specific Timing may need to be adjusted.
+  animations.right.push(new Animation(BosserMovement, WIDTH, HEIGHT, 0, 0, 2)); // WALKING // @TODO: Specific Timing may need to be adjusted.
+  animations.right.push(new Animation(BosserMovement, WIDTH, HEIGHT, 0, 0, 2)); // ATTACKING // @TODO Specific Timing may need to be adjusted.
 
   //The left-facing animations
-  animations.left.push(new Animation(BosserMovement, WIDTH, HEIGHT, 0, 0, 2)); // @TODO Specific Timing may need to be adjusted.
-  animations.left.push(new Animation(BosserMovement, WIDTH, HEIGHT, 0, 0, 2)); // @TODO Specific Timing may need to be adjusted.
+  animations.left.push(new Animation(BosserMovement, WIDTH, HEIGHT, 0, 0, 2)); // WALKING // @TODO Specific Timing may need to be adjusted.
+  animations.left.push(new Animation(BosserMovement, WIDTH, HEIGHT, 0, 0, 2)); // ATTACKING // @TODO Specific Timing may need to be adjusted.
 
   return animations;
 
 }());
 
 },{"../animation.js":2}],10:[function(require,module,exports){
+/* Bossest Monster Entity.
+ */
+module.exports = (function() {
+  var Animation = require('../animation.js');
+
+  // States for the monster
+  const WALKING = 0;
+  const ATTACKING = 1;
+
+  // The sprite HEIGHT (One frame).
+  const HEIGHT = 100;
+  // The sprite WIDTH (One frame).
+  const WIDTH = 116;
+
+  // The movement sprite sheet for the Bossest. It is simple, with walking and attacking being the same animation.
+  var BossestMovement = new Image();
+  BossestMovement.src = './img/monsters/Bossest/Bossest-Movement.png';
+
+  var animations = {};
+  animations.right = [];
+  animations.left = [];
+
+  // The right-facing animations. ALL OF THESE ANIMATIONS ARE THE SAME. IMPLEMENTED FOR THE SAKE OF CONSISTANCY.
+  animations.right.push(new Animation(BossestMovement, WIDTH, HEIGHT, 0, 0, 2)); // WALKING // TODO Specific Timing may need to be adjusted.
+  animations.right.push(new Animation(BossestMovement, WIDTH, HEIGHT, 0, 0, 2)); // ATTACKING // TODO Specific Timing may need to be adjusted.
+
+  //The left-facing animations
+  animations.left.push(new Animation(BossestMovement, WIDTH, HEIGHT, 0, 0, 2)); // WALKING // TODO Specific Timing may need to be adjusted.
+  animations.left.push(new Animation(BossestMovement, WIDTH, HEIGHT, 0, 0, 2)); // ATTACKING // TODO Specific Timing may need to be adjusted.
+
+  return animations;
+
+}());
+
+},{"../animation.js":2}],11:[function(require,module,exports){
+/* Creepo Monster Entity.
+ */
+module.exports = (function() {
+  var Animation = require('../animation.js');
+
+  // States for the monster
+  const WALKING = 0;
+  const ATTACKING = 1;
+
+  // The sprite size (It's a square 64 pixels x 64 pixels)
+  const SIZE = 64;
+
+  // The right walking Creepo spritesheet
+  var CreepoWalkRight = new Image();
+  CreepoWalkRight.src = './img/monsters/Creepo/Creepo_Walk_Right.png';
+
+  // The left walking Creepo spritesheet
+  var CreepoWalkLeft = new Image();
+  CreepoWalkLeft.src = "./img/monsters/Creepo/Creepo_Walk_Left.png";
+
+  // The right attacking Creepo spritesheet
+  var CreepoAttackRight = new Image();
+  CreepoAttackRight.src = "./img/monsters/Creepo/Creepo_Attack_Right.png";
+
+  // The left attacking Creepo spritesheet
+  var CreepoAttackLeft = new Image();
+  CreepoAttackLeft.src = "./img/monsters/Creepo/Creepo_Attack_Left.png";
+
+  var animations = {};
+  animations.right = [];
+  animations.left = [];
+
+  // The right-facing animations.
+  animations.right.push(new Animation(CreepoWalkRight, SIZE, SIZE, 0, 0, 5)); // WALKING // TODO Specific Timing may need to be adjusted.
+  animations.right.push(new Animation(CreepoAttackRight, SIZE, SIZE, 0, 0, 6)); // ATTACKING // TODO Specific Timing may need to be adjusted.
+
+  //The left-facing animations
+  animations.left.push(new Animation(CreepoWalkLeft, SIZE, SIZE, 0, 0, 5)); // WALKING // TODO Specific Timing may need to be adjusted.
+  animations.left.push(new Animation(CreepoAttackLeft, SIZE, SIZE, 0, 0, 6)); // ATTACKING // TODO Specific Timing may need to be adjusted.
+
+  return animations;
+
+}());
+
+},{"../animation.js":2}],12:[function(require,module,exports){
+/* Gunner Monster Entity.
+ */
+module.exports = (function() {
+  var Animation = require('../animation.js');
+
+  // States for the monster
+  const WALKING = 0;
+  const ATTACKING = 1;
+
+  // The sprite size (It's a square 64 pixels x 64 pixels)
+  const SIZE = 64;
+
+  // The right walking Gunner spritesheet
+  var GunnerWalkRight = new Image();
+  GunnerWalkRight.src = './img/monsters/Gunner/Gunner_Walk_Right.png';
+
+  // The left walking Gunner spritesheet
+  var GunnerWalkLeft = new Image();
+  GunnerWalkLeft.src = "./img/monsters/Gunner/Gunner_Walk_Left.png";
+
+  // The right attacking Gunner spritesheet
+  var GunnerAttackRight = new Image();
+  GunnerAttackRight.src = "./img/monsters/Gunner/Gunner_Attack_Right.png";
+
+  // The left attacking Gunner spritesheet
+  var GunnerAttackLeft = new Image();
+  GunnerAttackLeft.src = "./img/monsters/Gunner/Gunner_Attack_Left.png";
+
+  var animations = {};
+  animations.right = [];
+  animations.left = [];
+
+  // The right-facing animations.
+  animations.right.push(new Animation(GunnerWalkRight, SIZE, SIZE, 0, 0, 8)); // WALKING // TODO Specific Timing may need to be adjusted.
+  animations.right.push(new Animation(GunnerAttackRight, SIZE, SIZE, 0, 0, 8)); // ATTACKING // TODO Specific Timing may need to be adjusted.
+
+  //The left-facing animations
+  animations.right.push(new Animation(GunnerWalkLeft, SIZE, SIZE, 0, 0, 8)); // WALKING // TODO Specific Timing may need to be adjusted.
+  animations.right.push(new Animation(GunnerAttackLeft, SIZE, SIZE, 0, 0, 8)); // ATTACKING // TODO Specific Timing may need to be adjusted.
+
+  return animations;
+
+}());
+
+},{"../animation.js":2}],13:[function(require,module,exports){
+/* Puncher Monster Entity.
+ */
+module.exports = (function() {
+  var Animation = require('../animation.js');
+
+  // States for the monster
+  const WALKING = 0;
+  const ATTACKING = 1;
+
+  // The sprite size (It's a square 64 pixels x 64 pixels)
+  const SIZE = 64;
+
+  // The right walking Puncher spritesheet
+  var PuncherWalkRight = new Image();
+  PuncherWalkRight.src = './img/monsters/Puncher/Puncher_Walk_Right.png';
+
+  // The left walking Puncher spritesheet
+  var PuncherWalkLeft = new Image();
+  PuncherWalkLeft.src = "./img/monsters/Puncher/Puncher_Walk_Left.png";
+
+  // The right attacking Puncher spritesheet
+  var PuncherAttackRight = new Image();
+  PuncherAttackRight.src = "./img/monsters/Puncher/Puncher_Attack_Right.png";
+
+  // The left attacking Puncher spritesheet
+  var PuncherAttackLeft = new Image();
+  PuncherAttackLeft.src = "./img/monsters/Puncher/Puncher_Attack_Left.png";
+
+  var animations = {};
+  animations.right = [];
+  animations.left = [];
+
+  // The right-facing animations.
+  animations.right.push(new Animation(PuncherWalkRight, SIZE, SIZE, 0, 0, 8)); // WALKING // TODO Specific Timing may need to be adjusted.
+  animations.right.push(new Animation(PuncherAttackRight, SIZE, SIZE, 0, 0, 10)); // ATTACKING // TODO Specific Timing may need to be adjusted.
+
+  //The left-facing animations
+  animations.left.push(new Animation(PuncherWalkLeft, SIZE, SIZE, 0, 0, 8)); // WALKING // TODO Specific Timing may need to be adjusted.
+  animations.left.push(new Animation(PuncherAttackLeft, SIZE, SIZE, 0, 0, 10)); // ATTACKING // TODO Specific Timing may need to be adjusted.
+
+  return animations;
+
+}());
+
+},{"../animation.js":2}],14:[function(require,module,exports){
+/* Skully Monster Entity.
+ */
+module.exports = (function() {
+  var Animation = require('../animation.js');
+
+  // States for the monster
+  const WALKING = 0;
+  const ATTACKING = 1;
+
+  // The sprite size (It's a square 64 pixels x 64 pixels)
+  const SIZE = 64;
+
+  // The right walking Skully spritesheet
+  var SkullyWalkRight = new Image();
+  SkullyWalkRight.src = './img/monsters/Skully/Skully_Walk_Right.png';
+
+  // The left walking Skully spritesheet
+  var SkullyWalkLeft = new Image();
+  SkullyWalkLeft.src = "./img/monsters/Skully/Skully_Walk_Left.png";
+
+  // The right attacking Skully spritesheet
+  var SkullyAttackRight = new Image();
+  SkullyAttackRight.src = "./img/monsters/Skully/Skully_Attack_Right.png";
+
+  // The left attacking Skully spritesheet
+  var SkullyAttackLeft = new Image();
+  SkullyAttackLeft.src = "./img/monsters/Skully/Skully_Attack_Left.png";
+
+  var animations = {};
+  animations.right = [];
+  animations.left = [];
+
+  // The right-facing animations.
+  animations.right.push(new Animation(SkullyWalkRight, SIZE, SIZE, 0, 0, 4)); // WALKING // TODO Specific Timing may need to be adjusted.
+  animations.right.push(new Animation(SkullyAttackRight, SIZE, SIZE, 0, 0, 4)); // ATTACKING // TODO Specific Timing may need to be adjusted.
+
+  //The left-facing animations
+  animations.left.push(new Animation(SkullyWalkLeft, SIZE, SIZE, 0, 0, 4)); // WALKING // TODO Specific Timing may need to be adjusted.
+  animations.left.push(new Animation(SkullyAttackLeft, SIZE, SIZE, 0, 0, 4)); // ATTACKING // TODO Specific Timing may need to be adjusted.
+
+  return animations;
+
+}());
+
+},{"../animation.js":2}],15:[function(require,module,exports){
+/* Snappy Monster Entity.
+ */
+module.exports = (function() {
+  var Animation = require('../animation.js');
+
+  // States for the monster
+  const WALKING = 0;
+  const ATTACKING = 1;
+
+  // The sprite size (It's a square 64 pixels x 64 pixels)
+  const SIZE = 64;
+
+  // The right walking Snappy spritesheet
+  var SnappyWalkRight = new Image();
+  SnappyWalkRight.src = './img/monsters/Snappy/Snappy_Walk_Right.png';
+
+  // The left walking Snappy spritesheet
+  var SnappyWalkLeft = new Image();
+  SnappyWalkLeft.src = "./img/monsters/Snappy/Snappy_Walk_Left.png";
+
+  // The right attacking Snappy spritesheet
+  var SnappyAttackRight = new Image();
+  SnappyAttackRight.src = "./img/monsters/Snappy/Snappy_Attack_Right.png";
+
+  // The left attacking Snappy spritesheet
+  var SnappyAttackLeft = new Image();
+  SnappyAttackLeft.src = "./img/monsters/Snappy/Snappy_Attack_Left.png";
+
+  var animations = {};
+  animations.right = [];
+  animations.left = [];
+
+  // The right-facing animations.
+  animations.right.push(new Animation(SnappyWalkRight, SIZE, SIZE, 0, 0, 4)); // WALKING // TODO Specific Timing may need to be adjusted.
+  tanimations.right.push(new Animation(SnappyAttackRight, SIZE, SIZE, 0, 0, 5)); // ATTACKING // TODO Specific Timing may need to be adjusted.
+
+  //The left-facing animations
+  animations.left.push(new Animation(SnappyWalkLeft, SIZE, SIZE, 0, 0, 4)); // WALKING // TODO Specific Timing may need to be adjusted.
+  animations.left.push(new Animation(SnappyAttackLeft, SIZE, SIZE, 0, 0, 5)); // ATTACKING // TODO Specific Timing may need to be adjusted.
+
+  return animations;
+
+}());
+
+},{"../animation.js":2}],16:[function(require,module,exports){
+/* Wingy Monster Entity.
+ */
+module.exports = (function() {
+  var Animation = require('../animation.js');
+
+  // States for the monster
+  const WALKING = 0;
+  const ATTACKING = 1;
+
+  // The sprite size (It's a square 64 pixels x 64 pixels)
+  const SIZE = 64;
+
+  // The right walking Wingy spritesheet
+  var WingyWalkRight = new Image();
+  WingyWalkRight.src = './img/monsters/Wingy/Wingy_Walk_Right.png';
+
+  // The left walking Wingy spritesheet
+  var WingyWalkLeft = new Image();
+  WingyWalkLeft.src = "./img/monsters/Wingy/Wingy_Walk_Left.png";
+
+  // The right attacking Wingy spritesheet
+  var WingyAttackRight = new Image();
+  WingyAttackRight.src = "./img/monsters/Wingy/Wingy_Attack_Right.png";
+
+  // The left attacking Wingy spritesheet
+  var WingyAttackLeft = new Image();
+  WingyAttackLeft.src = "./img/monsters/Wingy/Wingy_Attack_Left.png";
+
+  var animations = {};
+  animations.right = [];
+  animations.left = [];s
+
+  // The right-facing animations.
+  animations.right.push(new Animation(WingyWalkRight, SIZE, SIZE, 0, 0, 5)); // WALKING // TODO Specific Timing may need to be adjusted.
+  animations.right.push(new Animation(WingyAttackRight, SIZE, SIZE, 0, 0, 5)); // ATTACKING // TODO Specific Timing may need to be adjusted.
+
+  //The left-facing animations
+  animations.left.push(new Animation(WingyWalkLeft, SIZE, SIZE, 0, 0, 5)); // WALKING // TODO Specific Timing may need to be adjusted.
+  animations.left.push(new Animation(WingyAttackLeft, SIZE, SIZE, 0, 0, 5)); // ATTACKING // TODO Specific Timing may need to be adjusted.
+
+  return animations;
+
+}());
+
+},{"../animation.js":2}],17:[function(require,module,exports){
 /* Author: Nic Johnson
  *
  * Title: ShopManager.js
@@ -1278,6 +1590,7 @@ module.exports = (function()
 		this.UpdateAgainstWallet();
 		this.UpdateSelectable();
 
+		/* eslint-disable */
 		switch (this.currentUpgrade)
 		{
 			case 0: // Door
@@ -1322,6 +1635,7 @@ module.exports = (function()
 				}
 				break;
 		}
+		/* eslint-enable */
 		this.UpdatePurchaseBtn();
 
 		if (this.doorSelectable)
@@ -1683,7 +1997,7 @@ module.exports = (function()
 
 
 
-},{}],11:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 module.exports = (function() {
 
   function Door(x, y) {
@@ -1696,7 +2010,7 @@ module.exports = (function() {
 
 }());
 
-},{}],12:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 /* Author: Nic Johnson
  *
  * Title: StatsManager.js

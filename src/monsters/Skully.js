@@ -1,8 +1,7 @@
 /* Skully Monster Entity.
  */
 module.exports = (function() {
-  var Monster = require('./monster.js'),
-  Animation = require('./animation.js');
+  var Animation = require('../animation.js');
 
   // States for the monster
   const WALKING = 0;
@@ -27,25 +26,18 @@ module.exports = (function() {
   var SkullyAttackLeft = new Image();
   SkullyAttackLeft.src = "./img/monsters/Skully/Skully_Attack_Left.png";
 
-  function Skully()
-  {
-    // TODO Needs Proper Parameters and Assignment of Properties
+  var animations = {};
+  animations.right = [];
+  animations.left = [];
 
-    // The right-facing animations.
-    this.animations.right[WALKING] = new Animation(SkullyWalkRight, SIZE, SIZE, 0, 0, 4); // TODO Specific Timing may need to be adjusted.
-    this.animations.right[ATTACKING] = new Animation(SkullyAttackRight, SIZE, SIZE, 0, 0, 4); // TODO Specific Timing may need to be adjusted.
+  // The right-facing animations.
+  animations.right.push(new Animation(SkullyWalkRight, SIZE, SIZE, 0, 0, 4)); // WALKING // TODO Specific Timing may need to be adjusted.
+  animations.right.push(new Animation(SkullyAttackRight, SIZE, SIZE, 0, 0, 4)); // ATTACKING // TODO Specific Timing may need to be adjusted.
 
-    //The left-facing animations
-    this.animations.left[WALKING] = new Animation(SkullyWalkLeft, SIZE, SIZE, 0, 0, 4); // TODO Specific Timing may need to be adjusted.
-    this.animations.left[ATTACKING] = new Animation(SkullyAttackLeft, SIZE, SIZE, 0, 0, 4); // TODO Specific Timing may need to be adjusted.
-  }
+  //The left-facing animations
+  animations.left.push(new Animation(SkullyWalkLeft, SIZE, SIZE, 0, 0, 4)); // WALKING // TODO Specific Timing may need to be adjusted.
+  animations.left.push(new Animation(SkullyAttackLeft, SIZE, SIZE, 0, 0, 4)); // ATTACKING // TODO Specific Timing may need to be adjusted.
 
-  // Inherits from Monster.
-  Skully.prototype = new Monster();
-
-  // TODO Add other functions/methods.
-
-
-  return Skully;
+  return animations;
 
 }());

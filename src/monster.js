@@ -6,8 +6,14 @@ module.exports = (function() {
 
   // boss = animation {} for monsters\Boss.js
   var boss = require('./monsters/Boss.js'),
-  bosser = require('./monsters/Bosser.js');
-  //TODO Other animations
+  bosser = require('./monsters/Bosser.js').
+  bossest = require('./monsters/Bossest.js'),
+  creepo = require('./monsters/Creepo.js')
+  gunner = require('./monsters/Gunner.js'),
+  puncher = require('./monsters/Puncher.js'),
+  skully = require('./monsters/Skully.js'),
+  snappy = require('./monsters/Snappy.js'),
+  wingy = require('./monsters/Wingy.js');
 
   Monster.prototype = new Entity();
 
