@@ -33,6 +33,8 @@ window.onload = function()
       EntityManager.upgrade_boss
     );
 
+    ShopManager.AddGold(15000);
+
     EntityManager.initialize();
     canvas = document.getElementById("monsters");
     ctx = canvas.getContext("2d");
