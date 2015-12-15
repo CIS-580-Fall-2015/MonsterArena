@@ -21,8 +21,8 @@ module.exports = (function() {
     exp: [0, 1.2]
   };
 
-  var ARENA_WIDTH; //TODO
-  var ARENA_HEIGHT; //TODO
+  var ARENA_WIDTH = document.getElementById('monsters').width;
+  var ARENA_HEIGHT = document.getElementById('monsters').height;
   var OFFSET = 64;
 
   // Builds the door array and places the hero
@@ -44,15 +44,50 @@ module.exports = (function() {
   // Runs all the turns, adds exp when neccesary
   // Clears array of dead monsters
   function update() {
-    var del = false;
+    //All monsters attack hero
     for (var i = 0; i < monsters.length; i++) {
-      var e = monsters[i].doTurn();
-      if (e >= 0) {
-        del = true;
-        hero.addExp(e);
-        delete monsters[i];
+      if (monsters[i].range) {
+        //Heal
+        damage = monsters[i].attack;
+
+        if (monsters[i].special = "heal") {
+          monsters[0].health += damage;
+          continue;
+        }
+
+        r = Math.random();
+
+        //Check crit
+        if (monsters[i].special = "crit") {
+          if (r > .9) {
+            damage *= 2;
+          }
+        }
+        hero.attacked(damage);
+
+        //Check Taunt
+        if (monsters[i].special = "taunt") {
+          if (r > .5) {
+            monsters.unshft(monsters[i]);
+            delete monsters[i];
+          }
+        }
       }
     }
+
+    var del = false;
+    if (monsters[0].special = "dodge") {
+      var r = Math.random()
+      if (r < .85) {
+        var e = monsters[0].attacked(hero.attack);
+        if (e >= 0) {
+          del = true;
+          hero.addExp(e);
+          delete monsters[i];
+        }
+      }
+    }
+
     if (del) {
       var undef;
       var temp = [];

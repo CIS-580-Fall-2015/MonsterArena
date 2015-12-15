@@ -33,9 +33,10 @@ module.exports = (function() {
     this.x = this.door.x;
     this.y = this.door.y;
     this.isBoss = isBoss;
+    this.inRange = false;
 
-    this.cx = document.getElementById('svgArea').width.baseVal.value / 2.0;
-    this.cy = document.getElementById('svgArea').height.baseVal.value / 2.0;
+    this.cx = document.getElementById('monsters').width.baseVal.value / 2.0;
+    this.cy = document.getElementById('monsters').height.baseVal.value / 2.0;
 
     // Create an animations property, with arrays for each direction of animations.
     this.animations = {
@@ -111,26 +112,31 @@ module.exports = (function() {
   Monster.prototype.doTurn = function(n) {
     //Checks Range and does movment
     //Check if movement needed based on which direction it is coming in from.
-    var a = math.floor(this.angle);
-    if (a == 135 || a == 180 || a == 225) {
-      if (this.x <= this.cx - 96) {
-        this.x += n * this.dx;
-        this.y += n * this.dy;
+    if (!this.inRange) {
+      var a = math.floor(this.angle);
+      if (a == 135 || a == 180 || a == 225) {
+        if (this.x <= this.cx - 96) {
+          this.x += n * this.dx;
+          this.y += n * this.dy;
+        }
+      } else if (a == 45 || a == 0 || a == 315) {
+        if (this.x >= this.cx + 32) {
+          this.x += n * this.dx;
+          this.y += n * this.dy;
+        }
+      } else if (a == 90) {
+        if (this.y <= this.cy - 96) {
+          this.x += n * this.dx;
+          this.y += n * this.dy;
+        }
+      } else if (a == 270) {
+        if (this.y >= this.cy + 32) {
+          this.x += n * this.dx;
+          this.y += n * this.dy;
+        }
       }
-    } else if (a == 45 || a == 0 || a == 315) {
-      if (this.x >= this.cx + 32) {
-        this.x += n * this.dx;
-        this.y += n * this.dy;
-      }
-    } else if (a == 90) {
-      if (this.y <= this.cy - 96) {
-        this.x += n * this.dx;
-        this.y += n * this.dy;
-      }
-    } else if (a == 270) {
-      if (this.y >= this.cy + 32) {
-        this.x += n * this.dx;
-        this.y += n * this.dy;
+      else {
+        this.inRange = true;
       }
     }
 
