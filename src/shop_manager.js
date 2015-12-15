@@ -65,7 +65,7 @@ module.exports = (function()
 		/* eslint-disable */
 		this.specialProgression = [
 									"shop_taunt_special", 
-									"shop_defense_special", 
+									"shop_dodge_special", 
 									"shop_critical_special", 
 									"shop_heal_special",
 									"shop_none_special",
@@ -92,7 +92,7 @@ module.exports = (function()
 		this.attackDone   = false;
 		this.healthDone   = false; 
 		this.specialDone  = false;
-		this.bossDone = false;
+		this.bossDone 	  = false;
 
 		/////////////////////////////////////
 		// Flags for determining if player //
@@ -103,7 +103,7 @@ module.exports = (function()
 		this.attackEnoughMoney   = false;
 		this.healthEnoughMoney   = false;
 		this.specialEnoughMoney  = false;
-		this.bossEnoughMoney = false;
+		this.bossEnoughMoney 	 = false;
 
 		////////////////////////////
 		// Costs for each upgrade //
@@ -113,7 +113,7 @@ module.exports = (function()
 		this.attackCost   = 0;
 		this.healthCost   = 0; 
 		this.specialCost  = 0;
-		this.bossCost = 0;
+		this.bossCost 	  = 0;
 
 		///////////////////////////////////////////
 		// Cost progressions for capped upgrades //
@@ -122,7 +122,7 @@ module.exports = (function()
 		this.doorCostIndex          = 0;
 		this.specialCostProgression = [300, 700, 1100, 1500];
 		this.specialCostIndex       = 0;
-		this.bossCostProgression    = [1500, 3000, 4500];
+		this.bossCostProgression    = [3000, 4500];
 		this.bossCostIndex 			= 0;
 		
 		/////////////////////////////////////////
