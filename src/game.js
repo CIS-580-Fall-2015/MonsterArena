@@ -1,4 +1,13 @@
 module.exports = function() {
+
+  var Hero = require('./hero.js'),
+    EntityManager = require('./entity_manager.js'),
+    ShopManager = require('./shop_manager.js'),
+    StatsManager = require('./stats_manager.js'),
+    AudioManager = require('./AudioManager.js'),
+    canvas,
+    ctx;
+
   var load = function(sm) {
     var statemanager = sm;
     // The width & height of the screen
@@ -7,13 +16,6 @@ module.exports = function() {
 
     EntityManager.add_gold = ShopManager.AddGold;
     // Module variables
-    var Hero = require('./hero.js'),
-      EntityManager = require('./entity_manager.js');
-    ShopManager = require('./shop_manager.js');
-    StatsManager = require('./stats_manager.js');
-    AudioManager = require('./AudioManager.js'),
-      canvas,
-      ctx;
 
     StatsManager.SetSpawnDelegate = EntityManager.spawn_monster;
 
