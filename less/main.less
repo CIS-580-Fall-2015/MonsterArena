@@ -1,6 +1,5 @@
 @default_height: 595px;
-@default_width: 1180px;
-@img_height: 590px;
+@img_height: 340px;
 @img_width: 590px;
 @top_padding: ((@default_height - @img_height) / 2);
 
@@ -10,9 +9,7 @@
 	height: @default_height;
 	display: inline-block;
 	text-align: center;
-	
-	
-	
+
 	#spawner
 	{
 		width: 295px;
@@ -27,19 +24,14 @@
 	{
 		width: @img_width;
 		height: @img_height;
-		background-image: url("img/arena3.png");
-	    background-repeat: no-repeat;
-	    background-size: 100% 95%;
 		float: left;
 		margin: 0 auto;
 		margin-top: @top_padding;
 		padding: 0 0 0 0;
 		display: inline-block;
-		
 
 		#health
 		{
-			
 			-webkit-apperance: none;
 			apperance: none;
 			background: red;
@@ -59,17 +51,6 @@
 		padding: 0 0 0 0;
 		margin: 0 auto;
 		display: inline-block;
-	}
-	
-	.splash{
-	   position: absolute;
-	   width: 1180px;
-	   height: @default_height;
-	   background-image: url("img/splash.jpg");
-	   background-repeat: no-repeat;
-	   background-size: 100% 100%;
-	   border: 5px double #000;
-	   display: none;
 	}
 }
 
