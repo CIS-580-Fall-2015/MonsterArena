@@ -39,14 +39,16 @@ module.exports = (function() {
   // Levelups the hero's stats based
   // on scaling factor
   Hero.prototype.levelup = function() {
-    var t = this.maxHealth;
-    this.maxHealth *= this.maxHealth_scale;
-    this.attack *= this.attack_scale;
-    this.defense *= this.defense_scale;
-    this.req_exp ^= this.exp_scale;
-    this.exp = 0;
-    this.level++;
-    document.getElementById('health').max = this.maxHealth;
+    if (this.level >= 10) {
+      var t = this.maxHealth;
+      this.maxHealth *= this.maxHealth_scale;
+      this.attack *= this.attack_scale;
+      this.defense *= this.defense_scale;
+      this.req_exp ^= this.exp_scale;
+      this.exp = 0;
+      this.level++;
+      document.getElementById('health').max = this.maxHealth;
+    }
   };
 
   // Updates health bar, adds gold based on damage
@@ -78,8 +80,7 @@ module.exports = (function() {
     }
   };
 
-  Hero.prototype.render = function(cntx)
-  {
+  Hero.prototype.render = function(cntx) {
     cntx.fillRect(this.x, this.y, 64, 64);
   };
 
