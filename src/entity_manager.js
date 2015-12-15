@@ -27,14 +27,14 @@ module.exports = (function() {
 
   // Builds the door array and places the hero
   function initialize() {
-    doors[0] = new Door(ARENA_WIDTH / 2, OFFSET); // North
-    doors[1] = new Door(ARENA_WIDTH - OFFSET, ARENA_HEIGHT / 2); // East
-    doors[2] = new Door(ARENA_WIDTH / 2, ARENA_HEIGHT - OFFSET); //South
-    doors[3] = new Door(OFFSET, ARENA_HEIGHT / 2); // West
-    doors[4] = new Door(ARENA_WIDTH * 0.75, ARENA_HEIGHT * 0.25); // North-East
-    doors[5] = new Door(ARENA_WIDTH * 0.75, ARENA_HEIGHT * 0.75); // South-East
-    doors[6] = new Door(ARENA_WIDTH * 0.25, ARENA_HEIGHT * 0.75); // South-West
-    doors[7] = new Door(ARENA_WIDTH * 0.25, ARENA_HEIGHT * 0.25); // North-West
+    doors.push(new Door(ARENA_WIDTH / 2, OFFSET)); // North
+    doors.push(new Door(ARENA_WIDTH - OFFSET, ARENA_HEIGHT / 2)); // East
+    doors.push(new Door(ARENA_WIDTH / 2, ARENA_HEIGHT - OFFSET)); //South
+    doors.push(new Door(OFFSET, ARENA_HEIGHT / 2)); // West
+    doors.push(new Door(ARENA_WIDTH * 0.75, ARENA_HEIGHT * 0.25)); // North-East
+    doors.push(new Door(ARENA_WIDTH * 0.75, ARENA_HEIGHT * 0.75)); // South-East
+    doors.push(new Door(ARENA_WIDTH * 0.25, ARENA_HEIGHT * 0.75)); // South-West
+    doors.push(new Door(ARENA_WIDTH * 0.25, ARENA_HEIGHT * 0.25)); // North-West
 
     hero = new Hero(HERO_STATS, ARENA_WIDTH / 2 - 32, ARENA_HEIGHT / 2 - 32, this);
 
@@ -44,6 +44,10 @@ module.exports = (function() {
   // Runs all the turns, adds exp when neccesary
   // Clears array of dead monsters
   function update() {
+    // Hero level and regeneration
+    hero.doTurn();
+
+
     //All monsters attack hero
     for (var i = 0; i < monsters.length; i++) {
       if (monsters[i].range) {
