@@ -15,9 +15,6 @@
 #toplevel #arena {
   width: 590px;
   height: 590px;
-  background-image: url("img/arena3.png");
-  background-repeat: no-repeat;
-  background-size: 100% 95%;
   float: left;
   margin: 0 auto;
   margin-top: 2.5px;
@@ -26,7 +23,7 @@
 }
 #toplevel #monsters {
   width: 590px;
-  height: 340px;
+  height: 560px;
   float: left;
   margin: 0 auto;
   padding: 0 0 0 0;
