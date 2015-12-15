@@ -1663,7 +1663,7 @@
 
 		<image id='stats_critical_special' desc='Chance to double damage' x='155' y='238' overflow="visible" opacity='0' width="48" height="48" xlink:href="./img/icons/criticalattack.png" />
 
-		<image id='stats_heal_special' desc='Ignores hero defense' x='155' y='238' overflow="visible" opacity='0' width="48" height="48" xlink:href="./img/icons/heal.png" />
+		<image id='stats_magic_special' desc='Ignores hero defense' x='155' y='238' overflow="visible" opacity='0' width="48" height="48" xlink:href="./img/icons/magicattack.png" />
 
 		<image id='stats_taunt_special' desc='Hero attacks this monster first' x='155' y='238' overflow="visible" opacity='0' width="48" height="48" xlink:href="./img/icons/taunt.png" />
 
@@ -1692,12 +1692,18 @@
 
 						</progress>
 					
+<<<<<<< HEAD
 						<!svg version="1.1" id="svgArea" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="590px" height="340px" viewBox="0 0 590 340" enable-background="new 0 0 590 340"xml:space="preserve">
 							<!image overflow="visible" width="1571" height="909" xlink:href="./img/arena3.png"  transform="matrix(0.3756 0 0 0.374 0 0)">
 						<!/image>
 						<!/svg>
 						<canvas id="monsters" xml:space = "preserve" style="border:1px solid #000000;">
 <						</canvas>
+=======
+						<svg version="1.1" id="svgArea" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="590px" height="340px" viewBox="0 0 590 340" enable-background="new 0 0 590 340"xml:space="preserve">
+						</image>
+						</svg>
+>>>>>>> d8cc507bab9d14507dbd547d7ed7929b01a921d3
 					</div>
 				<div id="shop">
 					<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="299px"
@@ -3384,7 +3390,7 @@ op+BIqRjIz2EVC/18fWUpSxlKUtZylKWvkj6nwADAE773NxT7bl3AAAAAElFTkSuQmCC" transform=
 
 		<image id='shop_critical_special' desc='Chance to double damage' x='57' y='300' overflow="visible" opacity='0' width="48" height="48" xlink:href="./img/icons/criticalattack.png" />
 
-		<image id='shop_heal_special' desc='Ignores player defense' x='57' y='300' overflow="visible" opacity='0' width="48" height="48" xlink:href="./img/icons/heal.png" />
+		<image id='shop_magic_special' desc='Ignores player defense' x='57' y='300' overflow="visible" opacity='0' width="48" height="48" xlink:href="./img/icons/magicattack.png" />
 
 		<image id='shop_taunt_special' desc='Hero attacks this first' x='57' y='300' overflow="visible" opacity='1' width="48" height="48" xlink:href="./img/icons/taunt.png" />
 

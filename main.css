@@ -14,12 +14,22 @@
 }
 #toplevel #arena {
   width: 590px;
-  height: 340px;
+  height: 590px;
   float: left;
   margin: 0 auto;
-  margin-top: 127.5px;
+  margin-top: 2.5px;
   padding: 0 0 0 0;
   display: inline-block;
+}
+#toplevel #monsters {
+  width: 590px;
+  height: 560px;
+  float: left;
+  margin: 0 auto;
+  padding: 0 0 0 0;
+  display: inline-block;
+  background-image: url("img/arena3.png");
+  background-size: 100% 100%;
 }
 #toplevel #arena #health {
   -webkit-apperance: none;
@@ -36,6 +46,16 @@
   padding: 0 0 0 0;
   margin: 0 auto;
   display: inline-block;
+}
+#toplevel .splash {
+  position: absolute;
+  width: 1180px;
+  height: 595px;
+  background-image: url("img/splash.jpg");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  border: 5px double #000;
+  display: none;
 }
 progress.health::-webkit-progress-value {
   background: red;

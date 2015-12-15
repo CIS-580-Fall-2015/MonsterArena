@@ -67,7 +67,7 @@ module.exports = (function()
 									"shop_taunt_special", 
 									"shop_defense_special", 
 									"shop_critical_special", 
-									"shop_magic_special",
+									"shop_heal_special",
 									"shop_none_special",
 									];
 		/* eslint-enable */
