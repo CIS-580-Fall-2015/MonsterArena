@@ -2355,10 +2355,6 @@ module.exports = (function()
 	/* eslint-disable */
 	var specialList = [
 						"stats_none_special", 
-						// "stats_critical_special", 
-						// "stats_magic_special", 
-						// "stats_taunt_special", 
-						// "stats_defense_special",
 					];
 	/* eslint-enable */
 	var specialIndex = 0;
@@ -2559,6 +2555,28 @@ module.exports = (function()
 		}
 		current = document.getElementById(specialList[specialIndex]);
 		current.setAttribute("opacity", "1");
+		switch(specialList[specialIndex])
+		{
+			case "stats_none_special": 
+				specialContent = "none";
+				break;
+
+			case "stats_dodge_special":
+				specialContent = "dodge";
+				break;
+
+			case "stats_critical_special":
+				specialContent = "crit"
+				break;
+
+			case "stats_heal_special":
+				specialContent = "heal";
+				break;
+
+			case "stats_taunt_special":
+				specialContent = "taunt";
+				break;
+		}
 		specialText.textContent = current.getAttribute("desc");
 	}
 
