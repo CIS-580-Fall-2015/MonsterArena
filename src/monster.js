@@ -4,6 +4,10 @@
 module.exports = (function() {
   var Entity = require('./entity.js');
 
+  // States for the monster.
+  const WALKING = 0;
+  const ATTACKING = 1;
+
   // boss = animation {} for monsters\Boss.js
   var boss = require('./monsters/Boss.js'),
   bosser = require('./monsters/Bosser.js').
@@ -14,6 +18,11 @@ module.exports = (function() {
   skully = require('./monsters/Skully.js'),
   snappy = require('./monsters/Snappy.js'),
   wingy = require('./monsters/Wingy.js');
+
+  // An array containing all of the normal monsters (non-bosses).
+  var availableRegMonsters = [];
+  // An array containing all of the bosses (Only 3, larger than regular monsters).
+  var availableBosses = [];
 
   Monster.prototype = new Entity();
 
