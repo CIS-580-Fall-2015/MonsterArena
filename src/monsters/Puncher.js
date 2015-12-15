@@ -1,8 +1,7 @@
 /* Puncher Monster Entity.
  */
 module.exports = (function() {
-  var Monster = require('./monster.js'),
-  Animation = require('./animation.js');
+  var Animation = require('../animation.js');
 
   // States for the monster
   const WALKING = 0;
@@ -27,25 +26,18 @@ module.exports = (function() {
   var PuncherAttackLeft = new Image();
   PuncherAttackLeft.src = "./img/monsters/Puncher/Puncher_Attack_Left.png";
 
-  function Puncher()
-  {
-    // TODO Needs Proper Parameters and Assignment of Properties
+  var animations = {};
+  animations.right = [];
+  animations.left = [];
 
-    // The right-facing animations.
-    this.animations.right[WALKING] = new Animation(PuncherWalkRight, SIZE, SIZE, 0, 0, 8); // TODO Specific Timing may need to be adjusted.
-    this.animations.right[ATTACKING] = new Animation(PuncherAttackRight, SIZE, SIZE, 0, 0, 10); // TODO Specific Timing may need to be adjusted.
+  // The right-facing animations.
+  animations.right.push(new Animation(PuncherWalkRight, SIZE, SIZE, 0, 0, 8)); // WALKING // TODO Specific Timing may need to be adjusted.
+  animations.right.push(new Animation(PuncherAttackRight, SIZE, SIZE, 0, 0, 10)); // ATTACKING // TODO Specific Timing may need to be adjusted.
 
-    //The left-facing animations
-    this.animations.left[WALKING] = new Animation(PuncherWalkLeft, SIZE, SIZE, 0, 0, 8); // TODO Specific Timing may need to be adjusted.
-    this.animations.left[ATTACKING] = new Animation(PuncherAttackLeft, SIZE, SIZE, 0, 0, 10); // TODO Specific Timing may need to be adjusted.
-  }
+  //The left-facing animations
+  animations.left.push(new Animation(PuncherWalkLeft, SIZE, SIZE, 0, 0, 8)); // WALKING // TODO Specific Timing may need to be adjusted.
+  animations.left.push(new Animation(PuncherAttackLeft, SIZE, SIZE, 0, 0, 10)); // ATTACKING // TODO Specific Timing may need to be adjusted.
 
-  // Inherits from Monster.
-  Puncher.prototype = new Monster();
-
-  // TODO Add other functions/methods.
-
-
-  return Puncher;
+  return animations;
 
 }());

@@ -1,8 +1,7 @@
 /* Bossest Monster Entity.
  */
 module.exports = (function() {
-  var Monster = require('./monster.js'),
-  Animation = require('./animation.js');
+  var Animation = require('../animation.js');
 
   // States for the monster
   const WALKING = 0;
@@ -17,25 +16,18 @@ module.exports = (function() {
   var BossestMovement = new Image();
   BossestMovement.src = './img/monsters/Bossest/Bossest-Movement.png';
 
-  function Bossest()
-  {
-    // TODO Needs Proper Parameters and Assignment of Properties
+  var animations = {};
+  animations.right = [];
+  animations.left = [];
 
-    // The right-facing animations. ALL OF THESE ANIMATIONS ARE THE SAME. IMPLEMENTED FOR THE SAKE OF CONSISTANCY.
-    this.animations.right[WALKING] = new Animation(BossestMovement, WIDTH, HEIGHT, 0, 0, 2); // TODO Specific Timing may need to be adjusted.
-    this.animations.right[ATTACKING] = new Animation(BossestMovement, WIDTH, HEIGHT, 0, 0, 2); // TODO Specific Timing may need to be adjusted.
+  // The right-facing animations. ALL OF THESE ANIMATIONS ARE THE SAME. IMPLEMENTED FOR THE SAKE OF CONSISTANCY.
+  animations.right.push(new Animation(BossestMovement, WIDTH, HEIGHT, 0, 0, 2)); // WALKING // TODO Specific Timing may need to be adjusted.
+  animations.right.push(new Animation(BossestMovement, WIDTH, HEIGHT, 0, 0, 2)); // ATTACKING // TODO Specific Timing may need to be adjusted.
 
-    //The left-facing animations
-    this.animations.left[WALKING] = new Animation(BossestMovement, WIDTH, HEIGHT, 0, 0, 2); // TODO Specific Timing may need to be adjusted.
-    this.animations.left[ATTACKING] = new Animation(BossestMovement, WIDTH, HEIGHT, 0, 0, 2); // TODO Specific Timing may need to be adjusted.
-  }
+  //The left-facing animations
+  animations.left.push(new Animation(BossestMovement, WIDTH, HEIGHT, 0, 0, 2)); // WALKING // TODO Specific Timing may need to be adjusted.
+  animations.left.push(new Animation(BossestMovement, WIDTH, HEIGHT, 0, 0, 2)); // ATTACKING // TODO Specific Timing may need to be adjusted.
 
-  // Inherits from Monster.
-  Bossest.prototype = new Monster();
-
-  // TODO Add other functions/methods.
-
-
-  return Bossest;
+  return animations;
 
 }());
