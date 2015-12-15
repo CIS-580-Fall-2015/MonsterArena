@@ -133,7 +133,13 @@ module.exports = (function() {
   Monster.prototype.attacked = function(damage) {
     //Temporary
     this.health -= damage - this.defense / 2;
+    if (DEBUG) {
+      console.log("Monster attacked! Health: " + this.health);
+    }
     if (this.health >= 0) {
+      if (DEBUG) {
+        console.log("It died!");
+      }
       this.door.avaliable = true;
       if (this.isBoss) {
         return 0;
@@ -149,7 +155,7 @@ module.exports = (function() {
   Monster.prototype.doTurn = function(n) {
     //Checks Range and does movment
     //Check if movement needed based on which direction it is coming in from.
-    
+
     if (!this.inRange) {
       var a = Math.floor(this.angle);
       if (a == 135 || a == 180 || a == 225) {

@@ -1,6 +1,8 @@
 module.exports = (function() {
   var Entity = require('./entity.js');
 
+  const DEBUG = true;
+
   Hero.prototype = new Entity();
 
   // Hero Constructor
@@ -48,6 +50,10 @@ module.exports = (function() {
       this.exp = 0;
       this.level++;
       document.getElementById('health').max = this.maxHealth;
+
+      if (DEBUG) {
+        console.log("Hero leveled up! Level: " +this.level);
+      }
     }
   };
 
@@ -55,6 +61,10 @@ module.exports = (function() {
   Hero.prototype.attacked = function(amount) {
     //testing health bar
     var bar = document.getElementById('health');
+
+    if (DEBUG) {
+      console.log("Hero attacked for " + amount);
+    }
 
     var damage = amount - this.defense / 2;
     this.health -= damage;
@@ -77,6 +87,10 @@ module.exports = (function() {
     this.health += this.maxHealth / 5;
     if (this.health > this.maxHealth) {
       this.health = this.maxHealth;
+    }
+
+    if (DEBUG) {
+      console.log("Hero healed");
     }
   };
 
