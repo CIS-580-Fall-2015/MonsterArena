@@ -81,15 +81,17 @@ module.exports = (function() {
         }
       }
 
-
-      if (monsters[0].special = "dodge") {
-        var r = Math.random()
-        if (r < .85) {
-          var e = monsters[0].attacked(hero.attack);
-          if (e >= 0) {
-            del = true;
-            hero.addExp(e);
-            delete monsters[i];
+      //Hero attacks
+      if (monsters[0].inRange = true) {
+        if (monsters[0].special = "dodge") {
+          var r = Math.random()
+          if (r < .85) {
+            var e = monsters[0].attacked(hero.attack);
+            if (e >= 0) {
+              del = true;
+              hero.addExp(e);
+              delete monsters[i];
+            }
           }
         }
       }
