@@ -10,7 +10,7 @@ module.exports = (function() {
 
   // boss = animation {} for monsters\Boss.js
   var boss = require('./monsters/Boss.js'),
-    bosser = require('./monsters/Bosser.js').
+    bosser = require('./monsters/Bosser.js'),
   bossest = require('./monsters/Bossest.js'),
     creepo = require('./monsters/Creepo.js')
   gunner = require('./monsters/Gunner.js'),
