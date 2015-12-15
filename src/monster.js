@@ -56,7 +56,7 @@ module.exports = (function() {
       this.special = stats.special;
       this.animations = availableRegMonsters[Math.floor(Math.random() * (availableRegMonsters.length) )]; // Pick one of the six regular sprites at random.
     }
-
+    this.maxHealth = this.health;
     this.door = door;
     this.door.avaliable = false;
     this.state = WALKING;

@@ -69,6 +69,9 @@ module.exports = (function() {
 
           if (monsters[i].special == "heal") {
             monsters[0].health += damage;
+            if (monsters[0].health > monsters[0].maxHealth) {
+              monsters[0].health = monsters[0].maxHealth;
+            }
             continue;
           }
 
