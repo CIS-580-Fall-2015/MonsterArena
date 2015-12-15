@@ -149,6 +149,16 @@ module.exports = (function() {
     }
   }
 
+  // Renders all the monsters with the given context.
+  function render(ctx)
+  {
+    for (var i = 0; i < monsters.length; i++) {
+        if(monsters[i]) {
+            monsters[i].render(ctx);
+        }
+    }
+  }
+
 
   return {
     initialize: initialize,
@@ -156,6 +166,7 @@ module.exports = (function() {
     open_door: open_door,
     spawn_monster: spawn_monster,
     upgrade_boss: upgrade_boss,
+    render: render
   };
 
 }());
