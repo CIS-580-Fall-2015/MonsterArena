@@ -517,9 +517,10 @@ module.exports = (function() {
   // Runs all the turns, adds exp when neccesary
   // Clears array of dead monsters
   function update() {
+    var del = false;
+
     // Hero level and regeneration
     hero.doTurn();
-
 
     //All monsters attack hero
     for (var i = 0; i < monsters.length; i++) {
@@ -546,13 +547,14 @@ module.exports = (function() {
         if (monsters[i].special = "taunt") {
           if (r > .5) {
             monsters.unshft(monsters[i]);
+            del = true;
             delete monsters[i];
           }
         }
       }
     }
 
-    var del = false;
+
     if (monsters[0].special = "dodge") {
       var r = Math.random()
       if (r < .85) {
@@ -656,11 +658,12 @@ window.onload = function()
     EntityManager = require('./entity_manager.js'),
     ShopManager = require('./shop_manager.js'),
     StatsManager = require('./stats_manager.js'),
-    AudioManager = require('./AudioManager.js'),
-    canvas,
-    ctx;
+    AudioManager = require('./AudioManager.js')
+    canvas = document.getElementById("monsters");
+    ctx = canvas.getContext("2d");
 
   var load = function(sm) {
+
     var statemanager = sm;
     // The width & height of the screen
     SCREEN_WIDTH = 1280;
@@ -680,24 +683,19 @@ window.onload = function()
       EntityManager.upgrade_boss
     );
 
+    EntityManager.initialize();
+    canvas = document.getElementById("monsters");
+    ctx = canvas.getContext("2d");
+
     AudioManager.playIdleMusic();
     EntityManager.initialize();
+
+    window.requestAnimationFrame(loop);
   }
 
 
   var update = function(elapsedTime) {
     EntityManager.update();
-  };
-
-  var load = function(sm) {
-    EntityManager.initialize();
-
-    // Get the canvas and grab the context.
-    canvas = document.getElementById("monsters");
-    ctx = canvas.getContext("2d");
-
-    //TODO Menu/game state
-    //TODO start game loop
   };
 
   var keyUp = function(e) {
@@ -722,9 +720,9 @@ window.onload = function()
     render();
     window.requestAnimationFrame(loop);
   }
+  load();
   window.requestAnimationFrame(loop);
 }
-
 //   return {
 //     load: load,
 //     update: update,
