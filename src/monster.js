@@ -12,7 +12,7 @@ module.exports = (function() {
   var boss = require('./monsters/Boss.js'),
     bosser = require('./monsters/Bosser.js'),
   bossest = require('./monsters/Bossest.js'),
-    creepo = require('./monsters/Creepo.js')
+    creepo = require('./monsters/Creepo.js'),
   gunner = require('./monsters/Gunner.js'),
     puncher = require('./monsters/Puncher.js'),
     skully = require('./monsters/Skully.js'),
@@ -52,7 +52,7 @@ module.exports = (function() {
       this.attack = stats.attack;
       this.defense = stats.defense;
       this.special = stats.special;
-      this.animations = availableRegMonsters[Math.floor((Math.random() * 7))]; // Pick one of the six regular sprites at random.
+      this.animations = availableRegMonsters[Math.floor(Math.random() * (availableRegMonsters.length) )]; // Pick one of the six regular sprites at random.
     }
 
     this.door = door;
@@ -67,8 +67,8 @@ module.exports = (function() {
     this.cy = document.getElementById('monsters').height / 2.0;
 
     //TODO modify according to center of door.
-    this.x = this.door.x + 32;
-    this.y = this.door.y + 32;
+    this.x = this.door.x;
+    this.y = this.door.y;
     this.angle = undefined;
 
     // Set the direction of the monster.
@@ -148,31 +148,57 @@ module.exports = (function() {
   Monster.prototype.doTurn = function(n) {
     //Checks Range and does movment
     //Check if movement needed based on which direction it is coming in from.
+    var inRangex = false;
+    var inRangey = false;
     if (!this.inRange) {
-      var a = math.floor(this.angle);
+      var a = Math.floor(this.angle);
       if (a == 135 || a == 180 || a == 225) {
         if (this.x <= this.cx - 96) {
           this.x += n * this.dx;
           this.y += n * this.dy;
+        }
+        else
+        {
+          inRange = true;
         }
       } else if (a == 45 || a == 0 || a == 315) {
         if (this.x >= this.cx + 32) {
           this.x += n * this.dx;
           this.y += n * this.dy;
         }
+        else
+        {
+          inRange = true;
+        }
       } else if (a == 90) {
         if (this.y <= this.cy - 96) {
           this.x += n * this.dx;
           this.y += n * this.dy;
+        }
+        else
+        {
+          inRange = true;
         }
       } else if (a == 270) {
         if (this.y >= this.cy + 32) {
           this.x += n * this.dx;
           this.y += n * this.dy;
         }
-      } else {
-        this.inRange = true;
-      }
+        else
+        {
+          inRange = true;
+        }
+      } 
+    }
+    // if (inRangex && inRangey)
+    // {
+
+    //   this.inRange = true;
+    //   this.state = ATTACKING;
+    // }
+    if (this.inRange)
+    {
+      this.state = ATTACKING;
     }
 
   };
@@ -184,6 +210,18 @@ module.exports = (function() {
       this.animations.left[this.state].render(context, this.x, this.y);
     } else {
       this.animations.right[this.state].render(context, this.x, this.y);
+    }
+  };
+
+  Monster.prototype.update = function(elapsedTime)
+  { 
+    if(this.isLeft)
+    {
+      this.animations.left[this.state].update(elapsedTime);
+    }
+    else
+    {
+      this.animations.right[this.state].update(elapsedTime);
     }
   };
 

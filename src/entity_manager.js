@@ -38,16 +38,21 @@ module.exports = (function() {
 
     hero = new Hero(HERO_STATS, ARENA_WIDTH / 2 - 32, ARENA_HEIGHT / 2 - 32, this);
 
-    spawn_boss_interval = setInterval(spawn_boss, 5000);
+    //spawn_boss_interval = setInterval(spawn_boss, 5000);
   }
 
   // Runs all the turns, adds exp when neccesary
   // Clears array of dead monsters
-  function update() {
+  function update(elapsedTime) {
     var del = false;
 
     // Hero level and regeneration
     hero.doTurn();
+    for(var i = 0; i < monsters.length; i++)
+    {
+      monsters[i].doTurn(1);
+      monsters[i].update(elapsedTime);
+    }
     if (monsters.length != 0) {
       //All monsters attack hero
       for (var i = 0; i < monsters.length; i++) {
@@ -118,7 +123,7 @@ module.exports = (function() {
   // Spawns a monster at an open door
   function spawn_monster(stats) {
     var d = null;
-    for (var i = 1; i > unlocked_doors; i++) {
+    for (var i = 1; i < unlocked_doors; i++) {
       if (doors[i].avaliable) {
         d = doors[i];
         break;
@@ -162,11 +167,13 @@ module.exports = (function() {
 
   // Renders all the monsters with the given context.
   function render(ctx) {
+    ctx.clearRect(0, 0, 590, 560);
     for (var i = 0; i < monsters.length; i++) {
       if (monsters[i]) {
         monsters[i].render(ctx);
       }
     }
+    hero.render(ctx);
   }
 
 
@@ -177,7 +184,8 @@ module.exports = (function() {
     spawn_monster: spawn_monster,
     upgrade_boss: upgrade_boss,
     render: render,
-    monsters: monsters
+    monsters: monsters,
+    doors: doors
   };
 
 }());

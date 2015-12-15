@@ -1,12 +1,15 @@
 // module.exports = function() {
 window.onload = function()
-{
+{ 
+    gameTime = 0;
+    canvas = document.getElementById("monsters");
+    canvas.width = 590;
+    canvas.height = 560;
     Hero = require('./hero.js'),
     EntityManager = require('./entity_manager.js'),
     ShopManager = require('./shop_manager.js'),
     StatsManager = require('./stats_manager.js'),
     AudioManager = require('./AudioManager.js')
-    canvas = document.getElementById("monsters");
     ctx = canvas.getContext("2d");
 
   var load = function(sm) {
@@ -42,7 +45,7 @@ window.onload = function()
 
 
   var update = function(elapsedTime) {
-    EntityManager.update();
+    EntityManager.update(elapsedTime);
   };
 
   var keyUp = function(e) {
@@ -61,9 +64,11 @@ window.onload = function()
     EntityManager.render(ctx);
   };
 
-  var loop = function()
+  var loop = function(newTime)
   {
-    update();
+    var elapsedTime = (newTime - gameTime) / 1000;
+    gameTime = newTime;
+    update(elapsedTime);
     render();
     window.requestAnimationFrame(loop);
   }
