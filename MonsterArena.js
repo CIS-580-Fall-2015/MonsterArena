@@ -367,6 +367,82 @@ module.exports = (function()
 
 
 },{}],2:[function(require,module,exports){
+/* Sprite sheet animation engine. Ported from DiggyHole, an open source game located at:
+   https://github.com/CIS-580-Fall-2015/diggy-hole
+*/
+
+module.exports = function () {
+
+
+  function Animation(image, width, height, top, left, numberOfFrames, secondsPerFrame, playItOnce, donePlayingCallback, reverse) {
+    this.frameIndex = 0,
+        this.time = 0,
+        this.secondsPerFrame = secondsPerFrame || (1 / 16),
+        this.numberOfFrames = numberOfFrames || 1;
+
+    this.width = width;
+    this.height = height;
+    this.image = image;
+
+    this.drawLocationX = top || 0;
+    this.drawLocationY = left || 0;
+
+    this.playItOnce = playItOnce;
+    this.donePlayingCallback = donePlayingCallback;
+    this.reversalFactor = 1;
+    if(reverse) this.reversalFactor = -1;
+  }
+
+  Animation.prototype.setStats = function (frameCount, locationX, locationY) {
+    this.numberOfFrames = frameCount;
+    this.drawLocationY = locationY;
+    this.drawLocationX = locationX;
+  };
+
+  Animation.prototype.update = function (elapsedTime, tilemap) {
+    this.time += elapsedTime;
+
+    // Update animation
+    if (this.time > this.secondsPerFrame) {
+      if (this.time > this.secondsPerFrame) this.time -= this.secondsPerFrame;
+
+      // If the current frame index is in range
+      if (this.frameIndex < this.numberOfFrames - 1) {
+        this.frameIndex += 1;
+      } else {
+        if (!this.playItOnce)
+          this.frameIndex = 0;
+
+        if (this.donePlayingCallback) {
+          this.donePlayingCallback();
+
+          //once we call the callback, destroy it so it cannot be called again
+          this.donePlayingCallback = null;
+        }
+      }
+    }
+  };
+
+  Animation.prototype.render = function (ctx, x, y) {
+
+    // Draw the current frame
+    ctx.drawImage(
+        this.image,
+        this.drawLocationX + (this.frameIndex * this.reversalFactor * this.width),
+        this.drawLocationY,
+        this.width,
+        this.height,
+        x,
+        y,
+        this.width,
+        this.height);
+  };
+
+  return Animation;
+
+}();
+
+},{}],3:[function(require,module,exports){
 /* Base class for all game entities,
  * implemented as a common JS module
  */
@@ -394,7 +470,7 @@ module.exports = (function(){
 
 }());
 
-},{}],3:[function(require,module,exports){
+},{}],4:[function(require,module,exports){
 module.exports = (function() {
 
   var Hero = require('./hero.js');
@@ -403,6 +479,10 @@ module.exports = (function() {
   var doors = [];
   var monsters = [];
   var unlocked_doors = 1;
+
+  var spawn_boss_interval;
+
+  var add_gold;
 
   var hero;
 
@@ -418,6 +498,7 @@ module.exports = (function() {
   var ARENA_HEIGHT; //TODO
   var OFFSET = 64;
 
+  // Builds the door array and places the hero
   function initialize() {
     doors[0] = new Door(ARENA_WIDTH / 2, OFFSET); // North
     doors[1] = new Door(ARENA_WIDTH - OFFSET, ARENA_HEIGHT / 2); // East
@@ -429,8 +510,12 @@ module.exports = (function() {
     doors[7] = new Door(ARENA_WIDTH * 0.25, ARENA_HEIGHT * 0.25); // North-West
 
     hero = new Hero(HERO_STATS, ARENA_WIDTH / 2 - 32, ARENA_HEIGHT / 2 - 32, this);
+
+    spawn_boss_interval = setInterval(spawn_boss, 5000);
   }
 
+  // Runs all the turns, adds exp when neccesary
+  // Clears array of dead monsters
   function update() {
     var del = false;
     for (var i = 0; i < monsters.length; i++) {
@@ -444,21 +529,23 @@ module.exports = (function() {
     if (del) {
       var undef;
       var temp = [];
-      for (var i = 0; i < monsters.length; i++) {
+      for (i = 0; i < monsters.length; i++) {
         if (monsters[i] !== undef) {
-          temp.push(arr[i])
+          temp.push(monsters[i]);
         }
       }
       monsters = temp;
     }
   }
 
+  // For door upgrades
   function open_door() {
     if (unlocked_doors < doors.length) {
       unlocked_doors++;
     }
   }
 
+  // Spawns a monster at an open door
   function spawn_monster(stats) {
     var d = null;
     for (var i = 1; i > unlocked_doors; i++) {
@@ -473,6 +560,23 @@ module.exports = (function() {
     }
   }
 
+  //Spawns the boss monster out of door[0]
+  function spawn_boss() {
+    var found = false;
+    for (var i = 0; i > monsters.length; i++) {
+      if (monsters[i].isBoss) {
+        found = true;
+        break;
+      }
+    }
+
+    if (!found) {
+      var b = new Monster(null, doors[0], true);
+      monsters.push(b);
+    }
+  }
+
+
   return {
     initialize: initialize,
     update: update,
@@ -482,7 +586,7 @@ module.exports = (function() {
 
 }());
 
-},{"./hero.js":5,"./monster.js":6,"./spawner":8}],4:[function(require,module,exports){
+},{"./hero.js":6,"./monster.js":7,"./spawner":11}],5:[function(require,module,exports){
 window.onload = function() {
 
   // The width & height of the screen
@@ -496,11 +600,17 @@ window.onload = function() {
   StatsManager = require('./stats_manager.js');
   AudioManager = require('./AudioManager.js');
 
+  EntityManager.add_gold = ShopManager.AddGold;
+
   StatsManager.SetSpawnDelegate = EntityManager.spawn_monster;
 
 
-  ShopManager.SetStatsManagerDelegates(StatsManager.IncreaseAttackCap,
-    StatsManager.IncreaseDefenseCap, StatsManager.IncreaseHealthCap);
+  ShopManager.SetStatsManagerDelegates(
+                                      StatsManager.IncreaseAttackCap,
+                                      StatsManager.IncreaseDefenseCap, 
+                                      StatsManager.IncreaseHealthCap,
+                                      StatsManager.AddSpecial
+                                      );
 
   AudioManager.playIdleMusic();
 
@@ -522,16 +632,17 @@ window.onload = function() {
 
 }
 
-},{"./AudioManager.js":1,"./entity_manager.js":3,"./hero.js":5,"./shop_manager.js":7,"./stats_manager.js":9}],5:[function(require,module,exports){
-module.exports = (function(){
+},{"./AudioManager.js":1,"./entity_manager.js":4,"./hero.js":6,"./shop_manager.js":10,"./stats_manager.js":12}],6:[function(require,module,exports){
+module.exports = (function() {
   var Entity = require('./entity.js');
 
   Hero.prototype = new Entity();
 
-
-
-  
-  function Hero(stats, x, y, EntityManager){
+  // Hero Constructor
+  // Stats is object keys = stats, values = [stat, scale_factor]
+  // x/y positions
+  // Entity Manager
+  function Hero(stats, x, y, EntityManager) {
     this.health = stats.health[0];
     this.health_scale = stats.health[1];
     this.attack = stats.attack[0];
@@ -547,32 +658,43 @@ module.exports = (function(){
 
     this.x = x;
     this.y = y;
-	document.getElementById('health').max = this.health;
+    document.getElementById('health').max = this.health;
   }
 
+  // Adds experiance, uncapped
   Hero.prototype.addExp = function(amount) {
     this.exp += amount;
   }
 
+  // Levelups the hero's stats based
+  // on scaling factor
   Hero.prototype.levelup = function() {
     this.health *= this.health_scale;
     this.attack *= this.attack_scale;
     this.defense *= this.defense_scale;
     this.req_exp ^= this.exp_scale;
     this.exp = 0;
+    this.level++;
   };
 
+  // Updates health bar, adds gold based on damage
   Hero.prototype.attacked = function(amount) {
+    //testing health bar
+    var bar = document.getElementById('health');
+    //
     //Temporary
     var damage = amount - this.defense / 2;
     this.health -= damage;
-	//testing health bar
-	document.getElementById('health').value = this.health;
+    //TODO error handle
+    this.EntityManager.add_gold(damage);
+    //testing health bar
+    bar.value = this.health;
     if (this.health >= 0) {
       //TODO die
     }
   };
 
+  // Targets and attacks monsters
   Hero.prototype.doTurn = function() {
     if (this.exp >= this.req_exp) {
       this.levelup();
@@ -580,26 +702,42 @@ module.exports = (function(){
     //TODO TARGET MONSTER AND ATTACK
   };
 
-   return Hero;
+  return Hero;
 
 }());
 
-},{"./entity.js":2}],6:[function(require,module,exports){
+},{"./entity.js":3}],7:[function(require,module,exports){
 /* Base class for each monster.
  * It inherits from the generic entity class.
  */
 module.exports = (function() {
   var Entity = require('./entity.js');
 
+  // boss = animation {} for monsters\Boss.js
+  var boss = require('./monsters/Boss.js'),
+  bosser = require('./monsters/Bosser.js');
+  //TODO Other animations
+
   Monster.prototype = new Entity();
 
+  var BOSS = {attack: 8, defense: 2, health: 5};
+
+  // Constructor
   function Monster(stats, door, isBoss) {
-    this.health = stats.health;
-    this.attack = stats.attack;
-    this.defense = stats.defense;
+    //Use BOSS stats if it's the leader
+    if (isBoss) {
+      this.health = BOSS.health;
+      this.attack = BOSS.attack;
+      this.defense = BOSS.defense;
+    } else {
+      this.health = stats.health;
+      this.attack = stats.attack;
+      this.defense = stats.defense;
+      this.specials = stats.specials;
+    }
+
     this.door = door;
     this.door.avaliable = false;
-    this.specials = stats.specials;
     this.state = 0;
     this.x = this.door.x;
     this.y = this.door.y;
@@ -661,6 +799,7 @@ module.exports = (function() {
     }
   }
 
+  // Handle monsters being attacked
   Monster.prototype.attacked = function(amount) {
     //Temporary
     this.health -= damage - this.defense;
@@ -676,6 +815,7 @@ module.exports = (function() {
     return -1;
   };
 
+  // Do the monsters turn
   //n is the number of frames*numberofpixelsperframe since last update (dx & dy calculated for move of 1 pixel)
   Monster.prototype.doTurn = function(n) {
     //Checks Range and does movment
@@ -712,7 +852,75 @@ module.exports = (function() {
 
 }());
 
-},{"./entity.js":2}],7:[function(require,module,exports){
+},{"./entity.js":3,"./monsters/Boss.js":8,"./monsters/Bosser.js":9}],8:[function(require,module,exports){
+/* Boss Monster Entity.
+ */
+module.exports = (function() {
+  var Animation = require('../animation.js');
+
+  // States for the monster
+  const WALKING = 0;
+  const ATTACKING = 1;
+
+  // The sprite HEIGHT (One frame).
+  const HEIGHT = 98;
+  // The sprite WIDTH (One frame).
+  const WIDTH = 124;
+
+  // The movement sprite sheet for the boss. It is simple, with walking and attacking being the same animation.
+  var BossMovement = new Image();
+  BossMovement.src = './img/monsters/Boss/Boss-Movement.png';
+  var animations = {};
+  animations.right = [];
+  animations.left = [];
+
+  // The right-facing animations. ALL OF THESE ANIMATIONS ARE THE SAME. IMPLEMENTED FOR THE SAKE OF CONSISTANCY.
+  animations.right.push(new Animation(BossMovement, WIDTH, HEIGHT, 0, 0, 2)); // TODO Specific Timing may need to be adjusted.
+  animations.right.push(new Animation(BossMovement, WIDTH, HEIGHT, 0, 0, 2)); // TODO Specific Timing may need to be adjusted.
+
+  //The left-facing animations
+  animations.left.push(new Animation(BossMovement, WIDTH, HEIGHT, 0, 0, 2)); // TODO Specific Timing may need to be adjusted.
+  animations.left.push(new Animation(BossMovement, WIDTH, HEIGHT, 0, 0, 2)); // TODO Specific Timing may need to be adjusted.
+
+  return animations;
+
+}());
+
+},{"../animation.js":2}],9:[function(require,module,exports){
+/* Bosser Monster Entity.
+ */
+module.exports = (function() {
+  var Animation = require('../animation.js');
+
+  // States for the monster
+  const WALKING = 0;
+  const ATTACKING = 1;
+
+  // The sprite HEIGHT (One frame).
+  const HEIGHT = 100;
+  // The sprite WIDTH (One frame).
+  const WIDTH = 86;
+
+  // The movement sprite sheet for the bosser. It is simple, with walking and attacking being the same animation.
+  var BosserMovement = new Image();
+  BosserMovement.src = './img/monsters/Bosser/Bosser-Movement.png';
+  var animations = {};
+  animations.right = [];
+  animations.left = [];
+
+  // The right-facing animations. ALL OF THESE ANIMATIONS ARE THE SAME. IMPLEMENTED FOR THE SAKE OF CONSISTANCY.
+  animations.right.push(new Animation(BosserMovement, WIDTH, HEIGHT, 0, 0, 2)); // @TODO: Specific Timing may need to be adjusted.
+  animations.right.push(new Animation(BosserMovement, WIDTH, HEIGHT, 0, 0, 2)); // @TODO Specific Timing may need to be adjusted.
+
+  //The left-facing animations
+  animations.left.push(new Animation(BosserMovement, WIDTH, HEIGHT, 0, 0, 2)); // @TODO Specific Timing may need to be adjusted.
+  animations.left.push(new Animation(BosserMovement, WIDTH, HEIGHT, 0, 0, 2)); // @TODO Specific Timing may need to be adjusted.
+
+  return animations;
+
+}());
+
+},{"../animation.js":2}],10:[function(require,module,exports){
 /* Author: Nic Johnson
  *
  * Title: ShopManager.js
@@ -724,6 +932,9 @@ module.exports = (function() {
  * History:
  * 		December 08, 2015: 
  *  		-Date Created
+ *  	December 13, 2015:
+ *  		-Whole bunch of stuff because i forgot to update this list
+ *  		-Subtracting gold on purchase
  */
 
 module.exports = (function()
@@ -745,7 +956,7 @@ module.exports = (function()
 			HEALTH: 2,
 			DEFENSE: 3,
 			SPECIAL: 4,
-			OTHER2: 5,
+			BOSS: 5,
 		};
 		Object.freeze(this.Upgrades);
 
@@ -756,7 +967,7 @@ module.exports = (function()
 			2: "HEALTH",
 			3: "DEFENSE",
 			4: "SPECIAL",
-			5: "OTHER2",
+			5: "BOSS",
 		};
 		Object.freeze(this.Strings);
 
@@ -771,28 +982,84 @@ module.exports = (function()
 		// Properties //
 		////////////////
 		this.currentSelected = undefined;
-		this.currentUpgrade = undefined;
-		this.totalGold = 0;
+		this.currentUpgrade  = undefined;
+		this.totalGold       = 0;
 		this.defaultAddition = 100;
-		this.specialProgression = ["taunt_special", "critical_special", "magic_special"];
+		/* eslint-disable */
+		this.specialProgression = [
+									"shop_taunt_special", 
+									"shop_defense_special", 
+									"shop_critical_special", 
+									"shop_magic_special",
+									"shop_none_special",
+									];
+		/* eslint-enable */
 		this.specialIndex = 0;
 
-		// Flags for greying out shop items
-		this.defenseSelectable = false;
-		this.doorSelectable = false;
-		this.attackSelectable = false;
-		this.healthSelectable = false;
-		this.specialSelectable = false;
-		this.otherTwoSelectable = false;
-		this.purchaseClickable = false;
+		//////////////////////////////////////
+		// Flags for greying out shop items //
+		//////////////////////////////////////
+		this.defenseSelectable  = false;
+		this.doorSelectable     = false;
+		this.attackSelectable   = false;
+		this.healthSelectable   = false;
+		this.specialSelectable  = false;
+		this.bossSelectable 	= false;
+		this.purchaseClickable  = false;
 
-		// Costs for each upgrade
-		this.doorCost = 501;
-		this.defenseCost = 500;
-		this.attackCost = 500;
-		this.healthCost = 500; 
-		this.specialCost = 500;
-		this.otherTwoCost = 500;
+		/////////////////////////////////////
+		// Flags for finished upgrade path //
+		/////////////////////////////////////
+		this.doorDone     = false;
+		this.defenseDone  = false;
+		this.attackDone   = false;
+		this.healthDone   = false; 
+		this.specialDone  = false;
+		this.bossDone = false;
+
+		/////////////////////////////////////
+		// Flags for determining if player //
+		// has enough money 		       //
+		/////////////////////////////////////
+		this.doorEnoughMoney     = false;
+		this.defenseEnoughMoney  = false;
+		this.attackEnoughMoney   = false;
+		this.healthEnoughMoney   = false;
+		this.specialEnoughMoney  = false;
+		this.bossEnoughMoney = false;
+
+		////////////////////////////
+		// Costs for each upgrade //
+		////////////////////////////
+		this.doorCost     = 0;
+		this.defenseCost  = 0;
+		this.attackCost   = 0;
+		this.healthCost   = 0; 
+		this.specialCost  = 0;
+		this.bossCost = 0;
+
+		///////////////////////////////////////////
+		// Cost progressions for capped upgrades //
+		///////////////////////////////////////////
+		this.doorCostProgression    = [100, 1000, 2000, 3000, 4000, 5000, 6000];
+		this.doorCostIndex          = 0;
+		this.specialCostProgression = [300, 700, 1100, 1500];
+		this.specialCostIndex       = 0;
+		this.bossCostProgression    = [1500, 3000, 4500];
+		this.bossCostIndex 			= 0;
+		
+		/////////////////////////////////////////
+		// Multipliers and base costs for non  //
+		// capped upgrades                     //
+		/////////////////////////////////////////
+		this.defenseBaseCost = 300;
+		this.defenseCostMult = 1;
+		
+		this.attackBaseCost  = 300;
+		this.attackCostMult  = 1;
+
+		this.healthBaseCost  = 300;
+		this.healthCostMult  = 1;
 
 
 		//////////////////////
@@ -838,12 +1105,12 @@ module.exports = (function()
 			self.Special();
 		});
 
-		this.otherTwo = document.getElementById("Other2");
-		this.otherTwo.descText = "Desc of Other 2";
-		this.otherTwo.selected = document.getElementById("Other2_Selected");
-		this.otherTwo.addEventListener("click", function(e)
+		this.boss = document.getElementById("Boss");
+		this.boss.descText = "Upgrades leader stats";
+		this.boss.selected = document.getElementById("Boss_Selected");
+		this.boss.addEventListener("click", function(e)
 		{
-			self.OtherTwo();
+			self.Boss();
 		});
 
 		this.purchaseBtn = document.getElementById("Purchase_Button");
@@ -859,36 +1126,24 @@ module.exports = (function()
 
 		
 		this.descriptionText = document.getElementById("Description_Text");
+		this.goldText        = document.getElementById("Gold_Text");
+		this.doorText        = document.getElementById("Door_Cost");
+		this.attackText      = document.getElementById("Attack_Cost");
+		this.defenseText     = document.getElementById("Defense_Cost");
+		this.healthText      = document.getElementById("Health_Cost");
+		this.specialText     = document.getElementById("Special_Cost");
+		this.bossText    	 = document.getElementById("Boss_Cost");
 		
-		this.goldText = document.getElementById("Gold_Text");
-
-		this.doorText = document.getElementById("Door_Cost");
-		this.doorText.textContent = this.doorCost;
-
-		this.attackText = document.getElementById("Attack_Cost");
-		this.attackText.textContent = this.attackCost;
-
-		this.defenseText = document.getElementById("Defense_Cost");
-		this.defenseText.textContent = this.defenseCost;
-
-		this.healthText = document.getElementById("Health_Cost");
-		this.healthText.textContent = this.healthCost;
-
-		this.specialText = document.getElementById("Special_Cost");
-		this.specialText.textContent = this.specialCost;
-
-		this.otherTwoText = document.getElementById("Other2_Cost");
-		this.otherTwoText.textContent = this.otherTwoCost;
-
-		this.doorGrey = document.getElementById("Door_Grey");
-		this.attackGrey = document.getElementById("Attack_Grey");
-		this.healthGrey = document.getElementById("Health_Grey");
-		this.defenseGrey = document.getElementById("Defense_Grey");
-		this.specialGrey = document.getElementById("Special_Grey");
-		this.otherTwoGrey = document.getElementById("Other2_Grey");
-		this.purchaseGrey = document.getElementById("Purchase_Grey");
+		this.doorGrey        = document.getElementById("Door_Grey");
+		this.attackGrey      = document.getElementById("Attack_Grey");
+		this.healthGrey      = document.getElementById("Health_Grey");
+		this.defenseGrey     = document.getElementById("Defense_Grey");
+		this.specialGrey     = document.getElementById("Special_Grey");
+		this.bossGrey    	 = document.getElementById("Boss_Grey");
+		this.purchaseGrey    = document.getElementById("Purchase_Grey");
 
 		this.SetGoldText();
+		this.UpdateCosts();
 
 	}
 
@@ -903,6 +1158,10 @@ module.exports = (function()
 	{	
 		this.goldText.textContent = "Gold: " + this.totalGold;
 	};
+
+	////////////////////////////
+	// Cost setting functions //
+	////////////////////////////
 
 	ShopManager.prototype.SetDoorCost = function (val) 
 	{
@@ -934,11 +1193,15 @@ module.exports = (function()
 		this.specialText.textContent = this.specialCost;
 	};
 
-	ShopManager.prototype.SetOtherTwoCost = function (val)
+	ShopManager.prototype.SetBossCost = function (val)
 	{
-		this.otherTwoCost = val;
-		this.otherTwoText.textContent = this.otherTwoCost;
+		this.bossCost = val;
+		this.bossText.textContent = this.bossCost;
 	};
+
+	/////////////////////////////////////////
+	// Gold addition/subtraction functions //
+	/////////////////////////////////////////
 
 	/**
 	 * Function: AddGold
@@ -957,37 +1220,163 @@ module.exports = (function()
 	{
 		var val = amt || this.defaultAddition;
 		this.totalGold += val;
-		if (this.totalGold >= this.doorCost)
+		this.UpdateItemGrey();
+		this.SetGoldText();
+	};
+
+
+	ShopManager.prototype.SubtractGold = function(amt)
+	{
+		this.totalGold -= amt;
+		this.SetGoldText();
+	};
+
+	ShopManager.prototype.UpdateAgainstWallet = function()
+	{
+		this.doorEnoughMoney     = this.totalGold >= this.doorCost;
+		this.attackEnoughMoney   = this.totalGold >= this.attackCost;
+		this.defenseEnoughMoney  = this.totalGold >= this.defenseCost;
+		this.healthEnoughMoney   = this.totalGold >= this.healthCost;
+		this.specialEnoughMoney  = this.totalGold >= this.specialCost;
+		this.bossEnoughMoney 	 = this.totalGold >= this.bossCost;
+	};
+
+	ShopManager.prototype.UpdateSelectable = function()
+	{
+		this.doorSelectable     = this.doorEnoughMoney && !this.doorDone;
+		this.attackSelectable   = this.attackEnoughMoney && !this.attackDone;
+		this.defenseSelectable  = this.defenseEnoughMoney && !this.defenseDone;
+		this.healthSelectable   = this.healthEnoughMoney && !this.healthDone;
+		this.specialSelectable  = this.specialEnoughMoney && !this.specialDone;
+		this.bossSelectable 	= this.bossEnoughMoney && !this.bossDone;
+	};
+
+	ShopManager.prototype.UpdateCosts = function()
+	{
+		// capped upgrades
+		this.doorCost    = this.doorCostProgression[this.doorCostIndex];
+		this.specialCost = this.specialCostProgression[this.specialCostIndex];
+		this.bossCost  	 = this.bossCostProgression[this.bossCostIndex];
+		
+		// non capped
+		this.attackCost  = this.attackBaseCost * this.attackCostMult;
+		this.defenseCost = this.defenseBaseCost * this.defenseCostMult;
+		this.healthCost  = this.healthBaseCost * this.healthCostMult;
+
+		// Updating text
+		this.doorText.textContent     = this.doorCost;
+		this.attackText.textContent   = this.attackCost;
+		this.defenseText.textContent  = this.defenseCost;
+		this.healthText.textContent   = this.healthCost;
+		this.specialText.textContent  = this.specialCost;
+		this.bossText.textContent 	  = this.bossCost;
+	};
+
+	ShopManager.prototype.UpdateItemGrey = function()
+	{
+		this.UpdateCosts();
+		this.UpdateAgainstWallet();
+		this.UpdateSelectable();
+
+		switch (this.currentUpgrade)
+		{
+			case 0: // Door
+				if (!this.doorSelectable)
+				{
+					this.purchaseClickable = false;
+				}
+				break;
+
+			case 1: // Attack
+				if (!this.attackSelectable)
+				{
+					this.purchaseClickable = false;
+				}
+				break;
+
+			case 2: // Health
+				if (!this.healthSelectable)
+				{
+					this.purchaseClickable = false;
+				}
+				break;
+
+			case 3: // Defense
+				if (!this.defenseSelectable)
+				{
+					this.purchaseClickable = false;
+				}
+				break;
+
+			case 4: // Special
+				if (!this.specialSelectable)
+				{
+					this.purchaseClickable = false;
+				}
+				break;
+
+			case 5: // Boss
+				if (!this.bossSelectable)
+				{
+					this.purchaseClickable = false;
+				}
+				break;
+		}
+		this.UpdatePurchaseBtn();
+
+		if (this.doorSelectable)
 		{
 			this.doorGrey.setAttribute("opacity", "0");
-			this.doorSelectable = true;
 		}
-		if (this.totalGold >= this.attackCost)
+		else
+		{
+			this.doorGrey.setAttribute("opacity", "0.65");
+		}
+
+		if (this.attackSelectable)
 		{
 			this.attackGrey.setAttribute("opacity", "0");
-			this.attackSelectable = true;
 		}
-		if (this.totalGold >= this.healthCost)
+		else
+		{
+			this.attackGrey.setAttribute("opacity", "0.65");
+		}
+
+		if (this.healthSelectable)
 		{
 			this.healthGrey.setAttribute("opacity", "0");
-			this.healthSelectable = true;
 		}
-		if (this.totalGold >= this.defenseCost)
+		else
+		{
+			this.healthGrey.setAttribute("opacity", "0.65");
+		}
+
+		if (this.defenseSelectable)
 		{
 			this.defenseGrey.setAttribute("opacity", "0");
-			this.defenseSelectable = true;
 		}
-		if (this.totalGold >= this.specialCost)
+		else
+		{
+			this.defenseGrey.setAttribute("opacity", "0.65");
+		}
+
+		if (this.specialSelectable)
 		{
 			this.specialGrey.setAttribute("opacity", "0");
-			this.specialSelectable = true;
 		}
-		if (this.totalGold >= this.otherTwoCost)
+		else
 		{
-			this.otherTwoGrey.setAttribute("opacity", "0");
-			this.otherTwoSelectable = true;
+			this.specialGrey.setAttribute("opacity", "0.65");
 		}
-		this.SetGoldText();
+
+		if (this.bossSelectable)
+		{
+			this.bossGrey.setAttribute("opacity", "0");
+		}
+		else
+		{
+			this.bossGrey.setAttribute("opacity", "0.65");
+		}
 	};
 
 	ShopManager.prototype.UpdatePurchaseBtn = function()
@@ -1003,13 +1392,18 @@ module.exports = (function()
 	};
 
 
-	ShopManager.prototype.SetStatsManagerDelegates = function(attack, defense, health)
+	ShopManager.prototype.SetStatsManagerDelegates = function(attack, defense, health, special)
 	{
 		if (this.DEBUG) { console.log("ShopManager: StatsManager delegates being set."); }
 		this.increaseAttack = attack;
 		this.increaseDefense = defense;
 		this.increaseHealth = health;
+		this.addSpecial = special;
 	};
+
+	////////////////////////
+	// UI Update handlers //
+	////////////////////////
 
 	ShopManager.prototype.DoorPlus = function() 
 	{
@@ -1126,8 +1520,8 @@ module.exports = (function()
 	ShopManager.prototype.Special = function() 
 	{
 		if (this.DEBUG) { console.log("ShopManager: Special Clicked"); }
-		this.descriptionText.textContent = this.currentSpecial.getAttribute('desc');
-		this.currentUpgrade = this.Upgrades.OTHER1;
+		this.descriptionText.textContent = this.currentSpecial.getAttribute("desc");
+		this.currentUpgrade = this.Upgrades.SPECIAL;
 		if (this.currentSelected != undefined)
 		{
 			this.currentSelected.setAttribute("stroke-opacity", "0");
@@ -1139,7 +1533,7 @@ module.exports = (function()
 			this.currentSelected = this.special.selected;
 			this.currentSelected.setAttribute("stroke-opacity", "100");
 		}
-		if (this.specialSelectable)
+		if (this.specialSelectable && !this.specialDone)
 		{
 			this.purchaseClickable = true;
 			this.UpdatePurchaseBtn();
@@ -1151,23 +1545,23 @@ module.exports = (function()
 		}
 	};
 
-	ShopManager.prototype.OtherTwo = function() 
+	ShopManager.prototype.Boss = function() 
 	{
-		if (this.DEBUG) { console.log("ShopManager: Other2 Clicked"); }
-		this.descriptionText.textContent = this.otherTwo.descText;
-		this.currentUpgrade = this.Upgrades.OTHER2;
+		if (this.DEBUG) { console.log("ShopManager: Boss Clicked"); }
+		this.descriptionText.textContent = this.boss.descText;
+		this.currentUpgrade = this.Upgrades.BOSS;
 		if (this.currentSelected != undefined)
 		{
 			this.currentSelected.setAttribute("stroke-opacity", "0");
-			this.currentSelected = this.otherTwo.selected;
+			this.currentSelected = this.boss.selected;
 			this.currentSelected.setAttribute("stroke-opacity", "100");
 		}
 		else
 		{
-			this.currentSelected = this.otherTwo.selected;
+			this.currentSelected = this.boss.selected;
 			this.currentSelected.setAttribute("stroke-opacity", "100");
 		}
-		if (this.otherTwoSelectable)
+		if (this.bossSelectable)
 		{
 			this.purchaseClickable = true;
 			this.UpdatePurchaseBtn();
@@ -1190,29 +1584,77 @@ module.exports = (function()
 			switch (this.currentUpgrade)
 			{
 				case 0: // Door
-
+					// TODO: Enable new door
+					this.SubtractGold(this.doorCost);
+					this.doorCostIndex++;
+					if (this.doorCostIndex == this.doorCostProgression.length)
+					{
+						this.doorDone = true;
+						this.doorSelectable = false;
+						this.purchaseClickable = false;
+						this.UpdatePurchaseBtn();
+					}
 					break;
 
 				case 1: // Attack
 					this.increaseAttack();
+					this.SubtractGold(this.attackCost);
+					this.attackCostMult++;
 					break;
 
 				case 2: // Health
 					this.increaseHealth();
+					this.SubtractGold(this.healthCost);
+					this.healthCostMult++;
 					break;
 
 				case 3: // Defense
 					this.increaseDefense();
+					this.SubtractGold(this.defenseCost);
+					this.defenseCostMult++;
 					break;
 
-				case 4: // Other1
-
+				case 4: // Special
+					var spec = this.specialProgression[this.specialIndex];
+					document.getElementById(this.specialProgression[this.specialIndex]).
+							setAttribute("opacity", "0");
+					this.specialIndex++;
+					console.log(this.specialIndex);
+					var s = document.getElementById(this.specialProgression[this.specialIndex]);
+					s.setAttribute("opacity", "1");
+					this.currentSpecial = s;
+					this.descriptionText.textContent = s.getAttribute('desc');
+					this.SubtractGold(this.specialCost);
+					if (this.specialIndex == this.specialProgression.length - 1)
+					{
+						this.specialDone = true;
+						this.specialSelectable = false;
+						this.purchaseClickable = false;
+						this.UpdatePurchaseBtn();	
+					}
+					this.specialCostIndex++;
+					this.addSpecial("stats_" + spec.substring(5));
 					break;
 
-				case 5: // Other2
+				case 5: // Boss
+					// TODO: Upgrade boss stats
+					this.SubtractGold(this.bossCost);
+					this.bossCostIndex++;
+					if (this.bossCostIndex == this.bossCostProgression.length)
+					{
+						document.getElementById("shop_leader").setAttribute("opacity", "0");
+						document.getElementById("shop_leader_none").setAttribute("opacity", "1");
+						this.boss.descText = "No more leader upgrades";
+						this.descriptionText.textContent = this.boss.descText;
+						this.bossDone = true;
+						this.bossSelectable = false;
+						this.purchaseClickable = false;
+						this.UpdatePurchaseBtn();
+					}
 					break;
 			}
 			/* eslint-enable */
+			this.UpdateItemGrey();
 		}
 		else
 		{
@@ -1241,7 +1683,7 @@ module.exports = (function()
 
 
 
-},{}],8:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 module.exports = (function() {
 
   function Door(x, y) {
@@ -1254,7 +1696,7 @@ module.exports = (function() {
 
 }());
 
-},{}],9:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 /* Author: Nic Johnson
  *
  * Title: StatsManager.js
@@ -1270,6 +1712,8 @@ module.exports = (function() {
  *  	December 7, 2015:
  *  		-Redid implementation away from Entity-style
  *  			because javascript scope is stupid.
+ *     December 13, 2015:
+ *     		- Whole bunch of stuff because i forgot to update this list
  */
 module.exports = (function()
 {
@@ -1302,7 +1746,15 @@ module.exports = (function()
 	var healthVal = startingHealthVal;
 	var specialContent = undefined;
 	var spawnDelegate = undefined;
-	var specialList = ["none_special","critical_special", "magic_special", "taunt_special"];
+	/* eslint-disable */
+	var specialList = [
+						"stats_none_special", 
+						// "stats_critical_special", 
+						// "stats_magic_special", 
+						// "stats_taunt_special", 
+						// "stats_defense_special",
+					];
+	/* eslint-enable */
 	var specialIndex = 0;
 
 	////////////////
@@ -1516,6 +1968,10 @@ module.exports = (function()
 		UpdateSpecial(-1);
 	}
 
+	///////////////////////
+	// Exposed Functions //
+	///////////////////////
+
 	function IncreaseAttackCap(val)
 	{
 		if (DEBUG) { console.log("StatsManager: Increasing Attack Cap"); }
@@ -1536,19 +1992,12 @@ module.exports = (function()
 		var amt = val || 1;
 		healthCap += amt;
 	}
-
-	/////////////////////
-	// Getters/Setters //
-	/////////////////////
+	
 	function SetSpawnDelegate(val)
 	{
 		spawnDelegate = val;
 	}
 
-
-	///////////////////////
-	// Exposed Functions //
-	///////////////////////
 	function SpawnMonster()
 	{
 		if (DEBUG) { console.log("StatsManager: SpawnMonster Clicked"); }
@@ -1560,6 +2009,11 @@ module.exports = (function()
 		{
 			spawnDelegate(GetCurrentStats());
 		}
+	}
+
+	function AddSpecial(specialName)
+	{
+		specialList.push(specialName);
 	}
 
 	function GetCurrentStats()
@@ -1588,8 +2042,9 @@ module.exports = (function()
 		IncreaseAttackCap: IncreaseAttackCap,
 		IncreaseDefenseCap: IncreaseDefenseCap,
 		IncreaseHealthCap: IncreaseHealthCap,
+		AddSpecial: AddSpecial,
 	};
 
 })();
 
-},{}]},{},[4]);
+},{}]},{},[5]);

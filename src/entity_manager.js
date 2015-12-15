@@ -56,9 +56,9 @@ module.exports = (function() {
     if (del) {
       var undef;
       var temp = [];
-      for (var i = 0; i < monsters.length; i++) {
+      for (i = 0; i < monsters.length; i++) {
         if (monsters[i] !== undef) {
-          temp.push(arr[i])
+          temp.push(monsters[i]);
         }
       }
       monsters = temp;

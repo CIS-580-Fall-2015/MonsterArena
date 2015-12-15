@@ -29,6 +29,18 @@
 		margin-top: @top_padding;
 		padding: 0 0 0 0;
 		display: inline-block;
+
+		#health
+		{
+			-webkit-apperance: none;
+			apperance: none;
+			background: red;
+			
+			&::-webkit-progress-value
+			{
+				background: red;
+			}
+		}
 	}
 
 	#shop
@@ -40,4 +52,14 @@
 		margin: 0 auto;
 		display: inline-block;
 	}
+}
+
+progress.health::-webkit-progress-value
+{
+	background:red;
+}
+
+progress.health
+{
+
 }

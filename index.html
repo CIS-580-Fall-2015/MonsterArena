@@ -1654,13 +1654,15 @@
 		<polygon fill="#231F20" points="220.765,263.269 213.271,278.239 205.818,263.248 	"/>
 	</g>
 	<g>
-		<image id='none_special' desc='No special' x='155' y='238' overflow="visible" opacity='1' width="40" height="40" xlink:href="./img/icons/none.svg" />
+		<image id='stats_none_special' desc='No special' x='155' y='238' overflow="visible" opacity='1' width="40" height="40" xlink:href="./img/icons/none.svg" />
 
-		<image id='critical_special' desc='Chance to double damage' x='155' y='238' overflow="visible" opacity='0' width="48" height="48" xlink:href="./img/icons/criticalattack.png" />
+		<image id='stats_defense_special' desc='Chance to ignore damage' x='155' y='238' overflow="visible" opacity='0' width="48" height="48" xlink:href="./img/icons/criticaldefense.png" />
 
-		<image id='magic_special' desc='Ignores defense' x='155' y='238' overflow="visible" opacity='0' width="48" height="48" xlink:href="./img/icons/magicattack.png" />
+		<image id='stats_critical_special' desc='Chance to double damage' x='155' y='238' overflow="visible" opacity='0' width="48" height="48" xlink:href="./img/icons/criticalattack.png" />
 
-		<image id='taunt_special' desc='Hero attack this first' x='155' y='238' overflow="visible" opacity='0' width="48" height="48" xlink:href="./img/icons/taunt.png" />
+		<image id='stats_magic_special' desc='Ignores hero defense' x='155' y='238' overflow="visible" opacity='0' width="48" height="48" xlink:href="./img/icons/magicattack.png" />
+
+		<image id='stats_taunt_special' desc='Hero attacks this monster first' x='155' y='238' overflow="visible" opacity='0' width="48" height="48" xlink:href="./img/icons/taunt.png" />
 
 	</g>
 
@@ -3373,11 +3375,15 @@ op+BIqRjIz2EVC/18fWUpSxlKUtZylKWvkj6nwADAE773NxT7bl3AAAAAElFTkSuQmCC" transform=
 <g id="Special">
 	<g id="Special_Icon">
 
-		<image id='critical_special' desc='Chance to double damage' x='57' y='300' overflow="visible" opacity='0' width="48" height="48" xlink:href="./img/icons/criticalattack.png" />
+		<image id='shop_defense_special' desc='Chance to ignore damage' x='57' y='300' overflow="visible" opacity='0' width="48" height="48" xlink:href="./img/icons/criticaldefense.png" />
 
-		<image id='magic_special' desc='Ignores defense' x='57' y='300' overflow="visible" opacity='0' width="48" height="48" xlink:href="./img/icons/magicattack.png" />
+		<image id='shop_critical_special' desc='Chance to double damage' x='57' y='300' overflow="visible" opacity='0' width="48" height="48" xlink:href="./img/icons/criticalattack.png" />
 
-		<image id='taunt_special' desc='Hero attacks this first' x='57' y='300' overflow="visible" opacity='1' width="48" height="48" xlink:href="./img/icons/taunt.png" />
+		<image id='shop_magic_special' desc='Ignores player defense' x='57' y='300' overflow="visible" opacity='0' width="48" height="48" xlink:href="./img/icons/magicattack.png" />
+
+		<image id='shop_taunt_special' desc='Hero attacks this first' x='57' y='300' overflow="visible" opacity='1' width="48" height="48" xlink:href="./img/icons/taunt.png" />
+
+		<image id='shop_none_special' desc='No more specials' x='57' y='300' overflow="visible" opacity='0' width="40" height="40" xlink:href="./img/icons/none.svg" />
 
 	</g>
 	<g id="Special_Transparent">
@@ -3396,23 +3402,26 @@ op+BIqRjIz2EVC/18fWUpSxlKUtZylKWvkj6nwADAE773NxT7bl3AAAAAElFTkSuQmCC" transform=
 		<text id='Special_Cost' x='81.5' y='379' font-size='16' text-anchor='middle'>500</text>
 	</g>
 </g>
-<g id="Other2">
-	<g id="Other2_Icon">
+<g id="Boss">
+	<g id="Boss_Icon">
+		<image id='shop_leader' desc='Upgrades leader stats' x='190' y='295' overflow="visible" opacity='1' width="48" height="48" xlink:href="./img/icons/leader.png" />
+
+		<image id='shop_leader_none' desc='No more leader upgrades' x='195' y='300' overflow="visible" opacity='0' width="40" height="40" xlink:href="./img/icons/none.svg" />
 	</g>
 	<g>
-		<rect id="Other2_Grey" opacity='0.75' x="185" y="294.5" fill="#666262" width="58" height="55"/>
+		<rect id="Boss_Grey" opacity='0.75' x="185" y="294.5" fill="#666262" width="58" height="55"/>
 	</g>
 	<g>
-		<rect id="Other2_Selected" x="179" y="286.5" fill="none" stroke-opacity='0' stroke="#CE2D2E" stroke-width="4" stroke-miterlimit="10" width="71" height="71"/>
+		<rect id="Boss_Selected" x="179" y="286.5" fill="none" stroke-opacity='0' stroke="#CE2D2E" stroke-width="4" stroke-miterlimit="10" width="71" height="71"/>
 	</g>
-	<g id="Other2_Transparent">
+	<g id="Boss_Transparent">
 		<rect x="185" y="294.5" fill-opacity='0' width="58" height="55"/>
 	</g>
-	<g id="Other2_Border">
+	<g id="Boss_Border">
 		<rect x="185" y="294.5" fill="none" stroke="#000000" stroke-width="3" stroke-miterlimit="10" width="58" height="55"/>
 	</g>
 	<g>
-		<text id='Other2_Cost' x='214.5' y='379' font-size='16' text-anchor='middle'>500</text>
+		<text id='Boss_Cost' x='214.5' y='379' font-size='16' text-anchor='middle'>500</text>
 	</g>
 </g>
 <g>

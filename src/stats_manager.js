@@ -13,6 +13,8 @@
  *  	December 7, 2015:
  *  		-Redid implementation away from Entity-style
  *  			because javascript scope is stupid.
+ *     December 13, 2015:
+ *     		- Whole bunch of stuff because i forgot to update this list
  */
 module.exports = (function()
 {
@@ -45,7 +47,15 @@ module.exports = (function()
 	var healthVal = startingHealthVal;
 	var specialContent = undefined;
 	var spawnDelegate = undefined;
-	var specialList = ["none_special","critical_special", "magic_special", "taunt_special"];
+	/* eslint-disable */
+	var specialList = [
+						"stats_none_special", 
+						// "stats_critical_special", 
+						// "stats_magic_special", 
+						// "stats_taunt_special", 
+						// "stats_defense_special",
+					];
+	/* eslint-enable */
 	var specialIndex = 0;
 
 	////////////////
@@ -259,6 +269,10 @@ module.exports = (function()
 		UpdateSpecial(-1);
 	}
 
+	///////////////////////
+	// Exposed Functions //
+	///////////////////////
+
 	function IncreaseAttackCap(val)
 	{
 		if (DEBUG) { console.log("StatsManager: Increasing Attack Cap"); }
@@ -279,19 +293,12 @@ module.exports = (function()
 		var amt = val || 1;
 		healthCap += amt;
 	}
-
-	/////////////////////
-	// Getters/Setters //
-	/////////////////////
+	
 	function SetSpawnDelegate(val)
 	{
 		spawnDelegate = val;
 	}
 
-
-	///////////////////////
-	// Exposed Functions //
-	///////////////////////
 	function SpawnMonster()
 	{
 		if (DEBUG) { console.log("StatsManager: SpawnMonster Clicked"); }
@@ -303,6 +310,11 @@ module.exports = (function()
 		{
 			spawnDelegate(GetCurrentStats());
 		}
+	}
+
+	function AddSpecial(specialName)
+	{
+		specialList.push(specialName);
 	}
 
 	function GetCurrentStats()
@@ -331,6 +343,7 @@ module.exports = (function()
 		IncreaseAttackCap: IncreaseAttackCap,
 		IncreaseDefenseCap: IncreaseDefenseCap,
 		IncreaseHealthCap: IncreaseHealthCap,
+		AddSpecial: AddSpecial,
 	};
 
 })();

@@ -12,19 +12,12 @@ Keep compiling simple!
 ## TODO
 
 * Index page  
-    * ~~Need to incorporate arena area between menus~~
-    * fix arena sizing
+    * arena/canvas work for rendering
 * Menu states
-* ~~Stats UI~~
-* ~~Shop UI~~ (mostly)  
-    * ~~Selection highlighting~~
-    * ~~Assigning delegates to handle updating~~ (paritally)
-    * ~~Final two upgrade options~~
-    * ~~Cost grey/available~~
-* ~~UI Design~~
-* UI Icons
+* Shop UI (95% finished)
+    * Assign delegates for boss/door upgrades
 * Monster sprites
-   * Monster Movement
+   * ~~Monster Movement~~
    * Monster Animation
    * Monster Updating/Rendering
    * ~~Monster Spawning~~
