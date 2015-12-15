@@ -10,7 +10,7 @@ module.exports = (function() {
 
   // boss = animation {} for monsters\Boss.js
   var boss = require('./monsters/Boss.js'),
-    bosser = require('./monsters/Bosser.js').
+    bosser = require('./monsters/Bosser.js'),
   bossest = require('./monsters/Bossest.js'),
     creepo = require('./monsters/Creepo.js')
   gunner = require('./monsters/Gunner.js'),
@@ -59,12 +59,6 @@ module.exports = (function() {
 
     this.cx = document.getElementById('monsters').width / 2.0;
     this.cy = document.getElementById('monsters').height / 2.0;
-
-    // Create an animations property, with arrays for each direction of animations.
-    this.animations = {
-      left: [],
-      right: []
-    };
 
     //TODO modify according to center of door.
     this.x = this.door.x + 32;
