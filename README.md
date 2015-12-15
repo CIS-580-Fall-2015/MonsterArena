@@ -6,7 +6,7 @@ Final project for CIS580
 
 Keep compiling simple!
 
-```browserify src/main.js -o MonsterArena.js```  
+```browserify src/game.js -o MonsterArena.js```  
 ```lessc less/main.less main.css```
 
 ## TODO
