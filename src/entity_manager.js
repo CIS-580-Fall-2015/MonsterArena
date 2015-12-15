@@ -170,13 +170,13 @@ module.exports = (function() {
   }
 
   function upgrade_boss() {
-    monster.BOSS.attack *= 2;
-    monster.BOSS.defense *= 2;
-    monster.BOSS.health *= 2;
-    if (monster.BOSS.animations = monster.boss) {
-      monster.BOSS.animations = monster.bosser;
+    Monster.BOSS.attack *= 2;
+    Monster.BOSS.defense *= 2;
+    Monster.BOSS.health *= 2;
+    if (Monster.BOSS.animations = Monster.boss) {
+      Monster.BOSS.animations = Monster.bosser;
     } else {
-      monster.BOSS.animations = monster.bossest;
+      Monster.BOSS.animations = Monster.bossest;
     }
   }
 
