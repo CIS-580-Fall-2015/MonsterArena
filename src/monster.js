@@ -62,6 +62,8 @@ module.exports = (function() {
     this.y = this.door.y;
     this.isBoss = isBoss;
     this.inRange = false;
+    this.inRangex = false;
+    this.inRangey = false;
 
     this.cx = document.getElementById('monsters').width / 2.0;
     this.cy = document.getElementById('monsters').height / 2.0;
@@ -147,8 +149,7 @@ module.exports = (function() {
   Monster.prototype.doTurn = function(n) {
     //Checks Range and does movment
     //Check if movement needed based on which direction it is coming in from.
-    var inRangex = false;
-    var inRangey = false;
+    
     if (!this.inRange) {
       var a = Math.floor(this.angle);
       if (a == 135 || a == 180 || a == 225) {
@@ -158,7 +159,7 @@ module.exports = (function() {
         }
         else
         {
-          this.inRange = true;
+          this.inRangex = true;
         }
       } else if (a == 45 || a == 0 || a == 315) {
         if (this.x >= this.cx + 32) {
@@ -167,7 +168,7 @@ module.exports = (function() {
         }
         else
         {
-          this.inRange = true;
+          this.inRangex = true;
         }
       } else if (a == 90) {
         if (this.y <= this.cy - 96) {
@@ -176,7 +177,7 @@ module.exports = (function() {
         }
         else
         {
-          this.inRange = true;
+          this.inRangey = true;
         }
       } else if (a == 270) {
         if (this.y >= this.cy + 32) {
@@ -185,20 +186,19 @@ module.exports = (function() {
         }
         else
         {
-          this.inRange = true;
+          this.inRangey = true;
         }
       }
     }
-    // if (inRangex && inRangey)
-    // {
-
-    //   this.inRange = true;
-    //   this.state = ATTACKING;
-    // }
-    if (this.inRange)
+    if (this.inRangex && this.inRangey)
     {
+      this.inRange = true;
       this.state = ATTACKING;
     }
+    // if (this.inRange)
+    // {
+    //   this.state = ATTACKING;
+    // }
 
   };
 

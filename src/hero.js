@@ -80,10 +80,7 @@ module.exports = (function() {
 
   Hero.prototype.render = function(cntx)
   {
-    cntx.drawImage(
-      this.img,
-      this.x,
-      this.y);
+    cntx.fillRect(this.x, this.y, 64, 64);
   };
 
   return Hero;

@@ -3,7 +3,7 @@
  * Script ID Data
  * ==============
  * File Name: AudioManager.js
- * Version Date: ad-2015-12-12 20:10:00
+ * Version Date: ad-2015-12-15 16:44:00
  * Contributors: Kyle Brown
  *
  * Documentation Language: English  (en){lkB-000-001}
@@ -60,8 +60,11 @@
  * ad-2015-12-12 17:49:00	(0,0,1)(0,7,231)(1,12,12)(17,49,0)	Clean up
  *			00-00-01 | 00-07-E7 | 01-0C-0C | 11-31-00
  *
- * ad-2015-12-12 20:10:00   	(0,0,1)(0,7,231)(1,12,12)(20,10,0)	Naming fixes
+ * ad-2015-12-12 20:10:00   (0,0,1)(0,7,231)(1,12,12)(20,10,0)	Naming fixes
  *			0-00-01 | 00-07-E7 | 01-0C-0C | 14-01-00
+ *
+ * ad-2015-12-15 16:44:00	(0,0,1)(0,7,231)(1,12,15)(16,44,0)	Spawn Sound
+ * 			0-00-01 | 00-07-E7 | 01-0C-0F | 10-2C-00
  * =================
  * File Dependencies
  * =================
@@ -77,6 +80,7 @@
  * MABuffSound.wav				The buff sound
  * MADebuffSound.wav			The debuff sound
  * MAClickSound.wav				The click sound
+ * MASpawnSound.wav				The spawning sound
  *
  *
  * ==================================
@@ -104,11 +108,12 @@
  * playBattleMusic			Plays the battle music (by ... "^^")
  * playWinMusic				Plays the win music (by ... "^^")
  * playLoseMusic			Plays the lose music (by ... "^^")
- * playLevelUpSFX		Plays the Level Up sound (by ...starts)
+ * playLevelUpSFX			Plays the Level Up sound (by ...starts)
  * playUpgradeSFX			Plays the Upgrade sound (by ..."^^")
- * playBuffSFX			Plays the Buff sound (by ..."^^")
+ * playBuffSFX				Plays the Buff sound (by ..."^^")
  * playDebuffSFX			Plays the Debuff sound (by ..."^^")
- * playClickSFX			Plays the Click Sound sound (by ... "^^")
+ * playClickSFX				Plays the Click Sound sound (by ... "^^")
+ * playSpawnSFX				Plays the Spawning sound(by ... "^^")
  *
  * toggleMusic				Turns the music on or off based on current volume.
  * toggleEffects			Turns the sound effects on or off based on current volume.
@@ -138,7 +143,8 @@
  *		UPGRADESOUND: 5,
  *		BUFFSOUND: 6,
  *		DEBUFFSOUND: 7,
- *		CLICKSOUND: 8
+ *		CLICKSOUND: 8,
+ * 		SPAWNSOUND: 9
  *	Strings - The corresponding string names
  *		0: "IDLEMUSIC",
  *		1: "BATTLEMUSIC",
@@ -148,7 +154,8 @@
  *		5: "UPGRADESOUND",
  *		6: "BUFFSOUND",
  *		7: "DEBUFFSOUND",
- *		8: "CLICKSOUND"
+ *		8: "CLICKSOUND",
+ *		9: "SPAWNSOUND"
  *	MusicFiles - The file paths for the music files
  *		0: "audio/MAIdleMusic.wav",
  *		1: "audio/MABattleMusic.wav",
@@ -158,7 +165,8 @@
  *		5: "audio/MAUpgradeSound.wav",
  *		6: "audio/MABuffSound.wav", 
  *		7: "audio/MADebuffSound.wav", *
- *		8: "audio/MAClickSound.wav"
+ *		8: "audio/MAClickSound.wav",
+ *		9: "audio/MASpawnSound.wav"
  *
  * =================
  * MAIdleMusic.wav
@@ -192,6 +200,10 @@
  * MAClickSound.wav
  * ================
  *
+ * ================
+ * MASpawnSound.wav
+ * ================
+ *
  */
 
 
@@ -213,7 +225,8 @@ module.exports = (function()
 		UPGRADESOUND: 5,
 		BUFFSOUND: 6,
 		DEBUFFSOUND: 7,
-		CLICKSOUND: 8
+		CLICKSOUND: 8,
+		SPAWNSOUND: 9
 	};
 	Object.freeze(this.AudioSounds);
 
@@ -228,7 +241,8 @@ module.exports = (function()
 		5: "UPGRADESOUND",
 		6: "BUFFSOUND",
 		7: "DEBUFFSOUND",
-		8: "CLICKSOUND"
+		8: "CLICKSOUND",
+		9: "SPAWNSOUND"
 	}
 	Object.freeze(this.Strings);
 	
@@ -243,7 +257,8 @@ module.exports = (function()
 		5: "audio/MAUpgradeSound.wav",
 		6: "audio/MABuffSound.wav",
 		7: "audio/MADebuffSound.wav",
-		8: "audio/MAClickSound.wav"
+		8: "audio/MAClickSound.wav",
+		9: "audio/MASpawnSound.wav"
 	}
 	Object.freeze(this.MusicFiles);
 	
@@ -342,6 +357,12 @@ module.exports = (function()
 	{
 		if (this.DEBUG) { console.log("AudioManager: ClickFX-Play"); }
 		this._curSFX = 8;
+		playMusic(this.soundElm,this.MusicFiles[this._curSFX]);
+	}
+	AudioManager.prototype.playSpawnSFX = function ()
+	{
+		if (this.DEBUG) { console.log("AudioManager: SpawnSFX-Play"); }
+		this._curSFX = 9;
 		playMusic(this.soundElm,this.MusicFiles[this._curSFX]);
 	}
 	

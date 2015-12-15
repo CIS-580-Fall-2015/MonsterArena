@@ -521,8 +521,7 @@ module.exports = (function() {
 
     // Hero level and regeneration
     hero.doTurn();
-    for(var i = 0; i < monsters.length; i++)
-    {
+    for (var i = 0; i < monsters.length; i++) {
       monsters[i].doTurn(1);
       monsters[i].update(elapsedTime);
     }
@@ -559,10 +558,18 @@ module.exports = (function() {
         }
       }
 
-
+      //Check dodge
+      var dodge = false;
       if (monsters[0].special = "dodge") {
         var r = Math.random()
         if (r < .85) {
+          dodge = true;
+        }
+      }
+
+      //Hero attacks
+      if (monsters[0].inRange = true) {
+        if (!dodge) {
           var e = monsters[0].attacked(hero.attack);
           if (e >= 0) {
             del = true;
@@ -698,6 +705,8 @@ window.onload = function()
       EntityManager.open_door,
       EntityManager.upgrade_boss
     );
+
+    ShopManager.AddGold(15000);
 
     EntityManager.initialize();
     canvas = document.getElementById("monsters");
@@ -835,10 +844,7 @@ module.exports = (function() {
 
   Hero.prototype.render = function(cntx)
   {
-    cntx.drawImage(
-      this.img,
-      this.x,
-      this.y);
+    cntx.fillRect(this.x, this.y, 64, 64);
   };
 
   return Hero;
@@ -910,6 +916,8 @@ module.exports = (function() {
     this.y = this.door.y;
     this.isBoss = isBoss;
     this.inRange = false;
+    this.inRangex = false;
+    this.inRangey = false;
 
     this.cx = document.getElementById('monsters').width / 2.0;
     this.cy = document.getElementById('monsters').height / 2.0;
@@ -980,7 +988,6 @@ module.exports = (function() {
     //Temporary
     this.health -= damage - this.defense / 2;
     if (this.health >= 0) {
-      //TODO die
       this.door.avaliable = true;
       if (this.isBoss) {
         return 0;
@@ -996,8 +1003,7 @@ module.exports = (function() {
   Monster.prototype.doTurn = function(n) {
     //Checks Range and does movment
     //Check if movement needed based on which direction it is coming in from.
-    var inRangex = false;
-    var inRangey = false;
+    
     if (!this.inRange) {
       var a = Math.floor(this.angle);
       if (a == 135 || a == 180 || a == 225) {
@@ -1007,7 +1013,7 @@ module.exports = (function() {
         }
         else
         {
-          this.inRange = true;
+          this.inRangex = true;
         }
       } else if (a == 45 || a == 0 || a == 315) {
         if (this.x >= this.cx + 32) {
@@ -1016,7 +1022,7 @@ module.exports = (function() {
         }
         else
         {
-          this.inRange = true;
+          this.inRangex = true;
         }
       } else if (a == 90) {
         if (this.y <= this.cy - 96) {
@@ -1025,7 +1031,7 @@ module.exports = (function() {
         }
         else
         {
-          this.inRange = true;
+          this.inRangey = true;
         }
       } else if (a == 270) {
         if (this.y >= this.cy + 32) {
@@ -1034,20 +1040,19 @@ module.exports = (function() {
         }
         else
         {
-          this.inRange = true;
+          this.inRangey = true;
         }
-      } 
+      }
     }
-    // if (inRangex && inRangey)
-    // {
-
-    //   this.inRange = true;
-    //   this.state = ATTACKING;
-    // }
-    if (this.inRange)
+    if (this.inRangex && this.inRangey)
     {
+      this.inRange = true;
       this.state = ATTACKING;
     }
+    // if (this.inRange)
+    // {
+    //   this.state = ATTACKING;
+    // }
 
   };
 
@@ -1062,7 +1067,7 @@ module.exports = (function() {
   };
 
   Monster.prototype.update = function(elapsedTime)
-  { 
+  {
     if(this.isLeft)
     {
       this.animations.left[this.state].update(elapsedTime);
