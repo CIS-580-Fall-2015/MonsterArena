@@ -15,6 +15,7 @@ module.exports = (function() {
   // The movement sprite sheet for the bosser. It is simple, with walking and attacking being the same animation.
   var BosserMovement = new Image();
   BosserMovement.src = './img/monsters/Bosser/Bosser-Movement.png';
+
   var animations = {};
   animations.right = [];
   animations.left = [];
