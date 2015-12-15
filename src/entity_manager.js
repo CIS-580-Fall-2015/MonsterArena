@@ -112,6 +112,7 @@ module.exports = (function() {
     if (unlocked_doors < doors.length) {
       unlocked_doors++;
     }
+    console.log("EM Doors open: " + unlocked_doors);
   }
 
   // Spawns a monster at an open door
@@ -126,6 +127,9 @@ module.exports = (function() {
     if (d) {
       var m = new Monster(stats, d);
       monsters.push(m);
+      console.log("Spawning monster at door " + i);
+    } else {
+      console.log("EM no doors avaliable");
     }
   }
 
