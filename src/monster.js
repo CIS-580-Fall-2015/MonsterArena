@@ -10,14 +10,14 @@ module.exports = (function() {
 
   // boss = animation {} for monsters\Boss.js
   var boss = require('./monsters/Boss.js'),
-  bosser = require('./monsters/Bosser.js').
+    bosser = require('./monsters/Bosser.js').
   bossest = require('./monsters/Bossest.js'),
-  creepo = require('./monsters/Creepo.js')
+    creepo = require('./monsters/Creepo.js')
   gunner = require('./monsters/Gunner.js'),
-  puncher = require('./monsters/Puncher.js'),
-  skully = require('./monsters/Skully.js'),
-  snappy = require('./monsters/Snappy.js'),
-  wingy = require('./monsters/Wingy.js');
+    puncher = require('./monsters/Puncher.js'),
+    skully = require('./monsters/Skully.js'),
+    snappy = require('./monsters/Snappy.js'),
+    wingy = require('./monsters/Wingy.js');
 
   // An array containing all of the normal monsters (non-bosses).
   var availableRegMonsters = [];
@@ -26,7 +26,12 @@ module.exports = (function() {
 
   Monster.prototype = new Entity();
 
-  var BOSS = {attack: 8, defense: 2, health: 5};
+  var BOSS = {
+    attack: 8,
+    defense: 2,
+    health: 5,
+    animations: boss
+  };
 
   // Constructor
   function Monster(stats, door, isBoss) {
@@ -35,16 +40,18 @@ module.exports = (function() {
       this.health = BOSS.health;
       this.attack = BOSS.attack;
       this.defense = BOSS.defense;
+      this.animations = BOSS.animations;
     } else {
       this.health = stats.health;
       this.attack = stats.attack;
       this.defense = stats.defense;
       this.special = stats.special;
+      this.animations = availableRegMonsters[Math.floor((Math.random() * 7))]; // Pick one of the six regular sprites at random.
     }
 
     this.door = door;
     this.door.avaliable = false;
-    this.state = 0;
+    this.state = WALKING;
     this.x = this.door.x;
     this.y = this.door.y;
     this.isBoss = isBoss;
@@ -63,6 +70,20 @@ module.exports = (function() {
     this.x = this.door.x + 32;
     this.y = this.door.y + 32;
     this.angle = undefined;
+
+    // Set the direction of the monster.
+    if (this.x < this.cx) {
+      this.isLeft = false;
+    } else if (this.x > this.cx) {
+      this.isLeft = true;
+    } else {
+      var ranNum = Math.floor((Math.random() * 2));
+      if (ranNum == 0) {
+        this.isLeft = false;
+      } else {
+        this.isLeft = true;
+      }
+    }
 
     //determines change in x and y for every movment
     if (this.x == this.cx) {
@@ -149,12 +170,21 @@ module.exports = (function() {
           this.x += n * this.dx;
           this.y += n * this.dy;
         }
-      }
-      else {
+      } else {
         this.inRange = true;
       }
     }
 
+  };
+
+  // Renders the monster on the canvas via the animation engine.
+  Monster.prototype.render = function(context) {
+    // Draw the Monster (and the correct animation).
+    if (this.isLeft) {
+      this.animations.left[this.state].render(context, this.x, this.y);
+    } else {
+      this.animations.right[this.state].render(context, this.x, this.y);
+    }
   };
 
   return Monster;
