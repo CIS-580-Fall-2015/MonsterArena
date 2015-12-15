@@ -1,44 +1,68 @@
-window.onload = function() {
+module.exports = function()
+{
+  var load = function(sm)
+  {
+    var statemanager = sm;
+    // The width & height of the screen
+    SCREEN_WIDTH = 1280;
+    SCREEN_HEIGHT = 720;
 
-  // The width & height of the screen
-  SCREEN_WIDTH = 1280;
-  SCREEN_HEIGHT = 720;
+    // Module variables
+    var Hero = require('./hero.js'),
+    EntityManager = require('./entity_manager.js');
+    ShopManager = require('./shop_manager.js');
+    StatsManager = require('./stats_manager.js');
+    AudioManager = require('./AudioManager.js');
 
-  // Module variables
-  var Hero = require('./hero.js'),
-  EntityManager = require('./entity_manager.js');
-  ShopManager = require('./shop_manager.js');
-  StatsManager = require('./stats_manager.js');
-  AudioManager = require('./AudioManager.js');
+    EntityManager.add_gold = ShopManager.AddGold;
 
-  EntityManager.add_gold = ShopManager.AddGold;
-
-  StatsManager.SetSpawnDelegate = EntityManager.spawn_monster;
-
-
-  ShopManager.SetStatsManagerDelegates(
-                                      StatsManager.IncreaseAttackCap,
-                                      StatsManager.IncreaseDefenseCap, 
-                                      StatsManager.IncreaseHealthCap,
-                                      StatsManager.AddSpecial
-                                      );
-
-  AudioManager.playIdleMusic();
+    StatsManager.SetSpawnDelegate = EntityManager.spawn_monster;
 
 
-  var load = function(sm) {
+    ShopManager.SetStatsManagerDelegates(
+                                        StatsManager.IncreaseAttackCap,
+                                        StatsManager.IncreaseDefenseCap, 
+                                        StatsManager.IncreaseHealthCap,
+                                        StatsManager.AddSpecial
+                                        );
+
+    AudioManager.playIdleMusic();
     EntityManager.initialize();
-    //TODO Menu/game state
-    //TODO start game loop
+  } 
+
+  var update = function(elapsedTime) 
+  {
+    //EntityManager.update();
   };
 
-  var update = function(elapsedTime) {
-    EntityManager.update();
-  };
 
-
-  var render = function() {
+  var render = function() 
+  {
     //TODO
   };
 
-}
+  var keyUp = function(e)
+  {
+    // Do nothing
+  };
+
+  var keyDown = function(e)
+  {
+    // Do nothing
+  };
+
+  var exit = function()
+  {
+    // Any exit logic
+  };
+
+  return {
+    load: load,
+    update: update,
+    render: render,
+    keyUp: keyUp,
+    keyDown: keyDown,
+    exit: exit,
+  }
+
+}();
