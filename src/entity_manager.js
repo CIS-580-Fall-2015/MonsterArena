@@ -8,6 +8,7 @@ module.exports = (function() {
   var unlocked_doors = 1;
 
   var spawn_boss_interval;
+  var do_turns_interval;
 
   var add_gold;
 
@@ -38,19 +39,27 @@ module.exports = (function() {
 
     hero = new Hero(HERO_STATS, ARENA_WIDTH / 2 - 32, ARENA_HEIGHT / 2 - 32, this);
 
-    //spawn_boss_interval = setInterval(spawn_boss, 5000);
+
+    spawn_boss();
+    spawn_boss_interval = setInterval(spawn_boss, 5000);
+    do_turns_interval = setInterval(do_turns, 1000);
   }
 
   // Runs all the turns, adds exp when neccesary
   // Clears array of dead monsters
   function update(elapsedTime) {
+    for (var i = 0; i < monsters.length; i++) {
+      monsters[i].update(elapsedTime);
+    }
+  }
+
+  function do_turns() {
     var del = false;
 
     // Hero level and regeneration
     hero.doTurn();
     for (var i = 0; i < monsters.length; i++) {
       monsters[i].doTurn(1);
-      monsters[i].update(elapsedTime);
     }
     if (monsters.length != 0) {
       //All monsters attack hero
