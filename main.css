@@ -21,6 +21,16 @@
   padding: 0 0 0 0;
   display: inline-block;
 }
+#toplevel #monsters {
+  width: 590px;
+  height: 340px;
+  float: left;
+  margin: 0 auto;
+  padding: 0 0 0 0;
+  display: inline-block;
+  background-image: url("img/arena3.png");
+  background-size: 100% 100%;
+}
 #toplevel #arena #health {
   -webkit-apperance: none;
   apperance: none;
