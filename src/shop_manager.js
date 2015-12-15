@@ -65,7 +65,7 @@ module.exports = (function()
 		/* eslint-disable */
 		this.specialProgression = [
 									"shop_taunt_special", 
-									"shop_defense_special", 
+									"shop_dodge_special", 
 									"shop_critical_special", 
 									"shop_heal_special",
 									"shop_none_special",
@@ -92,7 +92,7 @@ module.exports = (function()
 		this.attackDone   = false;
 		this.healthDone   = false; 
 		this.specialDone  = false;
-		this.bossDone = false;
+		this.bossDone 	  = false;
 
 		/////////////////////////////////////
 		// Flags for determining if player //
@@ -103,7 +103,7 @@ module.exports = (function()
 		this.attackEnoughMoney   = false;
 		this.healthEnoughMoney   = false;
 		this.specialEnoughMoney  = false;
-		this.bossEnoughMoney = false;
+		this.bossEnoughMoney 	 = false;
 
 		////////////////////////////
 		// Costs for each upgrade //
@@ -113,7 +113,7 @@ module.exports = (function()
 		this.attackCost   = 0;
 		this.healthCost   = 0; 
 		this.specialCost  = 0;
-		this.bossCost = 0;
+		this.bossCost 	  = 0;
 
 		///////////////////////////////////////////
 		// Cost progressions for capped upgrades //
@@ -122,7 +122,7 @@ module.exports = (function()
 		this.doorCostIndex          = 0;
 		this.specialCostProgression = [300, 700, 1100, 1500];
 		this.specialCostIndex       = 0;
-		this.bossCostProgression    = [1500, 3000, 4500];
+		this.bossCostProgression    = [3000, 4500];
 		this.bossCostIndex 			= 0;
 		
 		/////////////////////////////////////////
@@ -471,13 +471,15 @@ module.exports = (function()
 	};
 
 
-	ShopManager.prototype.SetStatsManagerDelegates = function(attack, defense, health, special)
+	ShopManager.prototype.SetStatsManagerDelegates = function(attack, defense, health, special, door, boss)
 	{
 		if (this.DEBUG) { console.log("ShopManager: StatsManager delegates being set."); }
 		this.increaseAttack = attack;
 		this.increaseDefense = defense;
 		this.increaseHealth = health;
 		this.addSpecial = special;
+		this.openDoor = door;
+		this.upgradeBoss = boss;
 	};
 
 	////////////////////////
@@ -663,7 +665,8 @@ module.exports = (function()
 			switch (this.currentUpgrade)
 			{
 				case 0: // Door
-					// TODO: Enable new door
+					if (this.DEBUG) { console.log("ShopManager: Opening new door."); }
+					this.openDoor();
 					this.SubtractGold(this.doorCost);
 					this.doorCostIndex++;
 					if (this.doorCostIndex == this.doorCostProgression.length)
@@ -676,24 +679,28 @@ module.exports = (function()
 					break;
 
 				case 1: // Attack
+					if (this.DEBUG) { console.log("ShopManager: Increasing attack cap."); }
 					this.increaseAttack();
 					this.SubtractGold(this.attackCost);
 					this.attackCostMult++;
 					break;
 
 				case 2: // Health
+					if (this.DEBUG) { console.log("ShopManager: Increasing health cap."); }
 					this.increaseHealth();
 					this.SubtractGold(this.healthCost);
 					this.healthCostMult++;
 					break;
 
 				case 3: // Defense
+					if (this.DEBUG) { console.log("ShopManager: Increasing defense cap."); }
 					this.increaseDefense();
 					this.SubtractGold(this.defenseCost);
 					this.defenseCostMult++;
 					break;
 
 				case 4: // Special
+					if (this.DEBUG) { console.log("ShopManager: Buying new special."); }
 					var spec = this.specialProgression[this.specialIndex];
 					document.getElementById(this.specialProgression[this.specialIndex]).
 							setAttribute("opacity", "0");
@@ -716,7 +723,8 @@ module.exports = (function()
 					break;
 
 				case 5: // Boss
-					// TODO: Upgrade boss stats
+					if (this.DEBUG) { console.log("ShopManager: Upgrading Boss"); }
+					this.upgradeBoss();
 					this.SubtractGold(this.bossCost);
 					this.bossCostIndex++;
 					if (this.bossCostIndex == this.bossCostProgression.length)

@@ -57,8 +57,8 @@ module.exports = (function() {
     this.isBoss = isBoss;
     this.inRange = false;
 
-    this.cx = document.getElementById('monsters').width.baseVal.value / 2.0;
-    this.cy = document.getElementById('monsters').height.baseVal.value / 2.0;
+    this.cx = document.getElementById('monsters').width / 2.0;
+    this.cy = document.getElementById('monsters').height / 2.0;
 
     // Create an animations property, with arrays for each direction of animations.
     this.animations = {

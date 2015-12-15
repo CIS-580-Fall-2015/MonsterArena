@@ -12,19 +12,19 @@ module.exports = (function() {
 
   // The right walking Creepo spritesheet
   var CreepoWalkRight = new Image();
-  CreepoWalkRight.src = './img/monsters/Creepo/Creepo_Walk_Right.png';
+  CreepoWalkRight.src = './img/monsters/Creepo/Creepo-Walk-Right.png';
 
   // The left walking Creepo spritesheet
   var CreepoWalkLeft = new Image();
-  CreepoWalkLeft.src = "./img/monsters/Creepo/Creepo_Walk_Left.png";
+  CreepoWalkLeft.src = "./img/monsters/Creepo/Creepo-Walk-Left.png";
 
   // The right attacking Creepo spritesheet
   var CreepoAttackRight = new Image();
-  CreepoAttackRight.src = "./img/monsters/Creepo/Creepo_Attack_Right.png";
+  CreepoAttackRight.src = "./img/monsters/Creepo/Creepo-Attack-Right.png";
 
   // The left attacking Creepo spritesheet
   var CreepoAttackLeft = new Image();
-  CreepoAttackLeft.src = "./img/monsters/Creepo/Creepo_Attack_Left.png";
+  CreepoAttackLeft.src = "./img/monsters/Creepo/Creepo-Attack-Left.png";
 
   var animations = {};
   animations.right = [];

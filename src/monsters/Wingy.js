@@ -12,23 +12,23 @@ module.exports = (function() {
 
   // The right walking Wingy spritesheet
   var WingyWalkRight = new Image();
-  WingyWalkRight.src = './img/monsters/Wingy/Wingy_Walk_Right.png';
+  WingyWalkRight.src = './img/monsters/Wingy/Wingy-Walk-Right.png';
 
   // The left walking Wingy spritesheet
   var WingyWalkLeft = new Image();
-  WingyWalkLeft.src = "./img/monsters/Wingy/Wingy_Walk_Left.png";
+  WingyWalkLeft.src = "./img/monsters/Wingy/Wingy-Walk-Left.png";
 
   // The right attacking Wingy spritesheet
   var WingyAttackRight = new Image();
-  WingyAttackRight.src = "./img/monsters/Wingy/Wingy_Attack_Right.png";
+  WingyAttackRight.src = "./img/monsters/Wingy/Wingy-Attack-Right.png";
 
   // The left attacking Wingy spritesheet
   var WingyAttackLeft = new Image();
-  WingyAttackLeft.src = "./img/monsters/Wingy/Wingy_Attack_Left.png";
+  WingyAttackLeft.src = "./img/monsters/Wingy/Wingy-Attack-Left.png";
 
   var animations = {};
   animations.right = [];
-  animations.left = [];s
+  animations.left = [];
 
   // The right-facing animations.
   animations.right.push(new Animation(WingyWalkRight, SIZE, SIZE, 0, 0, 5)); // WALKING // TODO Specific Timing may need to be adjusted.

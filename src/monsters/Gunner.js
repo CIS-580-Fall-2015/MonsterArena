@@ -12,19 +12,19 @@ module.exports = (function() {
 
   // The right walking Gunner spritesheet
   var GunnerWalkRight = new Image();
-  GunnerWalkRight.src = './img/monsters/Gunner/Gunner_Walk_Right.png';
+  GunnerWalkRight.src = './img/monsters/Gunner/Gunner-Walk-Right.png';
 
   // The left walking Gunner spritesheet
   var GunnerWalkLeft = new Image();
-  GunnerWalkLeft.src = "./img/monsters/Gunner/Gunner_Walk_Left.png";
+  GunnerWalkLeft.src = "./img/monsters/Gunner/Gunner-Walk-Left.png";
 
   // The right attacking Gunner spritesheet
   var GunnerAttackRight = new Image();
-  GunnerAttackRight.src = "./img/monsters/Gunner/Gunner_Attack_Right.png";
+  GunnerAttackRight.src = "./img/monsters/Gunner/Gunner-Attack-Right.png";
 
   // The left attacking Gunner spritesheet
   var GunnerAttackLeft = new Image();
-  GunnerAttackLeft.src = "./img/monsters/Gunner/Gunner_Attack_Left.png";
+  GunnerAttackLeft.src = "./img/monsters/Gunner/Gunner-Attack-Left.png";
 
   var animations = {};
   animations.right = [];
