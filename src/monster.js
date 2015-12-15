@@ -132,7 +132,6 @@ module.exports = (function() {
     //Temporary
     this.health -= damage - this.defense / 2;
     if (this.health >= 0) {
-      //TODO die
       this.door.avaliable = true;
       if (this.isBoss) {
         return 0;
@@ -188,7 +187,7 @@ module.exports = (function() {
         {
           inRange = true;
         }
-      } 
+      }
     }
     // if (inRangex && inRangey)
     // {
@@ -214,7 +213,7 @@ module.exports = (function() {
   };
 
   Monster.prototype.update = function(elapsedTime)
-  { 
+  {
     if(this.isLeft)
     {
       this.animations.left[this.state].update(elapsedTime);

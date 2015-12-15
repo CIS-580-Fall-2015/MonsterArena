@@ -48,8 +48,7 @@ module.exports = (function() {
 
     // Hero level and regeneration
     hero.doTurn();
-    for(var i = 0; i < monsters.length; i++)
-    {
+    for (var i = 0; i < monsters.length; i++) {
       monsters[i].doTurn(1);
       monsters[i].update(elapsedTime);
     }
@@ -86,17 +85,23 @@ module.exports = (function() {
         }
       }
 
+      //Check dodge
+      var dodge = false;
+      if (monsters[0].special = "dodge") {
+        var r = Math.random()
+        if (r < .85) {
+          dodge = true;
+        }
+      }
+
       //Hero attacks
       if (monsters[0].inRange = true) {
-        if (monsters[0].special = "dodge") {
-          var r = Math.random()
-          if (r < .85) {
-            var e = monsters[0].attacked(hero.attack);
-            if (e >= 0) {
-              del = true;
-              hero.addExp(e);
-              delete monsters[i];
-            }
+        if (!dodge) {
+          var e = monsters[0].attacked(hero.attack);
+          if (e >= 0) {
+            del = true;
+            hero.addExp(e);
+            delete monsters[i];
           }
         }
       }
