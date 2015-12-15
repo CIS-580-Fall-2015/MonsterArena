@@ -48,61 +48,62 @@ module.exports = (function() {
 
     // Hero level and regeneration
     hero.doTurn();
+    if (monsters.length != 0) {
+      //All monsters attack hero
+      for (var i = 0; i < monsters.length; i++) {
+        if (monsters[i].range) {
+          //Heal
+          damage = monsters[i].attack;
 
-    //All monsters attack hero
-    for (var i = 0; i < monsters.length; i++) {
-      if (monsters[i].range) {
-        //Heal
-        damage = monsters[i].attack;
+          if (monsters[i].special = "heal") {
+            monsters[0].health += damage;
+            continue;
+          }
 
-        if (monsters[i].special = "heal") {
-          monsters[0].health += damage;
-          continue;
-        }
+          r = Math.random();
 
-        r = Math.random();
+          //Check crit
+          if (monsters[i].special = "crit") {
+            if (r > .9) {
+              damage *= 2;
+            }
+          }
+          hero.attacked(damage);
 
-        //Check crit
-        if (monsters[i].special = "crit") {
-          if (r > .9) {
-            damage *= 2;
+          //Check Taunt
+          if (monsters[i].special = "taunt") {
+            if (r > .5) {
+              monsters.unshft(monsters[i]);
+              del = true;
+              delete monsters[i];
+            }
           }
         }
-        hero.attacked(damage);
+      }
 
-        //Check Taunt
-        if (monsters[i].special = "taunt") {
-          if (r > .5) {
-            monsters.unshft(monsters[i]);
+
+      if (monsters[0].special = "dodge") {
+        var r = Math.random()
+        if (r < .85) {
+          var e = monsters[0].attacked(hero.attack);
+          if (e >= 0) {
             del = true;
+            hero.addExp(e);
             delete monsters[i];
           }
         }
       }
-    }
 
-
-    if (monsters[0].special = "dodge") {
-      var r = Math.random()
-      if (r < .85) {
-        var e = monsters[0].attacked(hero.attack);
-        if (e >= 0) {
-          del = true;
-          hero.addExp(e);
-          delete monsters[i];
+      if (del) {
+        var undef;
+        var temp = [];
+        for (i = 0; i < monsters.length; i++) {
+          if (monsters[i] !== undef) {
+            temp.push(monsters[i]);
+          }
         }
+        monsters = temp;
       }
-    }
-
-    if (del) {
-      var undef;
-      var temp = [];
-      for (i = 0; i < monsters.length; i++) {
-        if (monsters[i] !== undef) {
-          temp.push(monsters[i]);
-        }
-      }
-      monsters = temp;
     }
   }
 
@@ -156,12 +157,11 @@ module.exports = (function() {
   }
 
   // Renders all the monsters with the given context.
-  function render(ctx)
-  {
+  function render(ctx) {
     for (var i = 0; i < monsters.length; i++) {
-        if(monsters[i]) {
-            monsters[i].render(ctx);
-        }
+      if (monsters[i]) {
+        monsters[i].render(ctx);
+      }
     }
   }
 
