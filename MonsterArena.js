@@ -563,6 +563,9 @@ module.exports = (function() {
 
           if (monsters[i].special == "heal") {
             monsters[0].health += damage;
+            if (monsters[0].health > monsters[0].maxHealth) {
+              monsters[0].health = monsters[0].maxHealth;
+            }
             continue;
           }
 
@@ -664,13 +667,13 @@ module.exports = (function() {
   }
 
   function upgrade_boss() {
-    monster.BOSS.attack *= 2;
-    monster.BOSS.defense *= 2;
-    monster.BOSS.health *= 2;
-    if (monster.BOSS.animations = monster.boss) {
-      monster.BOSS.animations = monster.bosser;
+    Monster.BOSS.attack *= 2;
+    Monster.BOSS.defense *= 2;
+    Monster.BOSS.health *= 2;
+    if (Monster.BOSS.animations = Monster.boss) {
+      Monster.BOSS.animations = Monster.bosser;
     } else {
-      monster.BOSS.animations = monster.bossest;
+      Monster.BOSS.animations = Monster.bossest;
     }
   }
 
@@ -954,7 +957,7 @@ module.exports = (function() {
       this.special = stats.special;
       this.animations = availableRegMonsters[Math.floor(Math.random() * (availableRegMonsters.length) )]; // Pick one of the six regular sprites at random.
     }
-
+    this.maxHealth = this.health;
     this.door = door;
     this.door.avaliable = false;
     this.state = WALKING;
