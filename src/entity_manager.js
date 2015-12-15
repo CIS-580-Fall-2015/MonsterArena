@@ -101,7 +101,7 @@ module.exports = (function() {
           if (e >= 0) {
             del = true;
             hero.addExp(e);
-            delete monsters[i];
+            delete monsters[0];
           }
         }
       }
