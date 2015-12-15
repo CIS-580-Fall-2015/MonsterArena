@@ -50,6 +50,7 @@ module.exports = (function() {
   function update(elapsedTime) {
     for (var i = 0; i < monsters.length; i++) {
       monsters[i].update(elapsedTime);
+      monsters[i].doTurn(1);
     }
   }
 
@@ -58,9 +59,7 @@ module.exports = (function() {
 
     // Hero level and regeneration
     hero.doTurn();
-    for (var i = 0; i < monsters.length; i++) {
-      monsters[i].doTurn(1);
-    }
+
     if (monsters.length != 0) {
       //All monsters attack hero
       for (var i = 0; i < monsters.length; i++) {
