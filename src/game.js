@@ -23,7 +23,9 @@ module.exports = function()
                                         StatsManager.IncreaseAttackCap,
                                         StatsManager.IncreaseDefenseCap, 
                                         StatsManager.IncreaseHealthCap,
-                                        StatsManager.AddSpecial
+                                        StatsManager.AddSpecial,
+                                        EntityManager.open_door,
+                                        EntityManager.upgrade_boss
                                         );
 
     AudioManager.playIdleMusic();
