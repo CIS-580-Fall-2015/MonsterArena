@@ -4,6 +4,16 @@
   display: inline-block;
   text-align: center;
 }
+#toplevel .splash {
+  position: absolute;
+  width: 1180px;
+  height: 595px;
+  background-image: url("img/splash.jpg");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  border: 5px double #000;
+  display: none;
+}
 #toplevel #spawner {
   width: 295px;
   height: 595px;

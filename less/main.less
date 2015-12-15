@@ -1,4 +1,5 @@
 @default_height: 595px;
+@default_width: 1180px;
 @img_height: 340px;
 @img_width: 590px;
 @top_padding: ((@default_height - @img_height) / 2);
@@ -9,7 +10,18 @@
 	height: @default_height;
 	display: inline-block;
 	text-align: center;
-
+	
+	.splash{
+	   position: absolute;
+	   width: 1180px;
+	   height: @default_height;
+	   background-image: url("img/splash.jpg");
+	   background-repeat: no-repeat;
+	   background-size: 100% 100%;
+	   border: 5px double #000;
+	   display: none;
+	}
+	
 	#spawner
 	{
 		width: 295px;
