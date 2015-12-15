@@ -133,7 +133,7 @@ module.exports = (function() {
   Monster.prototype.attacked = function(damage) {
     //Temporary
     this.health -= damage - this.defense / 2;
-    if (this.health >= 0) {
+    if (this.health <= 0) {
       this.door.avaliable = true;
       if (this.isBoss) {
         return 0;
