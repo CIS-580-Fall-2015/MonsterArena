@@ -157,7 +157,7 @@ module.exports = (function() {
   //Spawns the boss monster out of door[0]
   function spawn_boss() {
     var found = false;
-    for (var i = 0; i > monsters.length; i++) {
+    for (var i = 0; i < monsters.length; i++) {
       if (monsters[i].isBoss) {
         found = true;
         break;
