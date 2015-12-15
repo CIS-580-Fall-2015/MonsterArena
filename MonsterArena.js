@@ -494,8 +494,8 @@ module.exports = (function() {
     exp: [0, 1.2]
   };
 
-  var ARENA_WIDTH; //TODO
-  var ARENA_HEIGHT; //TODO
+  var ARENA_WIDTH = document.getElementById('monsters').width;
+  var ARENA_HEIGHT = document.getElementById('monsters').height;
   var OFFSET = 64;
 
   // Builds the door array and places the hero
@@ -517,15 +517,50 @@ module.exports = (function() {
   // Runs all the turns, adds exp when neccesary
   // Clears array of dead monsters
   function update() {
-    var del = false;
+    //All monsters attack hero
     for (var i = 0; i < monsters.length; i++) {
-      var e = monsters[i].doTurn();
-      if (e >= 0) {
-        del = true;
-        hero.addExp(e);
-        delete monsters[i];
+      if (monsters[i].range) {
+        //Heal
+        damage = monsters[i].attack;
+
+        if (monsters[i].special = "heal") {
+          monsters[0].health += damage;
+          continue;
+        }
+
+        r = Math.random();
+
+        //Check crit
+        if (monsters[i].special = "crit") {
+          if (r > .9) {
+            damage *= 2;
+          }
+        }
+        hero.attacked(damage);
+
+        //Check Taunt
+        if (monsters[i].special = "taunt") {
+          if (r > .5) {
+            monsters.unshft(monsters[i]);
+            delete monsters[i];
+          }
+        }
       }
     }
+
+    var del = false;
+    if (monsters[0].special = "dodge") {
+      var r = Math.random()
+      if (r < .85) {
+        var e = monsters[0].attacked(hero.attack);
+        if (e >= 0) {
+          del = true;
+          hero.addExp(e);
+          delete monsters[i];
+        }
+      }
+    }
+
     if (del) {
       var undef;
       var temp = [];
@@ -576,17 +611,29 @@ module.exports = (function() {
     }
   }
 
+  function upgrade_boss() {
+    monster.BOSS.attack *= 2;
+    monster.BOSS.defense *= 2;
+    monster.BOSS.health *= 2;
+    if (monster.BOSS.animations = monster.boss) {
+      monster.BOSS.animations = monster.bosser;
+    } else {
+      monster.BOSS.animations = monster.bossest;
+    }
+  }
+
 
   return {
     initialize: initialize,
     update: update,
     open_door: open_door,
     spawn_monster: spawn_monster,
+    upgrade_boss: upgrade_boss,
   };
 
 }());
 
-},{"./hero.js":6,"./monster.js":8,"./spawner":12}],5:[function(require,module,exports){
+},{"./hero.js":6,"./monster.js":8,"./spawner":19}],5:[function(require,module,exports){
 module.exports = function()
 {
   var load = function(sm)
@@ -612,7 +659,9 @@ module.exports = function()
                                         StatsManager.IncreaseAttackCap,
                                         StatsManager.IncreaseDefenseCap, 
                                         StatsManager.IncreaseHealthCap,
-                                        StatsManager.AddSpecial
+                                        StatsManager.AddSpecial,
+                                        EntityManager.open_door,
+                                        EntityManager.upgrade_boss
                                         );
 
     AudioManager.playIdleMusic();
@@ -656,7 +705,7 @@ module.exports = function()
 
 }();
 
-},{"./AudioManager.js":1,"./entity_manager.js":4,"./hero.js":6,"./shop_manager.js":11,"./stats_manager.js":14}],6:[function(require,module,exports){
+},{"./AudioManager.js":1,"./entity_manager.js":4,"./hero.js":6,"./shop_manager.js":18,"./stats_manager.js":21}],6:[function(require,module,exports){
 module.exports = (function() {
   var Entity = require('./entity.js');
 
@@ -772,21 +821,41 @@ window.onload = function() {
   window.requestAnimationFrame(loop);
   
 };
-},{"./game":5,"./splash-screen":13}],8:[function(require,module,exports){
+},{"./game":5,"./splash-screen":20}],8:[function(require,module,exports){
 /* Base class for each monster.
  * It inherits from the generic entity class.
  */
 module.exports = (function() {
   var Entity = require('./entity.js');
 
+  // States for the monster.
+  const WALKING = 0;
+  const ATTACKING = 1;
+
   // boss = animation {} for monsters\Boss.js
   var boss = require('./monsters/Boss.js'),
-  bosser = require('./monsters/Bosser.js');
-  //TODO Other animations
+    bosser = require('./monsters/Bosser.js').
+  bossest = require('./monsters/Bossest.js'),
+    creepo = require('./monsters/Creepo.js')
+  gunner = require('./monsters/Gunner.js'),
+    puncher = require('./monsters/Puncher.js'),
+    skully = require('./monsters/Skully.js'),
+    snappy = require('./monsters/Snappy.js'),
+    wingy = require('./monsters/Wingy.js');
+
+  // An array containing all of the normal monsters (non-bosses).
+  var availableRegMonsters = [];
+  // An array containing all of the bosses (Only 3, larger than regular monsters).
+  var availableBosses = [];
 
   Monster.prototype = new Entity();
 
-  var BOSS = {attack: 8, defense: 2, health: 5};
+  var BOSS = {
+    attack: 8,
+    defense: 2,
+    health: 5,
+    animations: boss
+  };
 
   // Constructor
   function Monster(stats, door, isBoss) {
@@ -795,22 +864,25 @@ module.exports = (function() {
       this.health = BOSS.health;
       this.attack = BOSS.attack;
       this.defense = BOSS.defense;
+      this.animations = BOSS.animations;
     } else {
       this.health = stats.health;
       this.attack = stats.attack;
       this.defense = stats.defense;
-      this.specials = stats.specials;
+      this.special = stats.special;
+      this.animations = availableRegMonsters[Math.floor((Math.random() * 7))]; // Pick one of the six regular sprites at random.
     }
 
     this.door = door;
     this.door.avaliable = false;
-    this.state = 0;
+    this.state = WALKING;
     this.x = this.door.x;
     this.y = this.door.y;
     this.isBoss = isBoss;
+    this.inRange = false;
 
-    this.cx = document.getElementById('svgArea').width.baseVal.value / 2.0;
-    this.cy = document.getElementById('svgArea').height.baseVal.value / 2.0;
+    this.cx = document.getElementById('monsters').width.baseVal.value / 2.0;
+    this.cy = document.getElementById('monsters').height.baseVal.value / 2.0;
 
     // Create an animations property, with arrays for each direction of animations.
     this.animations = {
@@ -822,6 +894,20 @@ module.exports = (function() {
     this.x = this.door.x + 32;
     this.y = this.door.y + 32;
     this.angle = undefined;
+
+    // Set the direction of the monster.
+    if (this.x < this.cx) {
+      this.isLeft = false;
+    } else if (this.x > this.cx) {
+      this.isLeft = true;
+    } else {
+      var ranNum = Math.floor((Math.random() * 2));
+      if (ranNum == 0) {
+        this.isLeft = false;
+      } else {
+        this.isLeft = true;
+      }
+    }
 
     //determines change in x and y for every movment
     if (this.x == this.cx) {
@@ -886,39 +972,50 @@ module.exports = (function() {
   Monster.prototype.doTurn = function(n) {
     //Checks Range and does movment
     //Check if movement needed based on which direction it is coming in from.
-    var a = math.floor(this.angle);
-    if (a == 135 || a == 180 || a == 225) {
-      if (this.x <= this.cx - 96) {
-        this.x += n * this.dx;
-        this.y += n * this.dy;
-      }
-    } else if (a == 45 || a == 0 || a == 315) {
-      if (this.x >= this.cx + 32) {
-        this.x += n * this.dx;
-        this.y += n * this.dy;
-      }
-    } else if (a == 90) {
-      if (this.y <= this.cy - 96) {
-        this.x += n * this.dx;
-        this.y += n * this.dy;
-      }
-    } else if (a == 270) {
-      if (this.y >= this.cy + 32) {
-        this.x += n * this.dx;
-        this.y += n * this.dy;
+    if (!this.inRange) {
+      var a = math.floor(this.angle);
+      if (a == 135 || a == 180 || a == 225) {
+        if (this.x <= this.cx - 96) {
+          this.x += n * this.dx;
+          this.y += n * this.dy;
+        }
+      } else if (a == 45 || a == 0 || a == 315) {
+        if (this.x >= this.cx + 32) {
+          this.x += n * this.dx;
+          this.y += n * this.dy;
+        }
+      } else if (a == 90) {
+        if (this.y <= this.cy - 96) {
+          this.x += n * this.dx;
+          this.y += n * this.dy;
+        }
+      } else if (a == 270) {
+        if (this.y >= this.cy + 32) {
+          this.x += n * this.dx;
+          this.y += n * this.dy;
+        }
+      } else {
+        this.inRange = true;
       }
     }
 
-    //TODO specials
+  };
 
-
+  // Renders the monster on the canvas via the animation engine.
+  Monster.prototype.render = function(context) {
+    // Draw the Monster (and the correct animation).
+    if (this.isLeft) {
+      this.animations.left[this.state].render(context, this.x, this.y);
+    } else {
+      this.animations.right[this.state].render(context, this.x, this.y);
+    }
   };
 
   return Monster;
 
 }());
 
-},{"./entity.js":3,"./monsters/Boss.js":9,"./monsters/Bosser.js":10}],9:[function(require,module,exports){
+},{"./entity.js":3,"./monsters/Boss.js":9,"./monsters/Bosser.js":10,"./monsters/Bossest.js":11,"./monsters/Creepo.js":12,"./monsters/Gunner.js":13,"./monsters/Puncher.js":14,"./monsters/Skully.js":15,"./monsters/Snappy.js":16,"./monsters/Wingy.js":17}],9:[function(require,module,exports){
 /* Boss Monster Entity.
  */
 module.exports = (function() {
@@ -936,17 +1033,18 @@ module.exports = (function() {
   // The movement sprite sheet for the boss. It is simple, with walking and attacking being the same animation.
   var BossMovement = new Image();
   BossMovement.src = './img/monsters/Boss/Boss-Movement.png';
+
   var animations = {};
   animations.right = [];
   animations.left = [];
 
   // The right-facing animations. ALL OF THESE ANIMATIONS ARE THE SAME. IMPLEMENTED FOR THE SAKE OF CONSISTANCY.
-  animations.right.push(new Animation(BossMovement, WIDTH, HEIGHT, 0, 0, 2)); // TODO Specific Timing may need to be adjusted.
-  animations.right.push(new Animation(BossMovement, WIDTH, HEIGHT, 0, 0, 2)); // TODO Specific Timing may need to be adjusted.
+  animations.right.push(new Animation(BossMovement, WIDTH, HEIGHT, 0, 0, 2)); // WALKING // TODO Specific Timing may need to be adjusted.
+  animations.right.push(new Animation(BossMovement, WIDTH, HEIGHT, 0, 0, 2)); // ATTACKING // TODO Specific Timing may need to be adjusted.
 
   //The left-facing animations
-  animations.left.push(new Animation(BossMovement, WIDTH, HEIGHT, 0, 0, 2)); // TODO Specific Timing may need to be adjusted.
-  animations.left.push(new Animation(BossMovement, WIDTH, HEIGHT, 0, 0, 2)); // TODO Specific Timing may need to be adjusted.
+  animations.left.push(new Animation(BossMovement, WIDTH, HEIGHT, 0, 0, 2)); // WALKING // TODO Specific Timing may need to be adjusted.
+  animations.left.push(new Animation(BossMovement, WIDTH, HEIGHT, 0, 0, 2)); // ATTACKING // TODO Specific Timing may need to be adjusted.
 
   return animations;
 
@@ -970,23 +1068,329 @@ module.exports = (function() {
   // The movement sprite sheet for the bosser. It is simple, with walking and attacking being the same animation.
   var BosserMovement = new Image();
   BosserMovement.src = './img/monsters/Bosser/Bosser-Movement.png';
+
   var animations = {};
   animations.right = [];
   animations.left = [];
 
   // The right-facing animations. ALL OF THESE ANIMATIONS ARE THE SAME. IMPLEMENTED FOR THE SAKE OF CONSISTANCY.
-  animations.right.push(new Animation(BosserMovement, WIDTH, HEIGHT, 0, 0, 2)); // @TODO: Specific Timing may need to be adjusted.
-  animations.right.push(new Animation(BosserMovement, WIDTH, HEIGHT, 0, 0, 2)); // @TODO Specific Timing may need to be adjusted.
+  animations.right.push(new Animation(BosserMovement, WIDTH, HEIGHT, 0, 0, 2)); // WALKING // @TODO: Specific Timing may need to be adjusted.
+  animations.right.push(new Animation(BosserMovement, WIDTH, HEIGHT, 0, 0, 2)); // ATTACKING // @TODO Specific Timing may need to be adjusted.
 
   //The left-facing animations
-  animations.left.push(new Animation(BosserMovement, WIDTH, HEIGHT, 0, 0, 2)); // @TODO Specific Timing may need to be adjusted.
-  animations.left.push(new Animation(BosserMovement, WIDTH, HEIGHT, 0, 0, 2)); // @TODO Specific Timing may need to be adjusted.
+  animations.left.push(new Animation(BosserMovement, WIDTH, HEIGHT, 0, 0, 2)); // WALKING // @TODO Specific Timing may need to be adjusted.
+  animations.left.push(new Animation(BosserMovement, WIDTH, HEIGHT, 0, 0, 2)); // ATTACKING // @TODO Specific Timing may need to be adjusted.
 
   return animations;
 
 }());
 
 },{"../animation.js":2}],11:[function(require,module,exports){
+/* Bossest Monster Entity.
+ */
+module.exports = (function() {
+  var Animation = require('../animation.js');
+
+  // States for the monster
+  const WALKING = 0;
+  const ATTACKING = 1;
+
+  // The sprite HEIGHT (One frame).
+  const HEIGHT = 100;
+  // The sprite WIDTH (One frame).
+  const WIDTH = 116;
+
+  // The movement sprite sheet for the Bossest. It is simple, with walking and attacking being the same animation.
+  var BossestMovement = new Image();
+  BossestMovement.src = './img/monsters/Bossest/Bossest-Movement.png';
+
+  var animations = {};
+  animations.right = [];
+  animations.left = [];
+
+  // The right-facing animations. ALL OF THESE ANIMATIONS ARE THE SAME. IMPLEMENTED FOR THE SAKE OF CONSISTANCY.
+  animations.right.push(new Animation(BossestMovement, WIDTH, HEIGHT, 0, 0, 2)); // WALKING // TODO Specific Timing may need to be adjusted.
+  animations.right.push(new Animation(BossestMovement, WIDTH, HEIGHT, 0, 0, 2)); // ATTACKING // TODO Specific Timing may need to be adjusted.
+
+  //The left-facing animations
+  animations.left.push(new Animation(BossestMovement, WIDTH, HEIGHT, 0, 0, 2)); // WALKING // TODO Specific Timing may need to be adjusted.
+  animations.left.push(new Animation(BossestMovement, WIDTH, HEIGHT, 0, 0, 2)); // ATTACKING // TODO Specific Timing may need to be adjusted.
+
+  return animations;
+
+}());
+
+},{"../animation.js":2}],12:[function(require,module,exports){
+/* Creepo Monster Entity.
+ */
+module.exports = (function() {
+  var Animation = require('../animation.js');
+
+  // States for the monster
+  const WALKING = 0;
+  const ATTACKING = 1;
+
+  // The sprite size (It's a square 64 pixels x 64 pixels)
+  const SIZE = 64;
+
+  // The right walking Creepo spritesheet
+  var CreepoWalkRight = new Image();
+  CreepoWalkRight.src = './img/monsters/Creepo/Creepo-Walk-Right.png';
+
+  // The left walking Creepo spritesheet
+  var CreepoWalkLeft = new Image();
+  CreepoWalkLeft.src = "./img/monsters/Creepo/Creepo-Walk-Left.png";
+
+  // The right attacking Creepo spritesheet
+  var CreepoAttackRight = new Image();
+  CreepoAttackRight.src = "./img/monsters/Creepo/Creepo-Attack-Right.png";
+
+  // The left attacking Creepo spritesheet
+  var CreepoAttackLeft = new Image();
+  CreepoAttackLeft.src = "./img/monsters/Creepo/Creepo-Attack-Left.png";
+
+  var animations = {};
+  animations.right = [];
+  animations.left = [];
+
+  // The right-facing animations.
+  animations.right.push(new Animation(CreepoWalkRight, SIZE, SIZE, 0, 0, 5)); // WALKING // TODO Specific Timing may need to be adjusted.
+  animations.right.push(new Animation(CreepoAttackRight, SIZE, SIZE, 0, 0, 6)); // ATTACKING // TODO Specific Timing may need to be adjusted.
+
+  //The left-facing animations
+  animations.left.push(new Animation(CreepoWalkLeft, SIZE, SIZE, 0, 0, 5)); // WALKING // TODO Specific Timing may need to be adjusted.
+  animations.left.push(new Animation(CreepoAttackLeft, SIZE, SIZE, 0, 0, 6)); // ATTACKING // TODO Specific Timing may need to be adjusted.
+
+  return animations;
+
+}());
+
+},{"../animation.js":2}],13:[function(require,module,exports){
+/* Gunner Monster Entity.
+ */
+module.exports = (function() {
+  var Animation = require('../animation.js');
+
+  // States for the monster
+  const WALKING = 0;
+  const ATTACKING = 1;
+
+  // The sprite size (It's a square 64 pixels x 64 pixels)
+  const SIZE = 64;
+
+  // The right walking Gunner spritesheet
+  var GunnerWalkRight = new Image();
+  GunnerWalkRight.src = './img/monsters/Gunner/Gunner-Walk-Right.png';
+
+  // The left walking Gunner spritesheet
+  var GunnerWalkLeft = new Image();
+  GunnerWalkLeft.src = "./img/monsters/Gunner/Gunner-Walk-Left.png";
+
+  // The right attacking Gunner spritesheet
+  var GunnerAttackRight = new Image();
+  GunnerAttackRight.src = "./img/monsters/Gunner/Gunner-Attack-Right.png";
+
+  // The left attacking Gunner spritesheet
+  var GunnerAttackLeft = new Image();
+  GunnerAttackLeft.src = "./img/monsters/Gunner/Gunner-Attack-Left.png";
+
+  var animations = {};
+  animations.right = [];
+  animations.left = [];
+
+  // The right-facing animations.
+  animations.right.push(new Animation(GunnerWalkRight, SIZE, SIZE, 0, 0, 8)); // WALKING // TODO Specific Timing may need to be adjusted.
+  animations.right.push(new Animation(GunnerAttackRight, SIZE, SIZE, 0, 0, 8)); // ATTACKING // TODO Specific Timing may need to be adjusted.
+
+  //The left-facing animations
+  animations.right.push(new Animation(GunnerWalkLeft, SIZE, SIZE, 0, 0, 8)); // WALKING // TODO Specific Timing may need to be adjusted.
+  animations.right.push(new Animation(GunnerAttackLeft, SIZE, SIZE, 0, 0, 8)); // ATTACKING // TODO Specific Timing may need to be adjusted.
+
+  return animations;
+
+}());
+
+},{"../animation.js":2}],14:[function(require,module,exports){
+/* Puncher Monster Entity.
+ */
+module.exports = (function() {
+  var Animation = require('../animation.js');
+
+  // States for the monster
+  const WALKING = 0;
+  const ATTACKING = 1;
+
+  // The sprite size (It's a square 64 pixels x 64 pixels)
+  const SIZE = 64;
+
+  // The right walking Puncher spritesheet
+  var PuncherWalkRight = new Image();
+  PuncherWalkRight.src = './img/monsters/Puncher/Puncher-Walk-Right.png';
+
+  // The left walking Puncher spritesheet
+  var PuncherWalkLeft = new Image();
+  PuncherWalkLeft.src = "./img/monsters/Puncher/Puncher-Walk-Left.png";
+
+  // The right attacking Puncher spritesheet
+  var PuncherAttackRight = new Image();
+  PuncherAttackRight.src = "./img/monsters/Puncher/Puncher-Attack-Right.png";
+
+  // The left attacking Puncher spritesheet
+  var PuncherAttackLeft = new Image();
+  PuncherAttackLeft.src = "./img/monsters/Puncher/Puncher-Attack-Left.png";
+
+  var animations = {};
+  animations.right = [];
+  animations.left = [];
+
+  // The right-facing animations.
+  animations.right.push(new Animation(PuncherWalkRight, SIZE, SIZE, 0, 0, 8)); // WALKING // TODO Specific Timing may need to be adjusted.
+  animations.right.push(new Animation(PuncherAttackRight, SIZE, SIZE, 0, 0, 10)); // ATTACKING // TODO Specific Timing may need to be adjusted.
+
+  //The left-facing animations
+  animations.left.push(new Animation(PuncherWalkLeft, SIZE, SIZE, 0, 0, 8)); // WALKING // TODO Specific Timing may need to be adjusted.
+  animations.left.push(new Animation(PuncherAttackLeft, SIZE, SIZE, 0, 0, 10)); // ATTACKING // TODO Specific Timing may need to be adjusted.
+
+  return animations;
+
+}());
+
+},{"../animation.js":2}],15:[function(require,module,exports){
+/* Skully Monster Entity.
+ */
+module.exports = (function() {
+  var Animation = require('../animation.js');
+
+  // States for the monster
+  const WALKING = 0;
+  const ATTACKING = 1;
+
+  // The sprite size (It's a square 64 pixels x 64 pixels)
+  const SIZE = 64;
+
+  // The right walking Skully spritesheet
+  var SkullyWalkRight = new Image();
+  SkullyWalkRight.src = './img/monsters/Skully/Skully-Walk-Right.png';
+
+  // The left walking Skully spritesheet
+  var SkullyWalkLeft = new Image();
+  SkullyWalkLeft.src = "./img/monsters/Skully/Skully-Walk-Left.png";
+
+  // The right attacking Skully spritesheet
+  var SkullyAttackRight = new Image();
+  SkullyAttackRight.src = "./img/monsters/Skully/Skully-Attack-Right.png";
+
+  // The left attacking Skully spritesheet
+  var SkullyAttackLeft = new Image();
+  SkullyAttackLeft.src = "./img/monsters/Skully/Skully-Attack-Left.png";
+
+  var animations = {};
+  animations.right = [];
+  animations.left = [];
+
+  // The right-facing animations.
+  animations.right.push(new Animation(SkullyWalkRight, SIZE, SIZE, 0, 0, 4)); // WALKING // TODO Specific Timing may need to be adjusted.
+  animations.right.push(new Animation(SkullyAttackRight, SIZE, SIZE, 0, 0, 4)); // ATTACKING // TODO Specific Timing may need to be adjusted.
+
+  //The left-facing animations
+  animations.left.push(new Animation(SkullyWalkLeft, SIZE, SIZE, 0, 0, 4)); // WALKING // TODO Specific Timing may need to be adjusted.
+  animations.left.push(new Animation(SkullyAttackLeft, SIZE, SIZE, 0, 0, 4)); // ATTACKING // TODO Specific Timing may need to be adjusted.
+
+  return animations;
+
+}());
+
+},{"../animation.js":2}],16:[function(require,module,exports){
+/* Snappy Monster Entity.
+ */
+module.exports = (function() {
+  var Animation = require('../animation.js');
+
+  // States for the monster
+  const WALKING = 0;
+  const ATTACKING = 1;
+
+  // The sprite size (It's a square 64 pixels x 64 pixels)
+  const SIZE = 64;
+
+  // The right walking Snappy spritesheet
+  var SnappyWalkRight = new Image();
+  SnappyWalkRight.src = './img/monsters/Snappy/Snappy-Walk-Right.png';
+
+  // The left walking Snappy spritesheet
+  var SnappyWalkLeft = new Image();
+  SnappyWalkLeft.src = "./img/monsters/Snappy/Snappy-Walk-Left.png";
+
+  // The right attacking Snappy spritesheet
+  var SnappyAttackRight = new Image();
+  SnappyAttackRight.src = "./img/monsters/Snappy/Snappy-Attack-Right.png";
+
+  // The left attacking Snappy spritesheet
+  var SnappyAttackLeft = new Image();
+  SnappyAttackLeft.src = "./img/monsters/Snappy/Snappy-Attack-Left.png";
+
+  var animations = {};
+  animations.right = [];
+  animations.left = [];
+
+  // The right-facing animations.
+  animations.right.push(new Animation(SnappyWalkRight, SIZE, SIZE, 0, 0, 4)); // WALKING // TODO Specific Timing may need to be adjusted.
+  animations.right.push(new Animation(SnappyAttackRight, SIZE, SIZE, 0, 0, 5)); // ATTACKING // TODO Specific Timing may need to be adjusted.
+
+  //The left-facing animations
+  animations.left.push(new Animation(SnappyWalkLeft, SIZE, SIZE, 0, 0, 4)); // WALKING // TODO Specific Timing may need to be adjusted.
+  animations.left.push(new Animation(SnappyAttackLeft, SIZE, SIZE, 0, 0, 5)); // ATTACKING // TODO Specific Timing may need to be adjusted.
+
+  return animations;
+
+}());
+
+},{"../animation.js":2}],17:[function(require,module,exports){
+/* Wingy Monster Entity.
+ */
+module.exports = (function() {
+  var Animation = require('../animation.js');
+
+  // States for the monster
+  const WALKING = 0;
+  const ATTACKING = 1;
+
+  // The sprite size (It's a square 64 pixels x 64 pixels)
+  const SIZE = 64;
+
+  // The right walking Wingy spritesheet
+  var WingyWalkRight = new Image();
+  WingyWalkRight.src = './img/monsters/Wingy/Wingy-Walk-Right.png';
+
+  // The left walking Wingy spritesheet
+  var WingyWalkLeft = new Image();
+  WingyWalkLeft.src = "./img/monsters/Wingy/Wingy-Walk-Left.png";
+
+  // The right attacking Wingy spritesheet
+  var WingyAttackRight = new Image();
+  WingyAttackRight.src = "./img/monsters/Wingy/Wingy-Attack-Right.png";
+
+  // The left attacking Wingy spritesheet
+  var WingyAttackLeft = new Image();
+  WingyAttackLeft.src = "./img/monsters/Wingy/Wingy-Attack-Left.png";
+
+  var animations = {};
+  animations.right = [];
+  animations.left = [];
+
+  // The right-facing animations.
+  animations.right.push(new Animation(WingyWalkRight, SIZE, SIZE, 0, 0, 5)); // WALKING // TODO Specific Timing may need to be adjusted.
+  animations.right.push(new Animation(WingyAttackRight, SIZE, SIZE, 0, 0, 5)); // ATTACKING // TODO Specific Timing may need to be adjusted.
+
+  //The left-facing animations
+  animations.left.push(new Animation(WingyWalkLeft, SIZE, SIZE, 0, 0, 5)); // WALKING // TODO Specific Timing may need to be adjusted.
+  animations.left.push(new Animation(WingyAttackLeft, SIZE, SIZE, 0, 0, 5)); // ATTACKING // TODO Specific Timing may need to be adjusted.
+
+  return animations;
+
+}());
+
+},{"../animation.js":2}],18:[function(require,module,exports){
 /* Author: Nic Johnson
  *
  * Title: ShopManager.js
@@ -1460,13 +1864,15 @@ module.exports = (function()
 	};
 
 
-	ShopManager.prototype.SetStatsManagerDelegates = function(attack, defense, health, special)
+	ShopManager.prototype.SetStatsManagerDelegates = function(attack, defense, health, special, door, boss)
 	{
 		if (this.DEBUG) { console.log("ShopManager: StatsManager delegates being set."); }
 		this.increaseAttack = attack;
 		this.increaseDefense = defense;
 		this.increaseHealth = health;
 		this.addSpecial = special;
+		this.openDoor = door;
+		this.upgradeBoss = boss;
 	};
 
 	////////////////////////
@@ -1652,7 +2058,8 @@ module.exports = (function()
 			switch (this.currentUpgrade)
 			{
 				case 0: // Door
-					// TODO: Enable new door
+					if (this.DEBUG) { console.log("ShopManager: Opening new door."); }
+					this.openDoor();
 					this.SubtractGold(this.doorCost);
 					this.doorCostIndex++;
 					if (this.doorCostIndex == this.doorCostProgression.length)
@@ -1665,24 +2072,28 @@ module.exports = (function()
 					break;
 
 				case 1: // Attack
+					if (this.DEBUG) { console.log("ShopManager: Increasing attack cap."); }
 					this.increaseAttack();
 					this.SubtractGold(this.attackCost);
 					this.attackCostMult++;
 					break;
 
 				case 2: // Health
+					if (this.DEBUG) { console.log("ShopManager: Increasing health cap."); }
 					this.increaseHealth();
 					this.SubtractGold(this.healthCost);
 					this.healthCostMult++;
 					break;
 
 				case 3: // Defense
+					if (this.DEBUG) { console.log("ShopManager: Increasing defense cap."); }
 					this.increaseDefense();
 					this.SubtractGold(this.defenseCost);
 					this.defenseCostMult++;
 					break;
 
 				case 4: // Special
+					if (this.DEBUG) { console.log("ShopManager: Buying new special."); }
 					var spec = this.specialProgression[this.specialIndex];
 					document.getElementById(this.specialProgression[this.specialIndex]).
 							setAttribute("opacity", "0");
@@ -1705,7 +2116,8 @@ module.exports = (function()
 					break;
 
 				case 5: // Boss
-					// TODO: Upgrade boss stats
+					if (this.DEBUG) { console.log("ShopManager: Upgrading Boss"); }
+					this.upgradeBoss();
 					this.SubtractGold(this.bossCost);
 					this.bossCostIndex++;
 					if (this.bossCostIndex == this.bossCostProgression.length)
@@ -1751,7 +2163,7 @@ module.exports = (function()
 
 
 
-},{}],12:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 module.exports = (function() {
 
   function Door(x, y) {
@@ -1764,7 +2176,7 @@ module.exports = (function() {
 
 }());
 
-},{}],13:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 /* MainMenu GameState module
  * Authors:
  * - Ian Speer, Austin Boerger
@@ -1830,7 +2242,7 @@ module.exports = (function (){
   }
   
 })();
-},{}],14:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
 /* Author: Nic Johnson
  *
  * Title: StatsManager.js
