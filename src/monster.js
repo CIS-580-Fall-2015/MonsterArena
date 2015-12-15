@@ -21,8 +21,14 @@ module.exports = (function() {
 
   // An array containing all of the normal monsters (non-bosses).
   var availableRegMonsters = [];
+  availableRegMonsters.push(creepo);
+  availableRegMonsters.push(gunner);
+  availableRegMonsters.push(puncher);
+  availableRegMonsters.push(skully);
+  availableRegMonsters.push(snappy);
+  availableRegMonsters.push(wingy);
   // An array containing all of the bosses (Only 3, larger than regular monsters).
-  var availableBosses = [];
+  //var availableBosses = [];
 
   Monster.prototype = new Entity();
 

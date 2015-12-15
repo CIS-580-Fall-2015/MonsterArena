@@ -19,7 +19,7 @@ window.onload = function()
     EntityManager.add_gold = ShopManager.AddGold;
     // Module variables
 
-    StatsManager.SetSpawnDelegate = EntityManager.spawn_monster;
+    StatsManager.SetSpawnDelegate(EntityManager.spawn_monster);
 
     ShopManager.SetStatsManagerDelegates(
       StatsManager.IncreaseAttackCap,

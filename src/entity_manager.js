@@ -176,7 +176,8 @@ module.exports = (function() {
     open_door: open_door,
     spawn_monster: spawn_monster,
     upgrade_boss: upgrade_boss,
-    render: render
+    render: render,
+    monsters: monsters
   };
 
 }());
