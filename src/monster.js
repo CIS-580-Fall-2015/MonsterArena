@@ -39,7 +39,7 @@ module.exports = (function() {
       this.health = stats.health;
       this.attack = stats.attack;
       this.defense = stats.defense;
-      this.specials = stats.specials;
+      this.special = stats.special;
     }
 
     this.door = door;
@@ -154,9 +154,6 @@ module.exports = (function() {
         this.inRange = true;
       }
     }
-
-    //TODO specials
-
 
   };
 
