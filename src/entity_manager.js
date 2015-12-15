@@ -44,9 +44,10 @@ module.exports = (function() {
   // Runs all the turns, adds exp when neccesary
   // Clears array of dead monsters
   function update() {
+    var del = false;
+
     // Hero level and regeneration
     hero.doTurn();
-
 
     //All monsters attack hero
     for (var i = 0; i < monsters.length; i++) {
@@ -73,13 +74,14 @@ module.exports = (function() {
         if (monsters[i].special = "taunt") {
           if (r > .5) {
             monsters.unshft(monsters[i]);
+            del = true;
             delete monsters[i];
           }
         }
       }
     }
 
-    var del = false;
+
     if (monsters[0].special = "dodge") {
       var r = Math.random()
       if (r < .85) {
