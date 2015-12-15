@@ -4,16 +4,6 @@
   display: inline-block;
   text-align: center;
 }
-#toplevel .splash {
-  position: absolute;
-  width: 1180px;
-  height: 595px;
-  background-image: url("img/splash.jpg");
-  background-repeat: no-repeat;
-  background-size: 100% 100%;
-  border: 5px double #000;
-  display: none;
-}
 #toplevel #spawner {
   width: 295px;
   height: 595px;
@@ -24,10 +14,13 @@
 }
 #toplevel #arena {
   width: 590px;
-  height: 340px;
+  height: 590px;
+  background-image: url("img/arena3.png");
+  background-repeat: no-repeat;
+  background-size: 100% 95%;
   float: left;
   margin: 0 auto;
-  margin-top: 127.5px;
+  margin-top: 2.5px;
   padding: 0 0 0 0;
   display: inline-block;
 }
@@ -46,6 +39,16 @@
   padding: 0 0 0 0;
   margin: 0 auto;
   display: inline-block;
+}
+#toplevel .splash {
+  position: absolute;
+  width: 1180px;
+  height: 595px;
+  background-image: url("img/splash.jpg");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  border: 5px double #000;
+  display: none;
 }
 progress.health::-webkit-progress-value {
   background: red;
