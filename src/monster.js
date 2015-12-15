@@ -122,9 +122,9 @@ module.exports = (function() {
   }
 
   // Handle monsters being attacked
-  Monster.prototype.attacked = function(amount) {
+  Monster.prototype.attacked = function(damage) {
     //Temporary
-    this.health -= damage - this.defense;
+    this.health -= damage - this.defense / 2;
     if (this.health >= 0) {
       //TODO die
       this.door.avaliable = true;
