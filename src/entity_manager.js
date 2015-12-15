@@ -138,12 +138,24 @@ module.exports = (function() {
     }
   }
 
+  function upgrade_boss() {
+    monster.BOSS.attack *= 2;
+    monster.BOSS.defense *= 2;
+    monster.BOSS.health *= 2;
+    if (monster.BOSS.animations = monster.boss) {
+      monster.BOSS.animations = monster.bosser;
+    } else {
+      monster.BOSS.animations = monster.bossest;
+    }
+  }
+
 
   return {
     initialize: initialize,
     update: update,
     open_door: open_door,
     spawn_monster: spawn_monster,
+    upgrade_boss: upgrade_boss,
   };
 
 }());
