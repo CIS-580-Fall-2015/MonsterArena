@@ -8,6 +8,8 @@ module.exports = (function() {
   const WALKING = 0;
   const ATTACKING = 1;
 
+  const DEBUG = true;
+
   // boss = animation {} for monsters\Boss.js
   var boss = require('./monsters/Boss.js'),
     bosser = require('./monsters/Bosser.js'),
