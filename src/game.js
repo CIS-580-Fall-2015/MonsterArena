@@ -1,5 +1,6 @@
-module.exports = function() {
-
+// module.exports = function() {
+window.onload = function()
+{
   var Hero = require('./hero.js'),
     EntityManager = require('./entity_manager.js'),
     ShopManager = require('./shop_manager.js'),
@@ -34,7 +35,7 @@ module.exports = function() {
 
 
   var update = function(elapsedTime) {
-    //EntityManager.update();
+    EntityManager.update();
   };
 
   var load = function(sm) {
@@ -64,13 +65,22 @@ module.exports = function() {
     EntityManager.render(ctx);
   };
 
-  return {
-    load: load,
-    update: update,
-    render: render,
-    keyUp: keyUp,
-    keyDown: keyDown,
-    exit: exit
+  var loop = function()
+  {
+    update();
+    render();
+    window.requestAnimationFrame(loop);
   }
+  window.requestAnimationFrame(loop);
+}
 
-}();
+//   return {
+//     load: load,
+//     update: update,
+//     render: render,
+//     keyUp: keyUp,
+//     keyDown: keyDown,
+//     exit: exit
+//   }
+
+// }();

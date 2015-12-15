@@ -15,8 +15,8 @@ window.onload = function() {
     return state;
   }
   
-  var game = require('./game');
-  pushState(game);
+  // var game = require('./game');
+  // pushState(game);
   
   var splashScreen = require('./splash-screen');
   pushState(splashScreen);
