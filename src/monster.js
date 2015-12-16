@@ -131,9 +131,13 @@ module.exports = (function() {
   }
 
   // Handle monsters being attacked
-  Monster.prototype.attacked = function(damage) {
+  Monster.prototype.attacked = function(amount) {
     //Temporary
-    this.health -= damage - this.defense / 2;
+    var damage = amount - this.defense / 2;
+    if (damage < 1) {
+      damage = 1;
+    }
+    this.health -= damage;
     if (DEBUG) {
       console.log("Monster attacked! Health: " + this.health);
     }
@@ -145,7 +149,7 @@ module.exports = (function() {
       if (this.isBoss) {
         return 0;
       } else {
-        return this.health + this.attack + this.defense;
+        return this.maxHealth + this.attack + this.defense;
       }
     }
     return -1;

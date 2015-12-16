@@ -38,6 +38,7 @@ module.exports = (function() {
     var ARENA_WIDTH = document.getElementById('monsters').width;
   var ARENA_HEIGHT = document.getElementById('monsters').height;
   var OFFSET = 64;
+  var DEBUG = true;
 
   // Builds the door array and places the hero
   function initialize() {
@@ -76,7 +77,7 @@ module.exports = (function() {
     if (monsters.length != 0) {
       //All monsters attack hero
       for (var i = 0; i < monsters.length; i++) {
-        if (monsters[i].range) {
+        if (monsters[i].inRange) {
           //Heal
           damage = monsters[i].attack;
 
@@ -101,9 +102,13 @@ module.exports = (function() {
           //Check Taunt
           if (monsters[i].special == "taunt") {
             if (r > .5) {
-              monsters.unshft(monsters[i]);
-              del = true;
-              delete monsters[i];
+              if (DEBUG) {
+                console.log("Taunting!");
+              }
+              var t = monsters[0];
+              monsters[0] = monsters[i];
+              monsters[i] = t;
+              monsters[i].special = "none";
             }
           }
         }
