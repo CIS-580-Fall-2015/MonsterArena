@@ -635,9 +635,7 @@ module.exports = (function() {
     animations: boss
   };
 
-
-
-    var ARENA_WIDTH = document.getElementById('monsters').width;
+  var ARENA_WIDTH = document.getElementById('monsters').width;
   var ARENA_HEIGHT = document.getElementById('monsters').height;
   var OFFSET = 64;
   var DEBUG = true;
@@ -654,6 +652,7 @@ module.exports = (function() {
     doors.push(new Door(ARENA_WIDTH * 0.75, ARENA_HEIGHT * 0.75)); // South-East
     doors.push(new Door(ARENA_WIDTH * 0.25, ARENA_HEIGHT * 0.75)); // South-West
     doors.push(new Door(ARENA_WIDTH * 0.25, ARENA_HEIGHT * 0.25)); // North-West
+    doors[0].open = true;
 
     hero = new Hero(HERO_STATS, ARENA_WIDTH / 2 - 32, ARENA_HEIGHT / 2 - 32, this);
 
@@ -767,6 +766,7 @@ module.exports = (function() {
   // For door upgrades
   function open_door() {
     if (unlocked_doors < doors.length) {
+      doors[unlocked_doors].open = true;
       unlocked_doors++;
     }
     console.log("EM Doors open: " + unlocked_doors);
@@ -826,6 +826,10 @@ module.exports = (function() {
       }
     }
     hero.render(ctx);
+    for (var i = 0; i < doors.length; i++)
+    {
+      doors[i].render(ctx);
+    }
   }
 
 
@@ -2550,13 +2554,55 @@ module.exports = (function()
 },{}],21:[function(require,module,exports){
 module.exports = (function() {
 
-  function Door(x, y) {
-    this.x = x;
-    this.y = y;
-    this.avaliable = true;
-  }
+	var Colors = {
+		RED: "#ff0000",
+		BLUE: "#0066ff",
+		GREY: "#737373"
+	};
+	Object.freeze(Colors);
 
-  return Door;
+	function Door(x, y) {
+		this.x = x;
+		this.y = y;
+		this.avaliable = true;
+		this.open = false;
+	}
+
+	Door.prototype.render = function(cntx)
+	{
+		var color;
+		if (this.open)
+		{
+			if (this.avaliable)
+			{
+				color = Colors.BLUE;
+			}
+			else
+			{
+				color = Colors.RED;
+			}
+		}
+		else
+		{
+			color = Colors.GREY;
+		}
+
+		cntx.save();
+		cntx.beginPath();
+		cntx.lineWidth = 5;
+		cntx.strokeStyle = color;
+		cntx.arc(
+			this.x,
+			this.y,
+			32,
+			0,
+			2 * Math.PI
+			);
+		cntx.stroke();
+		cntx.restore();
+	}
+
+	return Door;
 
 }());
 
@@ -2669,13 +2715,13 @@ module.exports = (function()
 	//////////////////////////////////////
 	// Default values for start of game //
 	//////////////////////////////////////
-	var startingAttackVal = 5;
-	var startingDefenseVal = 5;
-	var startingHealthVal = 5;
+	var startingAttackVal = 1;
+	var startingDefenseVal = 1;
+	var startingHealthVal = 1;
 
-	var attackCap = 10;
-	var defenseCap = 10;
-	var healthCap = 10;
+	var attackCap = 3;
+	var defenseCap = 3;
+	var healthCap = 3;
 
 	var attackFloor = 1;
 	var defenseFloor = 1;

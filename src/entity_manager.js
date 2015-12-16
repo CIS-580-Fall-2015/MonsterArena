@@ -33,9 +33,7 @@ module.exports = (function() {
     animations: boss
   };
 
-
-
-    var ARENA_WIDTH = document.getElementById('monsters').width;
+  var ARENA_WIDTH = document.getElementById('monsters').width;
   var ARENA_HEIGHT = document.getElementById('monsters').height;
   var OFFSET = 64;
   var DEBUG = true;
@@ -52,6 +50,7 @@ module.exports = (function() {
     doors.push(new Door(ARENA_WIDTH * 0.75, ARENA_HEIGHT * 0.75)); // South-East
     doors.push(new Door(ARENA_WIDTH * 0.25, ARENA_HEIGHT * 0.75)); // South-West
     doors.push(new Door(ARENA_WIDTH * 0.25, ARENA_HEIGHT * 0.25)); // North-West
+    doors[0].open = true;
 
     hero = new Hero(HERO_STATS, ARENA_WIDTH / 2 - 32, ARENA_HEIGHT / 2 - 32, this);
 
@@ -165,6 +164,7 @@ module.exports = (function() {
   // For door upgrades
   function open_door() {
     if (unlocked_doors < doors.length) {
+      doors[unlocked_doors].open = true;
       unlocked_doors++;
     }
     console.log("EM Doors open: " + unlocked_doors);
@@ -224,6 +224,10 @@ module.exports = (function() {
       }
     }
     hero.render(ctx);
+    for (var i = 0; i < doors.length; i++)
+    {
+      doors[i].render(ctx);
+    }
   }
 
 
