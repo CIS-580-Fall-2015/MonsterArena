@@ -1,228 +1,208 @@
-/* Author: Nic Johnson
- *
- * Title: ShopManager.js
- *
- * Description: manages the upgrade shop for
- * 		MonsterArena
- *
- *
- * History:
- * 		December 08, 2015:
- *  		-Date Created
- *  	December 13, 2015:
- *  		-Whole bunch of stuff because i forgot to update this list
- *  		-Subtracting gold on purchase
- */
-
 module.exports = (function()
 {
-	function ShopManager()
+	/////////////////////////////////
+	// Prints all debug statements //
+	/////////////////////////////////
+	DEBUG = false;
+
+	///////////
+	// Enums //
+	///////////
+	Upgrades =
 	{
-		/////////////////////////////////
-		// Prints all debug statements //
-		/////////////////////////////////
-		this.DEBUG = false;
+		DOOR: 0,
+		ATTACK: 1,
+		HEALTH: 2,
+		DEFENSE: 3,
+		SPECIAL: 4,
+		BOSS: 5,
+	};
+	Object.freeze(Upgrades);
 
-		///////////
-		// Enums //
-		///////////
-		this.Upgrades =
-		{
-			DOOR: 0,
-			ATTACK: 1,
-			HEALTH: 2,
-			DEFENSE: 3,
-			SPECIAL: 4,
-			BOSS: 5,
-		};
-		Object.freeze(this.Upgrades);
+	Strings =
+	{
+		0: "DOOR",
+		1: "ATTACK",
+		2: "HEALTH",
+		3: "DEFENSE",
+		4: "SPECIAL",
+		5: "BOSS",
+	};
+	Object.freeze(Strings);
 
-		this.Strings =
-		{
-			0: "DOOR",
-			1: "ATTACK",
-			2: "HEALTH",
-			3: "DEFENSE",
-			4: "SPECIAL",
-			5: "BOSS",
-		};
-		Object.freeze(this.Strings);
+	// ////////////////////////////////
+	// // Assignment of to fix  //
+	// // scope stuff for event      //
+	// // handlers                   //
+	// ////////////////////////////////
+	// var self = 
 
-		////////////////////////////////
-		// Assignment of this to fix  //
-		// scope stuff for event      //
-		// handlers                   //
-		////////////////////////////////
-		var self = this;
+	////////////////
+	// Properties //
+	////////////////
+	currentSelected = undefined;
+	currentUpgrade  = undefined;
+	totalGold       = 0;
+	defaultAddition = 100;
+	/* eslint-disable */
+	specialProgression = [
+								"shop_taunt_special",
+								"shop_dodge_special",
+								"shop_critical_special",
+								"shop_heal_special",
+								"shop_none_special",
+								];
+	/* eslint-enable */
+	specialIndex = 0;
 
-		////////////////
-		// Properties //
-		////////////////
-		this.currentSelected = undefined;
-		this.currentUpgrade  = undefined;
-		this.totalGold       = 0;
-		this.defaultAddition = 100;
-		/* eslint-disable */
-		this.specialProgression = [
-									"shop_taunt_special",
-									"shop_dodge_special",
-									"shop_critical_special",
-									"shop_heal_special",
-									"shop_none_special",
-									];
-		/* eslint-enable */
-		this.specialIndex = 0;
+	//////////////////////////////////////
+	// Flags for greying out shop items //
+	//////////////////////////////////////
+	defenseSelectable  = false;
+	doorSelectable     = false;
+	attackSelectable   = false;
+	healthSelectable   = false;
+	specialSelectable  = false;
+	bossSelectable 	   = false;
+	purchaseClickable  = false;
 
-		//////////////////////////////////////
-		// Flags for greying out shop items //
-		//////////////////////////////////////
-		this.defenseSelectable  = false;
-		this.doorSelectable     = false;
-		this.attackSelectable   = false;
-		this.healthSelectable   = false;
-		this.specialSelectable  = false;
-		this.bossSelectable 	= false;
-		this.purchaseClickable  = false;
+	/////////////////////////////////////
+	// Flags for finished upgrade path //
+	/////////////////////////////////////
+	doorDone     = false;
+	defenseDone  = false;
+	attackDone   = false;
+	healthDone   = false;
+	specialDone  = false;
+	bossDone 	  = false;
 
-		/////////////////////////////////////
-		// Flags for finished upgrade path //
-		/////////////////////////////////////
-		this.doorDone     = false;
-		this.defenseDone  = false;
-		this.attackDone   = false;
-		this.healthDone   = false;
-		this.specialDone  = false;
-		this.bossDone 	  = false;
+	/////////////////////////////////////
+	// Flags for determining if player //
+	// has enough money 		       //
+	/////////////////////////////////////
+	doorEnoughMoney     = false;
+	defenseEnoughMoney  = false;
+	attackEnoughMoney   = false;
+	healthEnoughMoney   = false;
+	specialEnoughMoney  = false;
+	bossEnoughMoney 	= false;
 
-		/////////////////////////////////////
-		// Flags for determining if player //
-		// has enough money 		       //
-		/////////////////////////////////////
-		this.doorEnoughMoney     = false;
-		this.defenseEnoughMoney  = false;
-		this.attackEnoughMoney   = false;
-		this.healthEnoughMoney   = false;
-		this.specialEnoughMoney  = false;
-		this.bossEnoughMoney 	 = false;
+	////////////////////////////
+	// Costs for each upgrade //
+	////////////////////////////
+	doorCost     = 0;
+	defenseCost  = 0;
+	attackCost   = 0;
+	healthCost   = 0;
+	specialCost  = 0;
+	bossCost 	 = 0;
 
-		////////////////////////////
-		// Costs for each upgrade //
-		////////////////////////////
-		this.doorCost     = 0;
-		this.defenseCost  = 0;
-		this.attackCost   = 0;
-		this.healthCost   = 0;
-		this.specialCost  = 0;
-		this.bossCost 	  = 0;
+	///////////////////////////////////////////
+	// Cost progressions for capped upgrades //
+	///////////////////////////////////////////
+	doorCostProgression    = [100, 1000, 2000, 3000, 4000, 5000, 6000];
+	doorCostIndex          = 0;
+	specialCostProgression = [300, 700, 1100, 1500];
+	specialCostIndex       = 0;
+	bossCostProgression    = [3000, 4500];
+	bossCostIndex 		   = 0;
 
-		///////////////////////////////////////////
-		// Cost progressions for capped upgrades //
-		///////////////////////////////////////////
-		this.doorCostProgression    = [100, 1000, 2000, 3000, 4000, 5000, 6000];
-		this.doorCostIndex          = 0;
-		this.specialCostProgression = [300, 700, 1100, 1500];
-		this.specialCostIndex       = 0;
-		this.bossCostProgression    = [3000, 4500];
-		this.bossCostIndex 			= 0;
+	/////////////////////////////////////////
+	// Multipliers and base costs for non  //
+	// capped upgrades                     //
+	/////////////////////////////////////////
+	defenseBaseCost = 300;
+	defenseCostMult = 1;
 
-		/////////////////////////////////////////
-		// Multipliers and base costs for non  //
-		// capped upgrades                     //
-		/////////////////////////////////////////
-		this.defenseBaseCost = 300;
-		this.defenseCostMult = 1;
+	attackBaseCost  = 300;
+	attackCostMult  = 1;
 
-		this.attackBaseCost  = 300;
-		this.attackCostMult  = 1;
-
-		this.healthBaseCost  = 300;
-		this.healthCostMult  = 1;
+	healthBaseCost  = 300;
+	healthCostMult  = 1;
 
 
-		//////////////////////
-		// Hooks to the DOM //
-		//////////////////////
-		this.doorPlus = document.getElementById("Door_Plus");
-		this.doorPlus.descText = "Adds another door.";
-		this.doorPlus.selected = document.getElementById("Door_Selected");
-		this.doorPlus.addEventListener("click", function(e)
-		{
-			self.DoorPlus();
-		});
+	//////////////////////
+	// Hooks to the DOM //
+	//////////////////////
+	doorPlus = document.getElementById("Door_Plus");
+	doorPlus.descText = "Adds another door.";
+	doorPlus.selected = document.getElementById("Door_Selected");
+	doorPlus.addEventListener("click", function(e)
+	{
+		DoorPlus();
+	});
 
-		this.attackPlus = document.getElementById("AttackCap_Plus");
-		this.attackPlus.descText = "Increases attack cap.";
-		this.attackPlus.selected = document.getElementById("Attack_Selected");
-		this.attackPlus.addEventListener("click", function(e)
-		{
-			self.AttackPlus();
-		});
+	attackPlus = document.getElementById("AttackCap_Plus");
+	attackPlus.descText = "Increases attack cap.";
+	attackPlus.selected = document.getElementById("Attack_Selected");
+	attackPlus.addEventListener("click", function(e)
+	{
+		AttackPlus();
+	});
 
-		this.healthPlus = document.getElementById("HealthCap_Plus");
-		this.healthPlus.descText = "Increases health cap.";
-		this.healthPlus.selected = document.getElementById("Health_Selected");
+	healthPlus = document.getElementById("HealthCap_Plus");
+	healthPlus.descText = "Increases health cap.";
+	healthPlus.selected = document.getElementById("Health_Selected");
 
-		this.healthPlus.addEventListener("click", function(e)
-		{
-			self.HealthPlus();
-		});
+	healthPlus.addEventListener("click", function(e)
+	{
+		HealthPlus();
+	});
 
-		this.defensePlus = document.getElementById("DefenseCap_Plus");
-		this.defensePlus.descText = "Increases defense cap.";
-		this.defensePlus.selected = document.getElementById("Defense_Selected");
-		this.defensePlus.addEventListener("click", function(e)
-		{
-			self.DefensePlus();
-		});
+	defensePlus = document.getElementById("DefenseCap_Plus");
+	defensePlus.descText = "Increases defense cap.";
+	defensePlus.selected = document.getElementById("Defense_Selected");
+	defensePlus.addEventListener("click", function(e)
+	{
+		DefensePlus();
+	});
 
-		this.special = document.getElementById("Special");
-		this.special.selected = document.getElementById("Special_Selected");
-		this.special.addEventListener("click", function(e)
-		{
-			self.Special();
-		});
+	special = document.getElementById("Special");
+	special.selected = document.getElementById("Special_Selected");
+	special.addEventListener("click", function(e)
+	{
+		Special();
+	});
 
-		this.boss = document.getElementById("Boss");
-		this.boss.descText = "Upgrades leader stats";
-		this.boss.selected = document.getElementById("Boss_Selected");
-		this.boss.addEventListener("click", function(e)
-		{
-			self.Boss();
-		});
+	boss = document.getElementById("Boss");
+	boss.descText = "Upgrades leader stats";
+	boss.selected = document.getElementById("Boss_Selected");
+	boss.addEventListener("click", function(e)
+	{
+		Boss();
+	});
 
-		this.purchaseBtn = document.getElementById("Purchase_Button");
-		this.purchaseBtn.addEventListener("click", function(e)
-		{
-			self.PurchaseBtn();
-		});
+	purchaseBtn = document.getElementById("Purchase_Button");
+	purchaseBtn.addEventListener("click", function(e)
+	{
+		PurchaseBtn();
+	});
 
-		this.currentSpecial = document.getElementById(this.specialProgression[this.specialIndex]);
-
-
-		// =-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+	currentSpecial = document.getElementById(specialProgression[specialIndex]);
 
 
-		this.descriptionText = document.getElementById("Description_Text");
-		this.goldText        = document.getElementById("Gold_Text");
-		this.doorText        = document.getElementById("Door_Cost");
-		this.attackText      = document.getElementById("Attack_Cost");
-		this.defenseText     = document.getElementById("Defense_Cost");
-		this.healthText      = document.getElementById("Health_Cost");
-		this.specialText     = document.getElementById("Special_Cost");
-		this.bossText    	 = document.getElementById("Boss_Cost");
+	// =-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-		this.doorGrey        = document.getElementById("Door_Grey");
-		this.attackGrey      = document.getElementById("Attack_Grey");
-		this.healthGrey      = document.getElementById("Health_Grey");
-		this.defenseGrey     = document.getElementById("Defense_Grey");
-		this.specialGrey     = document.getElementById("Special_Grey");
-		this.bossGrey    	 = document.getElementById("Boss_Grey");
-		this.purchaseGrey    = document.getElementById("Purchase_Grey");
 
-		this.SetGoldText();
-		this.UpdateCosts();
+	descriptionText = document.getElementById("Description_Text");
+	goldText        = document.getElementById("Gold_Text");
+	doorText        = document.getElementById("Door_Cost");
+	attackText      = document.getElementById("Attack_Cost");
+	defenseText     = document.getElementById("Defense_Cost");
+	healthText      = document.getElementById("Health_Cost");
+	specialText     = document.getElementById("Special_Cost");
+	bossText    	 = document.getElementById("Boss_Cost");
 
-	}
+	doorGrey        = document.getElementById("Door_Grey");
+	attackGrey      = document.getElementById("Attack_Grey");
+	healthGrey      = document.getElementById("Health_Grey");
+	defenseGrey     = document.getElementById("Defense_Grey");
+	specialGrey     = document.getElementById("Special_Grey");
+	bossGrey    	 = document.getElementById("Boss_Grey");
+	purchaseGrey    = document.getElementById("Purchase_Grey");
+
+	SetGoldText();
+	UpdateCosts();
 
 	/**
 	 * Function: SetGoldText
@@ -231,49 +211,49 @@ module.exports = (function()
 	 * 		the player wallet
 	 *
 	 */
-	ShopManager.prototype.SetGoldText = function()
+	function SetGoldText()
 	{
-		this.goldText.textContent = "Gold: " + this.totalGold;
+		goldText.textContent = "Gold: " + totalGold;
 	};
 
 	////////////////////////////
 	// Cost setting functions //
 	////////////////////////////
 
-	ShopManager.prototype.SetDoorCost = function (val)
+	function SetDoorCost(val)
 	{
-		this.doorCost = val;
-		this.doorText.textContent = this.doorCost;
+		doorCost = val;
+		doorText.textContent = doorCost;
 	};
 
-	ShopManager.prototype.SetAttackCost = function (val)
+	function SetAttackCost(val)
 	{
-		this.attackCost = val;
-		this.attackText.textContent = this.attackCost;
+		attackCost = val;
+		attackText.textContent = attackCost;
 	};
 
-	ShopManager.prototype.SetDefenseCost = function (val)
+	function SetDefenseCost(val)
 	{
-		this.defenseCost = val;
-		this.defenseText.textContent = this.defenseCost;
+		defenseCost = val;
+		defenseText.textContent = defenseCost;
 	};
 
-	ShopManager.prototype.SetHealthCost = function (val)
+	function SetHealthCost(val)
 	{
-		this.healthCost = val;
-		this.healthText.textContent = this.healthCost;
+		healthCost = val;
+		healthText.textContent = healthCost;
 	};
 
-	ShopManager.prototype.SetSpecialCost = function (val)
+	function SetSpecialCost(val)
 	{
-		this.specialCost = val;
-		this.specialText.textContent = this.specialCost;
+		specialCost = val;
+		specialText.textContent = specialCost;
 	};
 
-	ShopManager.prototype.SetBossCost = function (val)
+	function SetBossCost(val)
 	{
-		this.bossCost = val;
-		this.bossText.textContent = this.bossCost;
+		bossCost = val;
+		bossText.textContent = bossCost;
 	};
 
 	/////////////////////////////////////////
@@ -289,467 +269,468 @@ module.exports = (function()
 	 *
 	 *   amt - {optional} the amount to be added, if not
 	 *         		supplied then it defaults to
-	 *           	this.defaultAddition of shop
+	 *           	defaultAddition of shop
 	 *            	manager
 	 *
 	 */
-	ShopManager.prototype.AddGold = function(amt)
+	function AddGold(amt)
 	{
-		var val = amt || this.defaultAddition;
-		this.totalGold += val;
-		this.UpdateItemGrey();
-		this.SetGoldText();
+		var val = amt || defaultAddition;
+		totalGold += val;
+		UpdateItemGrey();
+		SetGoldText();
 	};
 
 
-	ShopManager.prototype.SubtractGold = function(amt)
+	function SubtractGold(amt)
 	{
-		this.totalGold -= amt;
-		this.SetGoldText();
+		totalGold -= amt;
+		SetGoldText();
 	};
 
-	ShopManager.prototype.UpdateAgainstWallet = function()
+	function UpdateAgainstWallet()
 	{
-		this.doorEnoughMoney     = this.totalGold >= this.doorCost;
-		this.attackEnoughMoney   = this.totalGold >= this.attackCost;
-		this.defenseEnoughMoney  = this.totalGold >= this.defenseCost;
-		this.healthEnoughMoney   = this.totalGold >= this.healthCost;
-		this.specialEnoughMoney  = this.totalGold >= this.specialCost;
-		this.bossEnoughMoney 	 = this.totalGold >= this.bossCost;
+		doorEnoughMoney     = totalGold >= doorCost;
+		attackEnoughMoney   = totalGold >= attackCost;
+		defenseEnoughMoney  = totalGold >= defenseCost;
+		healthEnoughMoney   = totalGold >= healthCost;
+		specialEnoughMoney  = totalGold >= specialCost;
+		bossEnoughMoney 	 = totalGold >= bossCost;
 	};
 
-	ShopManager.prototype.UpdateSelectable = function()
+	function UpdateSelectable()
 	{
-		this.doorSelectable     = this.doorEnoughMoney && !this.doorDone;
-		this.attackSelectable   = this.attackEnoughMoney && !this.attackDone;
-		this.defenseSelectable  = this.defenseEnoughMoney && !this.defenseDone;
-		this.healthSelectable   = this.healthEnoughMoney && !this.healthDone;
-		this.specialSelectable  = this.specialEnoughMoney && !this.specialDone;
-		this.bossSelectable 	= this.bossEnoughMoney && !this.bossDone;
+		doorSelectable     = doorEnoughMoney && !doorDone;
+		attackSelectable   = attackEnoughMoney && !attackDone;
+		defenseSelectable  = defenseEnoughMoney && !defenseDone;
+		healthSelectable   = healthEnoughMoney && !healthDone;
+		specialSelectable  = specialEnoughMoney && !specialDone;
+		bossSelectable 	= bossEnoughMoney && !bossDone;
 	};
 
-	ShopManager.prototype.UpdateCosts = function()
+	function UpdateCosts()
 	{
 		// capped upgrades
-		this.doorCost    = this.doorCostProgression[this.doorCostIndex];
-		this.specialCost = this.specialCostProgression[this.specialCostIndex];
-		this.bossCost  	 = this.bossCostProgression[this.bossCostIndex];
+		doorCost    = doorCostProgression[doorCostIndex];
+		specialCost = specialCostProgression[specialCostIndex];
+		bossCost  	 = bossCostProgression[bossCostIndex];
 
 		// non capped
-		this.attackCost  = this.attackBaseCost * this.attackCostMult;
-		this.defenseCost = this.defenseBaseCost * this.defenseCostMult;
-		this.healthCost  = this.healthBaseCost * this.healthCostMult;
+		attackCost  = attackBaseCost * attackCostMult;
+		defenseCost = defenseBaseCost * defenseCostMult;
+		healthCost  = healthBaseCost * healthCostMult;
 
 		// Updating text
-		this.doorText.textContent     = this.doorCost;
-		this.attackText.textContent   = this.attackCost;
-		this.defenseText.textContent  = this.defenseCost;
-		this.healthText.textContent   = this.healthCost;
-		this.specialText.textContent  = this.specialCost;
-		this.bossText.textContent 	  = this.bossCost;
+		doorText.textContent     = doorCost;
+		attackText.textContent   = attackCost;
+		defenseText.textContent  = defenseCost;
+		healthText.textContent   = healthCost;
+		specialText.textContent  = specialCost;
+		bossText.textContent 	  = bossCost;
 	};
 
-	ShopManager.prototype.UpdateItemGrey = function()
+	function UpdateItemGrey()
 	{
-		this.UpdateCosts();
-		this.UpdateAgainstWallet();
-		this.UpdateSelectable();
+		UpdateCosts();
+		UpdateAgainstWallet();
+		UpdateSelectable();
 
 		/* eslint-disable */
-		switch (this.currentUpgrade)
+		switch (currentUpgrade)
 		{
 			case 0: // Door
-				if (!this.doorSelectable)
+				if (!doorSelectable)
 				{
-					this.purchaseClickable = false;
+					purchaseClickable = false;
 				}
 				break;
 
 			case 1: // Attack
-				if (!this.attackSelectable)
+				if (!attackSelectable)
 				{
-					this.purchaseClickable = false;
+					purchaseClickable = false;
 				}
 				break;
 
 			case 2: // Health
-				if (!this.healthSelectable)
+				if (!healthSelectable)
 				{
-					this.purchaseClickable = false;
+					purchaseClickable = false;
 				}
 				break;
 
 			case 3: // Defense
-				if (!this.defenseSelectable)
+				if (!defenseSelectable)
 				{
-					this.purchaseClickable = false;
+					purchaseClickable = false;
 				}
 				break;
 
 			case 4: // Special
-				if (!this.specialSelectable)
+				if (!specialSelectable)
 				{
-					this.purchaseClickable = false;
+					purchaseClickable = false;
 				}
 				break;
 
 			case 5: // Boss
-				if (!this.bossSelectable)
+				if (!bossSelectable)
 				{
-					this.purchaseClickable = false;
+					purchaseClickable = false;
 				}
 				break;
 		}
 		/* eslint-enable */
-		this.UpdatePurchaseBtn();
+		UpdatePurchaseBtn();
 
-		if (this.doorSelectable)
+		if (doorSelectable)
 		{
-			this.doorGrey.setAttribute("opacity", "0");
+			doorGrey.setAttribute("opacity", "0");
 		}
 		else
 		{
-			this.doorGrey.setAttribute("opacity", "0.65");
+			doorGrey.setAttribute("opacity", "0.65");
 		}
 
-		if (this.attackSelectable)
+		if (attackSelectable)
 		{
-			this.attackGrey.setAttribute("opacity", "0");
+			attackGrey.setAttribute("opacity", "0");
 		}
 		else
 		{
-			this.attackGrey.setAttribute("opacity", "0.65");
+			attackGrey.setAttribute("opacity", "0.65");
 		}
 
-		if (this.healthSelectable)
+		if (healthSelectable)
 		{
-			this.healthGrey.setAttribute("opacity", "0");
+			healthGrey.setAttribute("opacity", "0");
 		}
 		else
 		{
-			this.healthGrey.setAttribute("opacity", "0.65");
+			healthGrey.setAttribute("opacity", "0.65");
 		}
 
-		if (this.defenseSelectable)
+		if (defenseSelectable)
 		{
-			this.defenseGrey.setAttribute("opacity", "0");
+			defenseGrey.setAttribute("opacity", "0");
 		}
 		else
 		{
-			this.defenseGrey.setAttribute("opacity", "0.65");
+			defenseGrey.setAttribute("opacity", "0.65");
 		}
 
-		if (this.specialSelectable)
+		if (specialSelectable)
 		{
-			this.specialGrey.setAttribute("opacity", "0");
+			specialGrey.setAttribute("opacity", "0");
 		}
 		else
 		{
-			this.specialGrey.setAttribute("opacity", "0.65");
+			specialGrey.setAttribute("opacity", "0.65");
 		}
 
-		if (this.bossSelectable)
+		if (bossSelectable)
 		{
-			this.bossGrey.setAttribute("opacity", "0");
+			bossGrey.setAttribute("opacity", "0");
 		}
 		else
 		{
-			this.bossGrey.setAttribute("opacity", "0.65");
+			bossGrey.setAttribute("opacity", "0.65");
 		}
 	};
 
-	ShopManager.prototype.UpdatePurchaseBtn = function()
+	function UpdatePurchaseBtn()
 	{
-		if (this.purchaseClickable)
+		if (purchaseClickable)
 		{
-			this.purchaseGrey.setAttribute("opacity", "0");
+			purchaseGrey.setAttribute("opacity", "0");
 		}
 		else
 		{
-			this.purchaseGrey.setAttribute("opacity", "0.65");
+			purchaseGrey.setAttribute("opacity", "0.65");
 		}
 	};
 
 
-	ShopManager.prototype.SetStatsManagerDelegates = function(attack, defense, health, special, door, boss)
+	function SetStatsManagerDelegates(attack, defense, health, special, door, boss)
 	{
-		if (this.DEBUG) { console.log("ShopManager: StatsManager delegates being set."); }
-		this.increaseAttack = attack;
-		this.increaseDefense = defense;
-		this.increaseHealth = health;
-		this.addSpecial = special;
-		this.openDoor = door;
-		this.upgradeBoss = boss;
+		if (DEBUG) { console.log("ShopManager: StatsManager delegates being set."); }
+		increaseAttack = attack;
+		increaseDefense = defense;
+		increaseHealth = health;
+		addSpecial = special;
+		openDoor = door;
+		upgradeBoss = boss;
 	};
 
 	////////////////////////
 	// UI Update handlers //
 	////////////////////////
 
-	ShopManager.prototype.DoorPlus = function()
+	function DoorPlus()
 	{
-		if (this.DEBUG) { console.log("ShopManager: Door Plus Clicked"); }
-		this.descriptionText.textContent = this.doorPlus.descText;
-		this.currentUpgrade = this.Upgrades.DOOR;
-		if (this.currentSelected != undefined)
+		if (DEBUG) { console.log("ShopManager: Door Plus Clicked"); }
+		descriptionText.textContent = doorPlus.descText;
+		currentUpgrade = Upgrades.DOOR;
+		if (currentSelected != undefined)
 		{
-			this.currentSelected.setAttribute("stroke-opacity", "0");
-			this.currentSelected = this.doorPlus.selected;
-			this.currentSelected.setAttribute("stroke-opacity", "100");
+			currentSelected.setAttribute("stroke-opacity", "0");
+			currentSelected = doorPlus.selected;
+			currentSelected.setAttribute("stroke-opacity", "100");
 		}
 		else
 		{
-			this.currentSelected = this.doorPlus.selected;
-			this.currentSelected.setAttribute("stroke-opacity", "100");
+			currentSelected = doorPlus.selected;
+			currentSelected.setAttribute("stroke-opacity", "100");
 		}
-		if (this.doorSelectable)
+		if (doorSelectable)
 		{
-			this.purchaseClickable = true;
-			this.UpdatePurchaseBtn();
+			purchaseClickable = true;
+			UpdatePurchaseBtn();
 		}
 		else
 		{
-			this.purchaseClickable = false;
-			this.UpdatePurchaseBtn();
+			purchaseClickable = false;
+			UpdatePurchaseBtn();
 		}
 	};
 
-	ShopManager.prototype.AttackPlus = function()
+	function AttackPlus()
 	{
-		if (this.DEBUG) { console.log("ShopManager: Attack Plus Clicked"); }
-		this.descriptionText.textContent = this.attackPlus.descText;
-		this.currentUpgrade = this.Upgrades.ATTACK;
-		if (this.currentSelected != undefined)
+		if (DEBUG) { console.log("ShopManager: Attack Plus Clicked"); }
+		descriptionText.textContent = attackPlus.descText;
+		currentUpgrade = Upgrades.ATTACK;
+		if (currentSelected != undefined)
 		{
-			this.currentSelected.setAttribute("stroke-opacity", "0");
-			this.currentSelected = this.attackPlus.selected;
-			this.currentSelected.setAttribute("stroke-opacity", "100");
+			currentSelected.setAttribute("stroke-opacity", "0");
+			currentSelected = attackPlus.selected;
+			currentSelected.setAttribute("stroke-opacity", "100");
 		}
 		else
 		{
-			this.currentSelected = this.attackPlus.selected;
-			this.currentSelected.setAttribute("stroke-opacity", "100");
+			currentSelected = attackPlus.selected;
+			currentSelected.setAttribute("stroke-opacity", "100");
 		}
-		if (this.attackSelectable)
+		if (attackSelectable)
 		{
-			this.purchaseClickable = true;
-			this.UpdatePurchaseBtn();
+			purchaseClickable = true;
+			UpdatePurchaseBtn();
 		}
 		else
 		{
-			this.purchaseClickable = false;
-			this.UpdatePurchaseBtn();
+			purchaseClickable = false;
+			UpdatePurchaseBtn();
 		}
 	};
 
-	ShopManager.prototype.HealthPlus = function()
+	function HealthPlus()
 	{
-		if (this.DEBUG) { console.log("ShopManager: Health Plus Clicked"); }
-		this.descriptionText.textContent = this.healthPlus.descText;
-		this.currentUpgrade = this.Upgrades.HEALTH;
-		if (this.currentSelected != undefined)
+		if (DEBUG) { console.log("ShopManager: Health Plus Clicked"); }
+		descriptionText.textContent = healthPlus.descText;
+		currentUpgrade = Upgrades.HEALTH;
+		if (currentSelected != undefined)
 		{
-			this.currentSelected.setAttribute("stroke-opacity", "0");
-			this.currentSelected = this.healthPlus.selected;
-			this.currentSelected.setAttribute("stroke-opacity", "100");
+			currentSelected.setAttribute("stroke-opacity", "0");
+			currentSelected = healthPlus.selected;
+			currentSelected.setAttribute("stroke-opacity", "100");
 		}
 		else
 		{
-			this.currentSelected = this.healthPlus.selected;
-			this.currentSelected.setAttribute("stroke-opacity", "100");
+			currentSelected = healthPlus.selected;
+			currentSelected.setAttribute("stroke-opacity", "100");
 		}
-		if (this.healthSelectable)
+		if (healthSelectable)
 		{
-			this.purchaseClickable = true;
-			this.UpdatePurchaseBtn();
+			purchaseClickable = true;
+			UpdatePurchaseBtn();
 		}
 		else
 		{
-			this.purchaseClickable = false;
-			this.UpdatePurchaseBtn();
+			purchaseClickable = false;
+			UpdatePurchaseBtn();
 		}
 	};
 
-	ShopManager.prototype.DefensePlus = function()
+	function DefensePlus()
 	{
-		if (this.DEBUG) { console.log("ShopManager: Defense Plus Clicked"); }
-		this.descriptionText.textContent = this.defensePlus.descText;
-		this.currentUpgrade = this.Upgrades.DEFENSE;
-		if (this.currentSelected != undefined)
+		if (DEBUG) { console.log("ShopManager: Defense Plus Clicked"); }
+		descriptionText.textContent = defensePlus.descText;
+		currentUpgrade = Upgrades.DEFENSE;
+		if (currentSelected != undefined)
 		{
-			this.currentSelected.setAttribute("stroke-opacity", "0");
-			this.currentSelected = this.defensePlus.selected;
-			this.currentSelected.setAttribute("stroke-opacity", "100");
+			currentSelected.setAttribute("stroke-opacity", "0");
+			currentSelected = defensePlus.selected;
+			currentSelected.setAttribute("stroke-opacity", "100");
 		}
 		else
 		{
-			this.currentSelected = this.defensePlus.selected;
-			this.currentSelected.setAttribute("stroke-opacity", "100");
+			currentSelected = defensePlus.selected;
+			currentSelected.setAttribute("stroke-opacity", "100");
 		}
-		if (this.defenseSelectable)
+		if (defenseSelectable)
 		{
-			this.purchaseClickable = true;
-			this.UpdatePurchaseBtn();
+			purchaseClickable = true;
+			UpdatePurchaseBtn();
 		}
 		else
 		{
-			this.purchaseClickable = false;
-			this.UpdatePurchaseBtn();
+			purchaseClickable = false;
+			UpdatePurchaseBtn();
 		}
 	};
 
-	ShopManager.prototype.Special = function()
+	function Special()
 	{
-		if (this.DEBUG) { console.log("ShopManager: Special Clicked"); }
-		this.descriptionText.textContent = this.currentSpecial.getAttribute("desc");
-		this.currentUpgrade = this.Upgrades.SPECIAL;
-		if (this.currentSelected != undefined)
+		if (DEBUG) { console.log("ShopManager: Special Clicked"); }
+		descriptionText.textContent = currentSpecial.getAttribute("desc");
+		currentUpgrade = Upgrades.SPECIAL;
+		if (currentSelected != undefined)
 		{
-			this.currentSelected.setAttribute("stroke-opacity", "0");
-			this.currentSelected = this.special.selected;
-			this.currentSelected.setAttribute("stroke-opacity", "100");
+			currentSelected.setAttribute("stroke-opacity", "0");
+			currentSelected = special.selected;
+			currentSelected.setAttribute("stroke-opacity", "100");
 		}
 		else
 		{
-			this.currentSelected = this.special.selected;
-			this.currentSelected.setAttribute("stroke-opacity", "100");
+			currentSelected = special.selected;
+			currentSelected.setAttribute("stroke-opacity", "100");
 		}
-		if (this.specialSelectable && !this.specialDone)
+		if (specialSelectable && !specialDone)
 		{
-			this.purchaseClickable = true;
-			this.UpdatePurchaseBtn();
+			purchaseClickable = true;
+			UpdatePurchaseBtn();
 		}
 		else
 		{
-			this.purchaseClickable = false;
-			this.UpdatePurchaseBtn();
+			purchaseClickable = false;
+			UpdatePurchaseBtn();
 		}
 	};
 
-	ShopManager.prototype.Boss = function()
+	function Boss()
 	{
-		if (this.DEBUG) { console.log("ShopManager: Boss Clicked"); }
-		this.descriptionText.textContent = this.boss.descText;
-		this.currentUpgrade = this.Upgrades.BOSS;
-		if (this.currentSelected != undefined)
+		if (DEBUG) { console.log("ShopManager: Boss Clicked"); }
+		descriptionText.textContent = boss.descText;
+		currentUpgrade = Upgrades.BOSS;
+		if (currentSelected != undefined)
 		{
-			this.currentSelected.setAttribute("stroke-opacity", "0");
-			this.currentSelected = this.boss.selected;
-			this.currentSelected.setAttribute("stroke-opacity", "100");
+			currentSelected.setAttribute("stroke-opacity", "0");
+			currentSelected = boss.selected;
+			currentSelected.setAttribute("stroke-opacity", "100");
 		}
 		else
 		{
-			this.currentSelected = this.boss.selected;
-			this.currentSelected.setAttribute("stroke-opacity", "100");
+			currentSelected = boss.selected;
+			currentSelected.setAttribute("stroke-opacity", "100");
 		}
-		if (this.bossSelectable)
+		if (bossSelectable)
 		{
-			this.purchaseClickable = true;
-			this.UpdatePurchaseBtn();
+			purchaseClickable = true;
+			UpdatePurchaseBtn();
 		}
 		else
 		{
-			this.purchaseClickable = false;
-			this.UpdatePurchaseBtn();
+			purchaseClickable = false;
+			UpdatePurchaseBtn();
 		}
 	};
 
-	ShopManager.prototype.PurchaseBtn = function()
+	function PurchaseBtn()
 	{
-		if (this.purchaseClickable)
+		if (purchaseClickable)
 		{
-			if (this.DEBUG) { console.log("ShopManager: PurchaseBtn Clicked"); }
-			console.log("Upgrade: " + this.Strings[this.currentUpgrade]);
+			if (DEBUG) { console.log("ShopManager: PurchaseBtn Clicked"); }
+			console.log("Upgrade: " + Strings[currentUpgrade]);
 
 			/* eslint-disable */
-			switch (this.currentUpgrade)
+			switch (currentUpgrade)
 			{
 				case 0: // Door
-					if (this.DEBUG) { console.log("ShopManager: Opening new door."); }
-					this.openDoor();
-					this.SubtractGold(this.doorCost);
-					this.doorCostIndex++;
-					if (this.doorCostIndex == this.doorCostProgression.length)
+					if (DEBUG) { console.log("ShopManager: Opening new door."); }
+					openDoor();
+					SubtractGold(doorCost);
+					doorCostIndex++;
+					if (doorCostIndex == doorCostProgression.length)
 					{
-						this.doorDone = true;
-						this.doorSelectable = false;
-						this.purchaseClickable = false;
-						this.UpdatePurchaseBtn();
+						doorDone = true;
+						doorSelectable = false;
+						purchaseClickable = false;
+						UpdatePurchaseBtn();
 					}
 					break;
 
 				case 1: // Attack
-					if (this.DEBUG) { console.log("ShopManager: Increasing attack cap."); }
-					this.increaseAttack();
-					this.SubtractGold(this.attackCost);
-					this.attackCostMult++;
+					if (DEBUG) { console.log("ShopManager: Increasing attack cap."); }
+					increaseAttack();
+					SubtractGold(attackCost);
+					attackCostMult++;
 					break;
 
 				case 2: // Health
-					if (this.DEBUG) { console.log("ShopManager: Increasing health cap."); }
-					this.increaseHealth();
-					this.SubtractGold(this.healthCost);
-					this.healthCostMult++;
+					if (DEBUG) { console.log("ShopManager: Increasing health cap."); }
+					increaseHealth();
+					SubtractGold(healthCost);
+					healthCostMult++;
 					break;
 
 				case 3: // Defense
-					if (this.DEBUG) { console.log("ShopManager: Increasing defense cap."); }
-					this.increaseDefense();
-					this.SubtractGold(this.defenseCost);
-					this.defenseCostMult++;
+					if (DEBUG) { console.log("ShopManager: Increasing defense cap."); }
+					increaseDefense();
+					SubtractGold(defenseCost);
+					defenseCostMult++;
 					break;
 
 				case 4: // Special
-					if (this.DEBUG) { console.log("ShopManager: Buying new special."); }
-					var spec = this.specialProgression[this.specialIndex];
-					document.getElementById(this.specialProgression[this.specialIndex]).
+					if (DEBUG) { console.log("ShopManager: Buying new special."); }
+					var spec = specialProgression[specialIndex];
+					document.getElementById(specialProgression[specialIndex]).
 							setAttribute("opacity", "0");
-					this.specialIndex++;
-					console.log(this.specialIndex);
-					var s = document.getElementById(this.specialProgression[this.specialIndex]);
+					specialIndex++;
+					console.log(specialIndex);
+					var s = document.getElementById(specialProgression[specialIndex]);
 					s.setAttribute("opacity", "1");
-					this.currentSpecial = s;
-					this.descriptionText.textContent = s.getAttribute('desc');
-					this.SubtractGold(this.specialCost);
-					if (this.specialIndex == this.specialProgression.length - 1)
+					currentSpecial = s;
+					descriptionText.textContent = s.getAttribute('desc');
+					SubtractGold(specialCost);
+					if (specialIndex == specialProgression.length - 1)
 					{
-						this.specialDone = true;
-						this.specialSelectable = false;
-						this.purchaseClickable = false;
-						this.UpdatePurchaseBtn();
+						specialDone = true;
+						specialSelectable = false;
+						purchaseClickable = false;
+						UpdatePurchaseBtn();
 					}
-					this.specialCostIndex++;
-					this.addSpecial("stats_" + spec.substring(5));
+					specialCostIndex++;
+					addSpecial("stats_" + spec.substring(5));
 					break;
 
 				case 5: // Boss
-					if (this.DEBUG) { console.log("ShopManager: Upgrading Boss"); }
-					this.upgradeBoss();
-					this.SubtractGold(this.bossCost);
-					this.bossCostIndex++;
-					if (this.bossCostIndex == this.bossCostProgression.length)
+					if (DEBUG) { console.log("ShopManager: Upgrading Boss"); }
+					upgradeBoss();
+					SubtractGold(bossCost);
+					bossCostIndex++;
+					if (bossCostIndex == bossCostProgression.length)
 					{
 						document.getElementById("shop_leader").setAttribute("opacity", "0");
 						document.getElementById("shop_leader_none").setAttribute("opacity", "1");
-						this.boss.descText = "No more leader upgrades";
-						this.descriptionText.textContent = this.boss.descText;
-						this.bossDone = true;
-						this.bossSelectable = false;
-						this.purchaseClickable = false;
-						this.UpdatePurchaseBtn();
+						boss.descText = "No more leader upgrades";
+						descriptionText.textContent = boss.descText;
+						bossDone = true;
+						bossSelectable = false;
+						purchaseClickable = false;
+						UpdatePurchaseBtn();
 					}
 					break;
 			}
 			/* eslint-enable */
-			this.UpdateItemGrey();
+			UpdateItemGrey();
 		}
 		else
 		{
-			if (this.DEBUG) { console.log("ShopManager: PurchaseBtn not clickable."); }
+			if (DEBUG) { console.log("ShopManager: PurchaseBtn not clickable."); }
 		}
 	};
 
-
-	return new ShopManager();
-
+	return {
+		AddGold: AddGold,
+		SetStatsManagerDelegates: SetStatsManagerDelegates,
+	}
 })();
