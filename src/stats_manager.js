@@ -22,7 +22,7 @@ module.exports = (function()
 	//////////////////////////////////////
 	// Value for outputting debug code. //
 	//////////////////////////////////////
-	var DEBUG = true;
+	var DEBUG = false;
 
 	//////////////////////////////////////
 	// Default values for start of game //
@@ -49,7 +49,7 @@ module.exports = (function()
 	var spawnDelegate = undefined;
 	/* eslint-disable */
 	var specialList = [
-						"stats_none_special", 
+						"stats_none_special",
 					];
 	/* eslint-enable */
 	var specialIndex = 0;
@@ -252,7 +252,7 @@ module.exports = (function()
 		current.setAttribute("opacity", "1");
 		switch(specialList[specialIndex])
 		{
-			case "stats_none_special": 
+			case "stats_none_special":
 				specialContent = "none";
 				break;
 
@@ -311,7 +311,7 @@ module.exports = (function()
 		var amt = val || 1;
 		healthCap += amt;
 	}
-	
+
 	function SetSpawnDelegate(val)
 	{
 		spawnDelegate = val;

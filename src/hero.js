@@ -1,7 +1,7 @@
 module.exports = (function() {
   var Entity = require('./entity.js');
 
-  const DEBUG = true;
+  const DEBUG = false;
 
   Hero.prototype = new Entity();
 
@@ -67,6 +67,9 @@ module.exports = (function() {
     }
 
     var damage = amount - this.defense / 2;
+    if (damage < 1) {
+      damage = 1;
+    }
     this.health -= damage;
 
     this.EntityManager.add_gold(damage);

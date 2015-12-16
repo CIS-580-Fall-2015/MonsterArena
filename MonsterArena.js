@@ -549,6 +549,7 @@ module.exports = (function() {
     var ARENA_WIDTH = document.getElementById('monsters').width;
   var ARENA_HEIGHT = document.getElementById('monsters').height;
   var OFFSET = 64;
+  var DEBUG = true;
 
   // Builds the door array and places the hero
   function initialize() {
@@ -612,9 +613,13 @@ module.exports = (function() {
           //Check Taunt
           if (monsters[i].special == "taunt") {
             if (r > .5) {
-              monsters.unshft(monsters[i]);
-              del = true;
-              delete monsters[i];
+              if (DEBUG) {
+                console.log("Taunting!");
+              }
+              var t = monsters[0];
+              monsters[0] = monsters[i];
+              monsters[i] = t;
+              monsters[i].special = "none";
             }
           }
         }
@@ -827,7 +832,7 @@ window.onload = function()
 module.exports = (function() {
   var Entity = require('./entity.js');
 
-  const DEBUG = true;
+  const DEBUG = false;
 
   Hero.prototype = new Entity();
 
@@ -893,6 +898,9 @@ module.exports = (function() {
     }
 
     var damage = amount - this.defense / 2;
+    if (damage < 1) {
+      damage = 1;
+    }
     this.health -= damage;
 
     this.EntityManager.add_gold(damage);
@@ -1062,9 +1070,13 @@ module.exports = (function() {
   }
 
   // Handle monsters being attacked
-  Monster.prototype.attacked = function(damage) {
+  Monster.prototype.attacked = function(amount) {
     //Temporary
-    this.health -= damage - this.defense / 2;
+    var damage = amount - this.defense / 2;
+    if (damage < 1) {
+      damage = 1;
+    }
+    this.health -= damage;
     if (DEBUG) {
       console.log("Monster attacked! Health: " + this.health);
     }
@@ -1076,7 +1088,7 @@ module.exports = (function() {
       if (this.isBoss) {
         return 0;
       } else {
-        return this.health + this.attack + this.defense;
+        return this.maxHealth + this.attack + this.defense;
       }
     }
     return -1;
@@ -1548,12 +1560,12 @@ module.exports = (function() {
  *
  * Title: ShopManager.js
  *
- * Description: manages the upgrade shop for 
+ * Description: manages the upgrade shop for
  * 		MonsterArena
- * 
+ *
  *
  * History:
- * 		December 08, 2015: 
+ * 		December 08, 2015:
  *  		-Date Created
  *  	December 13, 2015:
  *  		-Whole bunch of stuff because i forgot to update this list
@@ -1567,12 +1579,12 @@ module.exports = (function()
 		/////////////////////////////////
 		// Prints all debug statements //
 		/////////////////////////////////
-		this.DEBUG = true;
+		this.DEBUG = false;
 
 		///////////
 		// Enums //
 		///////////
-		this.Upgrades = 
+		this.Upgrades =
 		{
 			DOOR: 0,
 			ATTACK: 1,
@@ -1583,7 +1595,7 @@ module.exports = (function()
 		};
 		Object.freeze(this.Upgrades);
 
-		this.Strings = 
+		this.Strings =
 		{
 			0: "DOOR",
 			1: "ATTACK",
@@ -1610,9 +1622,9 @@ module.exports = (function()
 		this.defaultAddition = 100;
 		/* eslint-disable */
 		this.specialProgression = [
-									"shop_taunt_special", 
-									"shop_dodge_special", 
-									"shop_critical_special", 
+									"shop_taunt_special",
+									"shop_dodge_special",
+									"shop_critical_special",
 									"shop_heal_special",
 									"shop_none_special",
 									];
@@ -1636,7 +1648,7 @@ module.exports = (function()
 		this.doorDone     = false;
 		this.defenseDone  = false;
 		this.attackDone   = false;
-		this.healthDone   = false; 
+		this.healthDone   = false;
 		this.specialDone  = false;
 		this.bossDone 	  = false;
 
@@ -1657,7 +1669,7 @@ module.exports = (function()
 		this.doorCost     = 0;
 		this.defenseCost  = 0;
 		this.attackCost   = 0;
-		this.healthCost   = 0; 
+		this.healthCost   = 0;
 		this.specialCost  = 0;
 		this.bossCost 	  = 0;
 
@@ -1670,14 +1682,14 @@ module.exports = (function()
 		this.specialCostIndex       = 0;
 		this.bossCostProgression    = [3000, 4500];
 		this.bossCostIndex 			= 0;
-		
+
 		/////////////////////////////////////////
 		// Multipliers and base costs for non  //
 		// capped upgrades                     //
 		/////////////////////////////////////////
 		this.defenseBaseCost = 300;
 		this.defenseCostMult = 1;
-		
+
 		this.attackBaseCost  = 300;
 		this.attackCostMult  = 1;
 
@@ -1707,7 +1719,7 @@ module.exports = (function()
 		this.healthPlus = document.getElementById("HealthCap_Plus");
 		this.healthPlus.descText = "Increases health cap.";
 		this.healthPlus.selected = document.getElementById("Health_Selected");
-		
+
 		this.healthPlus.addEventListener("click", function(e)
 		{
 			self.HealthPlus();
@@ -1747,7 +1759,7 @@ module.exports = (function()
 
 		// =-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-		
+
 		this.descriptionText = document.getElementById("Description_Text");
 		this.goldText        = document.getElementById("Gold_Text");
 		this.doorText        = document.getElementById("Door_Cost");
@@ -1756,7 +1768,7 @@ module.exports = (function()
 		this.healthText      = document.getElementById("Health_Cost");
 		this.specialText     = document.getElementById("Special_Cost");
 		this.bossText    	 = document.getElementById("Boss_Cost");
-		
+
 		this.doorGrey        = document.getElementById("Door_Grey");
 		this.attackGrey      = document.getElementById("Attack_Grey");
 		this.healthGrey      = document.getElementById("Health_Grey");
@@ -1772,13 +1784,13 @@ module.exports = (function()
 
 	/**
 	 * Function: SetGoldText
-	 * 
-	 * Sets the total gold text. essentially updates 
+	 *
+	 * Sets the total gold text. essentially updates
 	 * 		the player wallet
-	 *   
+	 *
 	 */
 	ShopManager.prototype.SetGoldText = function()
-	{	
+	{
 		this.goldText.textContent = "Gold: " + this.totalGold;
 	};
 
@@ -1786,7 +1798,7 @@ module.exports = (function()
 	// Cost setting functions //
 	////////////////////////////
 
-	ShopManager.prototype.SetDoorCost = function (val) 
+	ShopManager.prototype.SetDoorCost = function (val)
 	{
 		this.doorCost = val;
 		this.doorText.textContent = this.doorCost;
@@ -1828,16 +1840,16 @@ module.exports = (function()
 
 	/**
 	 * Function: AddGold
-	 * 
+	 *
 	 * Essentially adds currency to player wallet.
-	 * 
+	 *
 	 * Parameters:
-	 * 
+	 *
 	 *   amt - {optional} the amount to be added, if not
-	 *         		supplied then it defaults to 
-	 *           	this.defaultAddition of shop 
+	 *         		supplied then it defaults to
+	 *           	this.defaultAddition of shop
 	 *            	manager
-	 * 
+	 *
 	 */
 	ShopManager.prototype.AddGold = function(amt)
 	{
@@ -1880,7 +1892,7 @@ module.exports = (function()
 		this.doorCost    = this.doorCostProgression[this.doorCostIndex];
 		this.specialCost = this.specialCostProgression[this.specialCostIndex];
 		this.bossCost  	 = this.bossCostProgression[this.bossCostIndex];
-		
+
 		// non capped
 		this.attackCost  = this.attackBaseCost * this.attackCostMult;
 		this.defenseCost = this.defenseBaseCost * this.defenseCostMult;
@@ -2032,7 +2044,7 @@ module.exports = (function()
 	// UI Update handlers //
 	////////////////////////
 
-	ShopManager.prototype.DoorPlus = function() 
+	ShopManager.prototype.DoorPlus = function()
 	{
 		if (this.DEBUG) { console.log("ShopManager: Door Plus Clicked"); }
 		this.descriptionText.textContent = this.doorPlus.descText;
@@ -2060,7 +2072,7 @@ module.exports = (function()
 		}
 	};
 
-	ShopManager.prototype.AttackPlus = function() 
+	ShopManager.prototype.AttackPlus = function()
 	{
 		if (this.DEBUG) { console.log("ShopManager: Attack Plus Clicked"); }
 		this.descriptionText.textContent = this.attackPlus.descText;
@@ -2088,7 +2100,7 @@ module.exports = (function()
 		}
 	};
 
-	ShopManager.prototype.HealthPlus = function() 
+	ShopManager.prototype.HealthPlus = function()
 	{
 		if (this.DEBUG) { console.log("ShopManager: Health Plus Clicked"); }
 		this.descriptionText.textContent = this.healthPlus.descText;
@@ -2116,7 +2128,7 @@ module.exports = (function()
 		}
 	};
 
-	ShopManager.prototype.DefensePlus = function() 
+	ShopManager.prototype.DefensePlus = function()
 	{
 		if (this.DEBUG) { console.log("ShopManager: Defense Plus Clicked"); }
 		this.descriptionText.textContent = this.defensePlus.descText;
@@ -2144,7 +2156,7 @@ module.exports = (function()
 		}
 	};
 
-	ShopManager.prototype.Special = function() 
+	ShopManager.prototype.Special = function()
 	{
 		if (this.DEBUG) { console.log("ShopManager: Special Clicked"); }
 		this.descriptionText.textContent = this.currentSpecial.getAttribute("desc");
@@ -2172,7 +2184,7 @@ module.exports = (function()
 		}
 	};
 
-	ShopManager.prototype.Boss = function() 
+	ShopManager.prototype.Boss = function()
 	{
 		if (this.DEBUG) { console.log("ShopManager: Boss Clicked"); }
 		this.descriptionText.textContent = this.boss.descText;
@@ -2200,7 +2212,7 @@ module.exports = (function()
 		}
 	};
 
-	ShopManager.prototype.PurchaseBtn = function() 
+	ShopManager.prototype.PurchaseBtn = function()
 	{
 		if (this.purchaseClickable)
 		{
@@ -2262,7 +2274,7 @@ module.exports = (function()
 						this.specialDone = true;
 						this.specialSelectable = false;
 						this.purchaseClickable = false;
-						this.UpdatePurchaseBtn();	
+						this.UpdatePurchaseBtn();
 					}
 					this.specialCostIndex++;
 					this.addSpecial("stats_" + spec.substring(5));
@@ -2299,22 +2311,6 @@ module.exports = (function()
 	return new ShopManager();
 
 })();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 },{}],18:[function(require,module,exports){
 module.exports = (function() {
@@ -2354,7 +2350,7 @@ module.exports = (function()
 	//////////////////////////////////////
 	// Value for outputting debug code. //
 	//////////////////////////////////////
-	var DEBUG = true;
+	var DEBUG = false;
 
 	//////////////////////////////////////
 	// Default values for start of game //
@@ -2381,7 +2377,7 @@ module.exports = (function()
 	var spawnDelegate = undefined;
 	/* eslint-disable */
 	var specialList = [
-						"stats_none_special", 
+						"stats_none_special",
 					];
 	/* eslint-enable */
 	var specialIndex = 0;
@@ -2584,7 +2580,7 @@ module.exports = (function()
 		current.setAttribute("opacity", "1");
 		switch(specialList[specialIndex])
 		{
-			case "stats_none_special": 
+			case "stats_none_special":
 				specialContent = "none";
 				break;
 
@@ -2643,7 +2639,7 @@ module.exports = (function()
 		var amt = val || 1;
 		healthCap += amt;
 	}
-	
+
 	function SetSpawnDelegate(val)
 	{
 		spawnDelegate = val;
