@@ -3,6 +3,10 @@ module.exports = (function() {
   var Hero = require('./hero.js');
   var Door = require('./spawner');
   var Monster = require('./monster.js');
+  //TODO replace this?
+  var boss = require('./monsters/Boss.js'),
+    bosser = require('./monsters/Bosser.js'),
+    bossest = require('./monsters/Bossest.js')
   var doors = [];
   var monsters = [];
   var unlocked_doors = 1;
@@ -22,7 +26,16 @@ module.exports = (function() {
     exp: [0, 1.2]
   };
 
-  var ARENA_WIDTH = document.getElementById('monsters').width;
+  var BOSS = {
+    attack: 8,
+    defense: 2,
+    health: 5,
+    animations: boss
+  };
+
+
+
+    var ARENA_WIDTH = document.getElementById('monsters').width;
   var ARENA_HEIGHT = document.getElementById('monsters').height;
   var OFFSET = 64;
 
@@ -167,19 +180,19 @@ module.exports = (function() {
     }
 
     if (!found) {
-      var b = new Monster(null, doors[0], true);
+      var b = new Monster(null, doors[0], BOSS);
       monsters.push(b);
     }
   }
 
   function upgrade_boss() {
-    Monster.BOSS.attack *= 2;
-    Monster.BOSS.defense *= 2;
-    Monster.BOSS.health *= 2;
-    if (Monster.BOSS.animations = Monster.boss) {
-      Monster.BOSS.animations = Monster.bosser;
+    BOSS.attack *= 2;
+    BOSS.defense *= 2;
+    BOSS.health *= 2;
+    if (BOSS.animations == boss) {
+      BOSS.animations = bosser;
     } else {
-      Monster.BOSS.animations = Monster.bossest;
+      BOSS.animations = bossest;
     }
   }
 

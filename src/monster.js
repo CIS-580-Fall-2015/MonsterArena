@@ -34,27 +34,25 @@ module.exports = (function() {
 
   Monster.prototype = new Entity();
 
-  var BOSS = {
-    attack: 8,
-    defense: 2,
-    health: 5,
-    animations: boss
-  };
+
 
   // Constructor
-  function Monster(stats, door, isBoss) {
+  function Monster(stats, door, BOSS) {
+    var undef;
     //Use BOSS stats if it's the leader
-    if (isBoss) {
+    if (BOSS != undef) {
       this.health = BOSS.health;
       this.attack = BOSS.attack;
       this.defense = BOSS.defense;
       this.animations = BOSS.animations;
+      this.isBoss = true;
     } else {
       this.health = stats.health;
       this.attack = stats.attack;
       this.defense = stats.defense;
       this.special = stats.special;
       this.animations = availableRegMonsters[Math.floor(Math.random() * (availableRegMonsters.length) )]; // Pick one of the six regular sprites at random.
+      this.isBoss = false;
     }
     this.maxHealth = this.health;
     this.door = door;
@@ -62,7 +60,6 @@ module.exports = (function() {
     this.state = WALKING;
     this.x = this.door.x;
     this.y = this.door.y;
-    this.isBoss = isBoss;
     this.inRange = false;
     this.inRangex = false;
     this.inRangey = false;
