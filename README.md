@@ -15,7 +15,7 @@ Keep compiling simple!
 	- [x] ~~Credits state~~
 		- [x] ~~Basic HTML/CSS~~
 		- [x] ~~Javascript class~~
-	- [ ] Game over state
+	- [x] ~~Game over state~~
 		- [x] ~~Basic HTML/CSS~~
 		- [x] ~~Javascript class~~
     - [ ] Help state
