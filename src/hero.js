@@ -50,6 +50,7 @@ module.exports = (function() {
       this.exp = 0;
       this.level++;
       document.getElementById('health').max = this.maxHealth;
+      document.getElementById('level').innerHTML = "Hero level: " + this.level;
 
       if (DEBUG) {
         console.log("Hero leveled up! Level: " +this.level);
