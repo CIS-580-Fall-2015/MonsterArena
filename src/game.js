@@ -36,8 +36,6 @@ window.onload = function()
     ShopManager.AddGold(150000);
 
     EntityManager.initialize();
-    canvas = document.getElementById("monsters");
-    ctx = canvas.getContext("2d");
 
     AudioManager.playIdleMusic();
     EntityManager.initialize();
