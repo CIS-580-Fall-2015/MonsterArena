@@ -587,7 +587,7 @@ module.exports = (function() {
     if (monsters.length != 0) {
       //All monsters attack hero
       for (var i = 0; i < monsters.length; i++) {
-        if (monsters[i].range) {
+        if (monsters[i].inRange) {
           //Heal
           damage = monsters[i].attack;
 
@@ -840,7 +840,7 @@ module.exports = (function() {
     this.health_scale = stats.health[1];
     this.attack = stats.attack[0];
     this.attack_scale = stats.attack[1];
-    this.defene = stats.defense[0];
+    this.defense = stats.defense[0];
     this.defense_scale = stats.defense[1];
     this.exp_scale = stats.exp[1];
     this.EntityManager = EntityManager;
