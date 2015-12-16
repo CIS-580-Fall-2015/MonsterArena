@@ -26,8 +26,9 @@ Keep compiling simple!
 - [ ] Implement AudioManager calls
 	- [x] ~~Shop Manager~~
 	- [x] ~~Stats Manager~~
+	- [x] ~~Win music~~
 - [ ] Test Specials
-- [ ] Game over logic
+- [x] ~~Game over logic~~
 - [ ] General balance fixes
 - [ ] Mute buttons
 

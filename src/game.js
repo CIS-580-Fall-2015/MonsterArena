@@ -37,7 +37,7 @@ module.exports = function() {
     );
     ShopManager.SetAudioManager(AudioManager);
 
-    //ShopManager.AddGold(150000);
+    ShopManager.AddGold(150000);
 
     EntityManager.initialize();
 
@@ -49,23 +49,19 @@ module.exports = function() {
 
 
   var update = function(elapsedTime) {
-    EntityManager.update(elapsedTime);
+    var heroAlive = EntityManager.update(elapsedTime);
+    if (!heroAlive)
+    {
+      AudioManager.playWinMusic();
+      stateManager.pushState(game_over);
+    }
   };
 
   var keyUp = function(e) {
     // Do nothing
   };
 
-  var keyDown = function(e) {
-    switch(e.keyCode)
-    {
-      case 27: //escape
-        console.log("ESCAPE");
-        e.preventDefault();
-        stateManager.pushState(game_over);
-        break;
-    }
-  };
+  var keyDown = function(e) {}
 
   var exit = function() {
     // Any exit logic

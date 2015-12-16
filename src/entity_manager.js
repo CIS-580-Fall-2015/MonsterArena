@@ -40,6 +40,8 @@ module.exports = (function() {
   var OFFSET = 64;
   var DEBUG = true;
 
+  var heroAlive = true;
+
   // Builds the door array and places the hero
   function initialize() {
     doors.push(new Door(ARENA_WIDTH / 2, OFFSET)); // North
@@ -65,6 +67,14 @@ module.exports = (function() {
     for (var i = 0; i < monsters.length; i++) {
       monsters[i].update(elapsedTime);
       monsters[i].doTurn(1);
+    }
+    if (heroAlive)
+    {
+      return true;
+    }
+    else
+    {
+      return false;
     }
   }
 
@@ -97,7 +107,11 @@ module.exports = (function() {
               damage *= 2;
             }
           }
-          hero.attacked(damage);
+          var alive = hero.attacked(damage);
+          if (!alive)
+          {
+            heroAlive = false;
+          }
 
           //Check Taunt
           if (monsters[i].special == "taunt") {

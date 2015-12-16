@@ -328,6 +328,13 @@ module.exports = (function()
 		this._curMusic = 1;
 		playMusic(this.musicElm,this.MusicFiles[this._curMusic]);
 	}
+
+	AudioManager.prototype.playWinMusic = function ()
+	{
+		if (this.DEBUG) { console.log("AudoManager: WinMusic-Play"); }
+		this._curMusic = 2;
+		playMusic(this.musicElm, this.MusicFiles[this._curMusic]);
+	}
 	
 	// Sound FX Play Functions
 	AudioManager.prototype.playLevelUpSFX = function ()
@@ -635,6 +642,8 @@ module.exports = (function() {
   var OFFSET = 64;
   var DEBUG = true;
 
+  var heroAlive = true;
+
   // Builds the door array and places the hero
   function initialize() {
     doors.push(new Door(ARENA_WIDTH / 2, OFFSET)); // North
@@ -660,6 +669,14 @@ module.exports = (function() {
     for (var i = 0; i < monsters.length; i++) {
       monsters[i].update(elapsedTime);
       monsters[i].doTurn(1);
+    }
+    if (heroAlive)
+    {
+      return true;
+    }
+    else
+    {
+      return false;
     }
   }
 
@@ -692,7 +709,11 @@ module.exports = (function() {
               damage *= 2;
             }
           }
-          hero.attacked(damage);
+          var alive = hero.attacked(damage);
+          if (!alive)
+          {
+            heroAlive = false;
+          }
 
           //Check Taunt
           if (monsters[i].special == "taunt") {
@@ -861,7 +882,7 @@ module.exports = function() {
     );
     ShopManager.SetAudioManager(AudioManager);
 
-    //ShopManager.AddGold(150000);
+    ShopManager.AddGold(150000);
 
     EntityManager.initialize();
 
@@ -873,23 +894,19 @@ module.exports = function() {
 
 
   var update = function(elapsedTime) {
-    EntityManager.update(elapsedTime);
+    var heroAlive = EntityManager.update(elapsedTime);
+    if (!heroAlive)
+    {
+      AudioManager.playWinMusic();
+      stateManager.pushState(game_over);
+    }
   };
 
   var keyUp = function(e) {
     // Do nothing
   };
 
-  var keyDown = function(e) {
-    switch(e.keyCode)
-    {
-      case 27: //escape
-        console.log("ESCAPE");
-        e.preventDefault();
-        stateManager.pushState(game_over);
-        break;
-    }
-  };
+  var keyDown = function(e) {}
 
   var exit = function() {
     // Any exit logic
@@ -1068,6 +1085,7 @@ module.exports = (function() {
   // Updates health bar, adds gold based on damage
   Hero.prototype.attacked = function(amount) {
     //testing health bar
+    var alive = true;
     var bar = document.getElementById('health');
 
     if (DEBUG) {
@@ -1083,11 +1101,13 @@ module.exports = (function() {
     this.EntityManager.add_gold(damage);
     //testing health bar
 
-    if (this.health >= 0) {
+    if (this.health <= 0) {
       //TODO die
+      alive = false;
     }
 
     bar.value = this.health;
+    return alive;
   };
 
   // Targets and attacks monsters

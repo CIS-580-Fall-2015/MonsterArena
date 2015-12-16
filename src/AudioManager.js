@@ -327,6 +327,13 @@ module.exports = (function()
 		this._curMusic = 1;
 		playMusic(this.musicElm,this.MusicFiles[this._curMusic]);
 	}
+
+	AudioManager.prototype.playWinMusic = function ()
+	{
+		if (this.DEBUG) { console.log("AudoManager: WinMusic-Play"); }
+		this._curMusic = 2;
+		playMusic(this.musicElm, this.MusicFiles[this._curMusic]);
+	}
 	
 	// Sound FX Play Functions
 	AudioManager.prototype.playLevelUpSFX = function ()

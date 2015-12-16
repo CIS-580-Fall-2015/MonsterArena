@@ -60,6 +60,7 @@ module.exports = (function() {
   // Updates health bar, adds gold based on damage
   Hero.prototype.attacked = function(amount) {
     //testing health bar
+    var alive = true;
     var bar = document.getElementById('health');
 
     if (DEBUG) {
@@ -75,11 +76,13 @@ module.exports = (function() {
     this.EntityManager.add_gold(damage);
     //testing health bar
 
-    if (this.health >= 0) {
+    if (this.health <= 0) {
       //TODO die
+      alive = false;
     }
 
     bar.value = this.health;
+    return alive;
   };
 
   // Targets and attacks monsters
