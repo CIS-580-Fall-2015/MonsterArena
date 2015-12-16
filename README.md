@@ -12,20 +12,20 @@ Keep compiling simple!
 ## TODO
 
 - [ ] Menu states
-	- [x] Credits state
-		- [x] Basic HTML/CSS
-		- [x] Javascript class
+	- [x] ~~Credits state~~
+		- [x] ~~Basic HTML/CSS~~
+		- [x] ~~Javascript class~~
 	- [ ] Game over state
-		- [x] Basic HTML/CSS
-		- [x] Javascript class
+		- [x] ~~Basic HTML/CSS~~
+		- [x] ~~Javascript class~~
     - [ ] Help state
 		- [ ] Basic HTML/CSS
 		- [ ] Javascript class
-	- [x] Recompile main.js into MonsterArena.js once the above are done.
+	- [x] ~~Recompile main.js into MonsterArena.js once the above are done.~~
 - [ ] Hero animations
 - [ ] Implement AudioManager calls
-	- [x] Shop Manager
-	- [x] Stats Manager
+	- [x] ~~Shop Manager~~
+	- [x] ~~Stats Manager~~
 - [ ] Test Specials
 - [ ] Game over logic
 - [ ] General balance fixes
