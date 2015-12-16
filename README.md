@@ -14,10 +14,10 @@ Keep compiling simple!
 - [ ] Menu states
 	- [ ] Credits state
 		- [x] Basic HTML/CSS
-		- [ ] Javascript class
+		- [x] Javascript class
 	- [ ] Game over state
 		- [x] Basic HTML/CSS
-		- [ ] Javascript class
+		- [x] Javascript class
     - [ ] Help state
 		- [ ] Basic HTML/CSS
 		- [ ] Javascript class
