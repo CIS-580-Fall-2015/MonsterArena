@@ -19,8 +19,8 @@ Keep compiling simple!
 		- [x] Basic HTML/CSS
 		- [ ] Javascript class
     - [ ] Help state
-		- [ ] Basic HTML/CSS
-		- [ ] Javascript class
+		- [x] Basic HTML/CSS
+		- [x] Javascript class
 	- [ ] Recompile main.js into MonsterArena.js once the above are done.
 - [ ] Hero animations
 - [ ] Implement AudioManager calls
