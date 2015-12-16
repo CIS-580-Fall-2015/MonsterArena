@@ -23,6 +23,7 @@ window.onload = function()
     // Module variables
 
     StatsManager.SetSpawnDelegate(EntityManager.spawn_monster);
+    StatsManager.SetAudioManager(AudioManager);
 
     ShopManager.SetStatsManagerDelegates(
       StatsManager.IncreaseAttackCap,
@@ -32,12 +33,13 @@ window.onload = function()
       EntityManager.open_door,
       EntityManager.upgrade_boss
     );
+    ShopManager.SetAudioManager(AudioManager);
 
     ShopManager.AddGold(150000);
 
     EntityManager.initialize();
 
-    AudioManager.playIdleMusic();
+    //AudioManager.playIdleMusic();
     EntityManager.initialize();
 
     window.requestAnimationFrame(loop);

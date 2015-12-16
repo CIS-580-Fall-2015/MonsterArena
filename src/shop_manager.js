@@ -54,6 +54,11 @@ module.exports = (function()
 								];
 	/* eslint-enable */
 	specialIndex = 0;
+	
+	///////////////////
+	// Audio Manager //
+	///////////////////
+	am = undefined;
 
 	//////////////////////////////////////
 	// Flags for greying out shop items //
@@ -460,6 +465,11 @@ module.exports = (function()
 		upgradeBoss = boss;
 	};
 
+	function SetAudioManager(val)
+	{
+		am = val;
+	}
+
 	////////////////////////
 	// UI Update handlers //
 	////////////////////////
@@ -469,6 +479,7 @@ module.exports = (function()
 		if (DEBUG) { console.log("ShopManager: Door Plus Clicked"); }
 		descriptionText.textContent = doorPlus.descText;
 		currentUpgrade = Upgrades.DOOR;
+		am.playClickSFX();
 		if (currentSelected != undefined)
 		{
 			currentSelected.setAttribute("stroke-opacity", "0");
@@ -497,6 +508,7 @@ module.exports = (function()
 		if (DEBUG) { console.log("ShopManager: Attack Plus Clicked"); }
 		descriptionText.textContent = attackPlus.descText;
 		currentUpgrade = Upgrades.ATTACK;
+		am.playClickSFX();
 		if (currentSelected != undefined)
 		{
 			currentSelected.setAttribute("stroke-opacity", "0");
@@ -525,6 +537,7 @@ module.exports = (function()
 		if (DEBUG) { console.log("ShopManager: Health Plus Clicked"); }
 		descriptionText.textContent = healthPlus.descText;
 		currentUpgrade = Upgrades.HEALTH;
+		am.playClickSFX();
 		if (currentSelected != undefined)
 		{
 			currentSelected.setAttribute("stroke-opacity", "0");
@@ -553,6 +566,7 @@ module.exports = (function()
 		if (DEBUG) { console.log("ShopManager: Defense Plus Clicked"); }
 		descriptionText.textContent = defensePlus.descText;
 		currentUpgrade = Upgrades.DEFENSE;
+		am.playClickSFX();
 		if (currentSelected != undefined)
 		{
 			currentSelected.setAttribute("stroke-opacity", "0");
@@ -581,6 +595,7 @@ module.exports = (function()
 		if (DEBUG) { console.log("ShopManager: Special Clicked"); }
 		descriptionText.textContent = currentSpecial.getAttribute("desc");
 		currentUpgrade = Upgrades.SPECIAL;
+		am.playClickSFX();
 		if (currentSelected != undefined)
 		{
 			currentSelected.setAttribute("stroke-opacity", "0");
@@ -609,6 +624,7 @@ module.exports = (function()
 		if (DEBUG) { console.log("ShopManager: Boss Clicked"); }
 		descriptionText.textContent = boss.descText;
 		currentUpgrade = Upgrades.BOSS;
+		am.playClickSFX();
 		if (currentSelected != undefined)
 		{
 			currentSelected.setAttribute("stroke-opacity", "0");
@@ -639,6 +655,7 @@ module.exports = (function()
 			if (DEBUG) { console.log("ShopManager: PurchaseBtn Clicked"); }
 			console.log("Upgrade: " + Strings[currentUpgrade]);
 
+			am.playClickSFX();
 			/* eslint-disable */
 			switch (currentUpgrade)
 			{
@@ -728,7 +745,8 @@ module.exports = (function()
 	};
 
 	return {
-		AddGold: AddGold,
-		SetStatsManagerDelegates: SetStatsManagerDelegates,
+		AddGold                  : AddGold,
+		SetStatsManagerDelegates : SetStatsManagerDelegates,
+		SetAudioManager          : SetAudioManager,
 	};
 })();

@@ -47,6 +47,12 @@ module.exports = (function()
 	var healthVal = startingHealthVal;
 	var specialContent = undefined;
 	var spawnDelegate = undefined;
+	
+	///////////////////
+	// Audio Manager //
+	///////////////////
+	var am = undefined;
+
 	/* eslint-disable */
 	var specialList = [
 						"stats_none_special",
@@ -127,6 +133,7 @@ module.exports = (function()
 		}
 
 		attackMinus1.setAttribute("stroke", "#000000");
+		am.playClickSFX();
 	}
 
 	function AttackMinus()
@@ -145,6 +152,7 @@ module.exports = (function()
 
 		attackPlus1.setAttribute("stroke", "#000000");
 		attackPlus2.setAttribute("stroke", "#000000");
+		am.playClickSFX();
 	}
 
 	function DefensePlus()
@@ -163,6 +171,7 @@ module.exports = (function()
 		}
 
 		defenseMinus1.setAttribute("stroke", "#000000");
+		am.playClickSFX();
 	}
 
 	function DefenseMinus()
@@ -181,6 +190,7 @@ module.exports = (function()
 
 		defensePlus1.setAttribute("stroke", "#000000");
 		defensePlus2.setAttribute("stroke", "#000000");
+		am.playClickSFX();
 	}
 
 	function HealthPlus()
@@ -199,6 +209,7 @@ module.exports = (function()
 		}
 
 		healthMinus1.setAttribute("stroke", "#000000");
+		am.playClickSFX();
 	}
 
 
@@ -218,6 +229,7 @@ module.exports = (function()
 
 		healthPlus1.setAttribute("stroke", "#000000");
 		healthPlus2.setAttribute("stroke", "#000000");
+		am.playClickSFX();
 	}
 
 	// 1 is up
@@ -278,12 +290,14 @@ module.exports = (function()
 	function SpecialUp()
 	{
 		if (DEBUG) { console.log("StatsManager: Special Up Clicked."); }
+		am.playClickSFX();
 		UpdateSpecial(1);
 	}
 
 	function SpecialDown()
 	{
 		if (DEBUG) { console.log("StatsManager: Special Down Clicked."); }
+		am.playClickSFX();
 		UpdateSpecial(-1);
 	}
 
@@ -317,6 +331,11 @@ module.exports = (function()
 		spawnDelegate = val;
 	}
 
+	function SetAudioManager(val)
+	{
+		am = val;
+	}
+
 	function SpawnMonster()
 	{
 		if (DEBUG) { console.log("StatsManager: SpawnMonster Clicked"); }
@@ -326,6 +345,7 @@ module.exports = (function()
 		}
 		else
 		{
+			am.playClickSFX();
 			spawnDelegate(GetCurrentStats());
 		}
 	}
@@ -354,14 +374,15 @@ module.exports = (function()
 	}
 
 	return {
-		GetCurrentStats: GetCurrentStats,
-		SpawnMonster: SpawnMonster,
-		SetSpawnDelegate: SetSpawnDelegate,
-		GetCurrentCaps: GetCurrentCaps,
-		IncreaseAttackCap: IncreaseAttackCap,
-		IncreaseDefenseCap: IncreaseDefenseCap,
-		IncreaseHealthCap: IncreaseHealthCap,
-		AddSpecial: AddSpecial,
+		GetCurrentStats    : GetCurrentStats,
+		SpawnMonster       : SpawnMonster,
+		SetSpawnDelegate   : SetSpawnDelegate,
+		GetCurrentCaps     : GetCurrentCaps,
+		IncreaseAttackCap  : IncreaseAttackCap,
+		IncreaseDefenseCap : IncreaseDefenseCap,
+		IncreaseHealthCap  : IncreaseHealthCap,
+		AddSpecial         : AddSpecial,
+		SetAudioManager    : SetAudioManager,
 	};
 
 })();
