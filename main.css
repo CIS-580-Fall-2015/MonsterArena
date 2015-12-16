@@ -4,6 +4,16 @@
   display: inline-block;
   text-align: center;
 }
+#toplevel #monsters {
+  width: 590px;
+  height: 560px;
+  float: left;
+  margin: 0 auto;
+  padding: 0 0 0 0;
+  display: inline-block;
+  background-image: url("img/arena3.png");
+  background-size: 100% 100%;
+}
 #toplevel #spawner {
   width: 295px;
   height: 595px;
@@ -20,16 +30,6 @@
   margin-top: 2.5px;
   padding: 0 0 0 0;
   display: inline-block;
-}
-#toplevel #monsters {
-  width: 590px;
-  height: 560px;
-  float: left;
-  margin: 0 auto;
-  padding: 0 0 0 0;
-  display: inline-block;
-  background-image: url("img/arena3.png");
-  background-size: 100% 100%;
 }
 #toplevel #arena #health {
   -webkit-apperance: none;
@@ -56,6 +56,48 @@
   background-size: 100% 100%;
   border: 5px double #000;
   display: none;
+}
+#toplevel #game_over {
+  position: absolute;
+  width: 1180px;
+  height: 595px;
+  border: 5px double #000;
+  display: none;
+  text-align: center;
+}
+#toplevel #game_over h1 {
+  font-size: 76px;
+}
+#toplevel #game_over p {
+  font-size: 16px;
+}
+#toplevel #game_over a {
+  text-decoration: none;
+}
+#toplevel #game_over a:hover {
+  text-decoration: underline;
+}
+#toplevel #credits {
+  position: absolute;
+  width: 1180px;
+  height: 595px;
+  border: 5px double #000;
+  display: none;
+}
+#toplevel #credits #c_box {
+  border-bottom: 1px double black;
+}
+#toplevel #credits h1 {
+  font-size: 76px;
+}
+#toplevel #credits #cont_list li {
+  font-size: 18px;
+}
+.menu {
+  position: absolute;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 progress.health::-webkit-progress-value {
   background: red;

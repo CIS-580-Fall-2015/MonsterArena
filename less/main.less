@@ -11,7 +11,17 @@
 	display: inline-block;
 	text-align: center;
 	
-	
+	#monsters 
+	{
+	  width: 590px;
+	  height: 560px;
+	  float: left;
+	  margin: 0 auto;
+	  padding: 0 0 0 0;
+	  display: inline-block;
+	  background-image: url("img/arena3.png");
+	  background-size: 100% 100%;
+	}
 	
 	#spawner
 	{
@@ -25,16 +35,13 @@
 
 	#arena
 	{
-		width: @img_width;
-		height: @img_height;
-		background-image: url("img/arena3.png");
-	    background-repeat: no-repeat;
-	    background-size: 100% 95%;
-		float: left;
-		margin: 0 auto;
-		margin-top: @top_padding;
-		padding: 0 0 0 0;
-		display: inline-block;
+	  width: 590px;
+	  height: 590px;
+	  float: left;
+	  margin: 0 auto;
+	  margin-top: 2.5px;
+	  padding: 0 0 0 0;
+	  display: inline-block;
 		
 
 		#health
@@ -71,6 +78,68 @@
 	   border: 5px double #000;
 	   display: none;
 	}
+
+	#game_over
+	{
+		position: absolute;
+		width: 1180px;
+		height: @default_height; 
+		border: 5px double #000;
+		display: none;
+		text-align: center;
+
+		h1
+		{
+			font-size: 76px;
+		}
+
+		p
+		{
+			font-size: 16px;
+		}
+
+		a
+		{
+			text-decoration: none;
+
+			&:hover
+			{
+				text-decoration: underline;
+			}
+		}
+	}
+
+	#credits
+	{
+		position: absolute;
+		width: 1180px;
+		height: @default_height;
+		border: 5px double #000;
+		display: none;
+
+		#c_box
+		{
+			border-bottom: 1px double black;
+		}
+
+		h1
+		{
+			font-size: 76px;
+		}
+
+		#cont_list li
+		{
+			font-size: 18px;
+		}
+	}
+}
+
+.menu
+{
+	position: absolute;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
 }
 
 progress.health::-webkit-progress-value
