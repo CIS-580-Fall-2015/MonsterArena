@@ -11,17 +11,23 @@ Keep compiling simple!
 
 ## TODO
 
-* Menu states
-* * Credits state
-* * Game over state
-* * Help State
-* * Recompile main.js into MonsterArena.js once the above are done.
-* Hero animations
-* Implement AudioManager calls
-* Test Specials
-* Game over logic
-* General balance fixes
-* Mute buttons
+- [ ] Menu states
+	- [ ] Credits state
+		- [x] Basic HTML/CSS
+		- [ ] Javascript class
+	- [ ] Game over state
+		- [x] Basic HTML/CSS
+		- [ ] Javascript class
+    - [ ] Help state
+		- [ ] Basic HTML/CSS
+		- [ ] Javascript class
+	- [ ] Recompile main.js into MonsterArena.js once the above are done.
+- [ ] Hero animations
+- [ ] Implement AudioManager calls
+- [ ] Test Specials
+- [ ] Game over logic
+- [ ] General balance fixes
+- [ ] Mute buttons
 
 ## Audio Manager
 Added audio containers in HTML. Add to molule via
