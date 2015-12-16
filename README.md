@@ -24,6 +24,8 @@ Keep compiling simple!
 	- [ ] Recompile main.js into MonsterArena.js once the above are done.
 - [ ] Hero animations
 - [ ] Implement AudioManager calls
+	- [x] Shop Manager
+	- [x] Stats Manager
 - [ ] Test Specials
 - [ ] Game over logic
 - [ ] General balance fixes
