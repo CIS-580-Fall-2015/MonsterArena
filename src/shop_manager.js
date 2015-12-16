@@ -100,11 +100,11 @@ module.exports = (function()
 	///////////////////////////////////////////
 	// Cost progressions for capped upgrades //
 	///////////////////////////////////////////
-	doorCostProgression    = [100, 1000, 2000, 3000, 4000, 5000, 6000];
+	doorCostProgression    = [ 100, 1000, 2000, 3000, 4000, 5000, 6000 ];
 	doorCostIndex          = 0;
-	specialCostProgression = [300, 700, 1100, 1500];
+	specialCostProgression = [ 300, 700, 1100, 1500 ];
 	specialCostIndex       = 0;
-	bossCostProgression    = [3000, 4500];
+	bossCostProgression    = [ 3000, 4500 ];
 	bossCostIndex 		   = 0;
 
 	/////////////////////////////////////////
@@ -335,7 +335,6 @@ module.exports = (function()
 		UpdateAgainstWallet();
 		UpdateSelectable();
 
-		/* eslint-disable */
 		switch (currentUpgrade)
 		{
 			case 0: // Door
@@ -380,7 +379,6 @@ module.exports = (function()
 				}
 				break;
 		}
-		/* eslint-enable */
 		UpdatePurchaseBtn();
 
 		if (doorSelectable)
@@ -732,5 +730,5 @@ module.exports = (function()
 	return {
 		AddGold: AddGold,
 		SetStatsManagerDelegates: SetStatsManagerDelegates,
-	}
+	};
 })();

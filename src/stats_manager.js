@@ -261,7 +261,7 @@ module.exports = (function()
 				break;
 
 			case "stats_critical_special":
-				specialContent = "crit"
+				specialContent = "crit";
 				break;
 
 			case "stats_heal_special":
