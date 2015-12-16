@@ -58,7 +58,7 @@ module.exports = function () {
   Animation.prototype.render = function (ctx, x, y) {
 
     // Draw the current frame
-    if (!half)
+    if (!this.half)
     {
       ctx.drawImage(
         this.image,
