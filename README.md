@@ -14,6 +14,7 @@ Keep compiling simple!
 * Index page  
     * arena/canvas work for rendering
 * Menu states
+* Reseting Hero Health
 * Shop UI (95% finished)
     * Assign delegates for boss/door upgrades
 * Monster sprites
