@@ -12,8 +12,8 @@
 module.exports = (function()
 {
 	var menu = document.getElementById("credits");
-	var statemanager;
-	var back = document.getElementById("cred_back_btn");
+	var stateManager;
+	var back = document.getElementById("cred_go_back");
 	/*
 	* The load() method initializes the menu 
 	* and tells the DOM to render the menu HTML
@@ -47,9 +47,11 @@ module.exports = (function()
 	*/
 	var render = function() {}
 
-	back.onclick = function(e)
+	back.onclick = function(event)
 	{
-		statemanager.popState();
+		event.preventDefault();
+		console.log("BACK");
+		stateManager.popState();
 	}
 
 	/* 

@@ -3,6 +3,7 @@
  * - Ian Speer, Austin Boerger
  */
 module.exports = (function (){
+  var credits = require('./credits.js');
   var menu = document.getElementById("splash-screen"),
       stateManager;
 
@@ -46,6 +47,10 @@ module.exports = (function (){
       case 13: // ENTER
         event.preventDefault();
 		    stateManager.popState();
+        break;
+      case 67: // C
+        event.preventDefault();
+        stateManager.pushState(credits);
         break;
     }
   }

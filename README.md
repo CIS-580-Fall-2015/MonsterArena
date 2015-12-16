@@ -6,13 +6,13 @@ Final project for CIS580
 
 Keep compiling simple!
 
-```browserify src/game.js -o MonsterArena.js```  
+```browserify src/main.js -o MonsterArena.js```  
 ```lessc less/main.less main.css```
 
 ## TODO
 
 - [ ] Menu states
-	- [ ] Credits state
+	- [x] Credits state
 		- [x] Basic HTML/CSS
 		- [x] Javascript class
 	- [ ] Game over state
@@ -21,7 +21,7 @@ Keep compiling simple!
     - [ ] Help state
 		- [ ] Basic HTML/CSS
 		- [ ] Javascript class
-	- [ ] Recompile main.js into MonsterArena.js once the above are done.
+	- [x] Recompile main.js into MonsterArena.js once the above are done.
 - [ ] Hero animations
 - [ ] Implement AudioManager calls
 	- [x] Shop Manager

@@ -1,6 +1,7 @@
-// module.exports = function() {
-window.onload = function()
-{ 
+module.exports = function() {
+//window.onload = function()
+//{ 
+    // Module variables
     gameTime = 0;
     canvas = document.getElementById("monsters");
     canvas.width = 590;
@@ -20,7 +21,6 @@ window.onload = function()
     SCREEN_HEIGHT = 720;
 
     EntityManager.add_gold = ShopManager.AddGold;
-    // Module variables
 
     StatsManager.SetSpawnDelegate(EntityManager.spawn_monster);
     StatsManager.SetAudioManager(AudioManager);
@@ -35,14 +35,14 @@ window.onload = function()
     );
     ShopManager.SetAudioManager(AudioManager);
 
-    ShopManager.AddGold(150000);
+    //ShopManager.AddGold(150000);
 
     EntityManager.initialize();
 
     AudioManager.playIdleMusic();
     EntityManager.initialize();
 
-    window.requestAnimationFrame(loop);
+    //window.requestAnimationFrame(loop);
   }
 
 
@@ -74,16 +74,16 @@ window.onload = function()
     render();
     window.requestAnimationFrame(loop);
   }
-  load();
-  window.requestAnimationFrame(loop);
-}
-//   return {
-//     load: load,
-//     update: update,
-//     render: render,
-//     keyUp: keyUp,
-//     keyDown: keyDown,
-//     exit: exit
-//   }
+  //load();
+  //window.requestAnimationFrame(loop);
+//}
+  return {
+    load: load,
+    update: update,
+    render: render,
+    keyUp: keyUp,
+    keyDown: keyDown,
+    exit: exit
+  }
 
-// }();
+}();

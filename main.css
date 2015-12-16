@@ -51,7 +51,7 @@
   position: absolute;
   width: 1180px;
   height: 595px;
-  background-image: url("img/splash.jpg");
+  background-image: url("img/splashscreen.png");
   background-repeat: no-repeat;
   background-size: 100% 100%;
   border: 5px double #000;
@@ -81,6 +81,7 @@
   position: absolute;
   width: 1180px;
   height: 595px;
+  background-color: white;
   border: 5px double #000;
   display: none;
 }
