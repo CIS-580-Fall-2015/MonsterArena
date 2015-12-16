@@ -21,12 +21,12 @@ module.exports = (function() {
   animations.left = [];
 
   // The right-facing animations. ALL OF THESE ANIMATIONS ARE THE SAME. IMPLEMENTED FOR THE SAKE OF CONSISTANCY.
-  animations.right.push(new Animation(BossestMovement, WIDTH, HEIGHT, 0, 0, 2)); // WALKING // TODO Specific Timing may need to be adjusted.
-  animations.right.push(new Animation(BossestMovement, WIDTH, HEIGHT, 0, 0, 2)); // ATTACKING // TODO Specific Timing may need to be adjusted.
+  animations.right.push(new Animation(BossestMovement, WIDTH, HEIGHT, 0, 0, 2, true)); // WALKING // TODO Specific Timing may need to be adjusted.
+  animations.right.push(new Animation(BossestMovement, WIDTH, HEIGHT, 0, 0, 2, true)); // ATTACKING // TODO Specific Timing may need to be adjusted.
 
   //The left-facing animations
-  animations.left.push(new Animation(BossestMovement, WIDTH, HEIGHT, 0, 0, 2)); // WALKING // TODO Specific Timing may need to be adjusted.
-  animations.left.push(new Animation(BossestMovement, WIDTH, HEIGHT, 0, 0, 2)); // ATTACKING // TODO Specific Timing may need to be adjusted.
+  animations.left.push(new Animation(BossestMovement, WIDTH, HEIGHT, 0, 0, 2, true)); // WALKING // TODO Specific Timing may need to be adjusted.
+  animations.left.push(new Animation(BossestMovement, WIDTH, HEIGHT, 0, 0, 2, true)); // ATTACKING // TODO Specific Timing may need to be adjusted.
 
   return animations;
 

@@ -395,7 +395,7 @@ module.exports = (function()
 module.exports = function () {
 
 
-  function Animation(image, width, height, top, left, numberOfFrames, secondsPerFrame, playItOnce, donePlayingCallback, reverse) {
+  function Animation(image, width, height, top, left, numberOfFrames, half, secondsPerFrame, playItOnce, donePlayingCallback, reverse) {
     this.frameIndex = 0,
         this.time = 0,
         this.secondsPerFrame = secondsPerFrame || (1 / 16),
@@ -404,6 +404,7 @@ module.exports = function () {
     this.width = width;
     this.height = height;
     this.image = image;
+    this.half = half || false;
 
     this.drawLocationX = top || 0;
     this.drawLocationY = left || 0;
@@ -447,7 +448,9 @@ module.exports = function () {
   Animation.prototype.render = function (ctx, x, y) {
 
     // Draw the current frame
-    ctx.drawImage(
+    if (!half)
+    {
+      ctx.drawImage(
         this.image,
         this.drawLocationX + (this.frameIndex * this.reversalFactor * this.width),
         this.drawLocationY,
@@ -457,6 +460,20 @@ module.exports = function () {
         y,
         this.width,
         this.height);
+    }
+    else
+    {
+      ctx.drawImage(
+        this.image,
+        this.drawLocationX + (this.frameIndex * this.reversalFactor * this.width),
+        this.drawLocationY,
+        this.width,
+        this.height,
+        x,
+        y,
+        this.width / 2,
+        this.height / 2);
+    }
   };
 
   return Animation;
@@ -1175,12 +1192,12 @@ module.exports = (function() {
   animations.left = [];
 
   // The right-facing animations. ALL OF THESE ANIMATIONS ARE THE SAME. IMPLEMENTED FOR THE SAKE OF CONSISTANCY.
-  animations.right.push(new Animation(BossMovement, WIDTH, HEIGHT, 0, 0, 2)); // WALKING // TODO Specific Timing may need to be adjusted.
-  animations.right.push(new Animation(BossMovement, WIDTH, HEIGHT, 0, 0, 2)); // ATTACKING // TODO Specific Timing may need to be adjusted.
+  animations.right.push(new Animation(BossMovement, WIDTH, HEIGHT, 0, 0, 2, true)); // WALKING // TODO Specific Timing may need to be adjusted.
+  animations.right.push(new Animation(BossMovement, WIDTH, HEIGHT, 0, 0, 2, true)); // ATTACKING // TODO Specific Timing may need to be adjusted.
 
   //The left-facing animations
-  animations.left.push(new Animation(BossMovement, WIDTH, HEIGHT, 0, 0, 2)); // WALKING // TODO Specific Timing may need to be adjusted.
-  animations.left.push(new Animation(BossMovement, WIDTH, HEIGHT, 0, 0, 2)); // ATTACKING // TODO Specific Timing may need to be adjusted.
+  animations.left.push(new Animation(BossMovement, WIDTH, HEIGHT, 0, 0, 2, true)); // WALKING // TODO Specific Timing may need to be adjusted.
+  animations.left.push(new Animation(BossMovement, WIDTH, HEIGHT, 0, 0, 2, true)); // ATTACKING // TODO Specific Timing may need to be adjusted.
 
   return animations;
 
@@ -1210,12 +1227,12 @@ module.exports = (function() {
   animations.left = [];
 
   // The right-facing animations. ALL OF THESE ANIMATIONS ARE THE SAME. IMPLEMENTED FOR THE SAKE OF CONSISTANCY.
-  animations.right.push(new Animation(BosserMovement, WIDTH, HEIGHT, 0, 0, 2)); // WALKING // @TODO: Specific Timing may need to be adjusted.
-  animations.right.push(new Animation(BosserMovement, WIDTH, HEIGHT, 0, 0, 2)); // ATTACKING // @TODO Specific Timing may need to be adjusted.
+  animations.right.push(new Animation(BosserMovement, WIDTH, HEIGHT, 0, 0, 2, true)); // WALKING // @TODO: Specific Timing may need to be adjusted.
+  animations.right.push(new Animation(BosserMovement, WIDTH, HEIGHT, 0, 0, 2, true)); // ATTACKING // @TODO Specific Timing may need to be adjusted.
 
   //The left-facing animations
-  animations.left.push(new Animation(BosserMovement, WIDTH, HEIGHT, 0, 0, 2)); // WALKING // @TODO Specific Timing may need to be adjusted.
-  animations.left.push(new Animation(BosserMovement, WIDTH, HEIGHT, 0, 0, 2)); // ATTACKING // @TODO Specific Timing may need to be adjusted.
+  animations.left.push(new Animation(BosserMovement, WIDTH, HEIGHT, 0, 0, 2, true)); // WALKING // @TODO Specific Timing may need to be adjusted.
+  animations.left.push(new Animation(BosserMovement, WIDTH, HEIGHT, 0, 0, 2, true)); // ATTACKING // @TODO Specific Timing may need to be adjusted.
 
   return animations;
 
@@ -1245,12 +1262,12 @@ module.exports = (function() {
   animations.left = [];
 
   // The right-facing animations. ALL OF THESE ANIMATIONS ARE THE SAME. IMPLEMENTED FOR THE SAKE OF CONSISTANCY.
-  animations.right.push(new Animation(BossestMovement, WIDTH, HEIGHT, 0, 0, 2)); // WALKING // TODO Specific Timing may need to be adjusted.
-  animations.right.push(new Animation(BossestMovement, WIDTH, HEIGHT, 0, 0, 2)); // ATTACKING // TODO Specific Timing may need to be adjusted.
+  animations.right.push(new Animation(BossestMovement, WIDTH, HEIGHT, 0, 0, 2, true)); // WALKING // TODO Specific Timing may need to be adjusted.
+  animations.right.push(new Animation(BossestMovement, WIDTH, HEIGHT, 0, 0, 2, true)); // ATTACKING // TODO Specific Timing may need to be adjusted.
 
   //The left-facing animations
-  animations.left.push(new Animation(BossestMovement, WIDTH, HEIGHT, 0, 0, 2)); // WALKING // TODO Specific Timing may need to be adjusted.
-  animations.left.push(new Animation(BossestMovement, WIDTH, HEIGHT, 0, 0, 2)); // ATTACKING // TODO Specific Timing may need to be adjusted.
+  animations.left.push(new Animation(BossestMovement, WIDTH, HEIGHT, 0, 0, 2, true)); // WALKING // TODO Specific Timing may need to be adjusted.
+  animations.left.push(new Animation(BossestMovement, WIDTH, HEIGHT, 0, 0, 2, true)); // ATTACKING // TODO Specific Timing may need to be adjusted.
 
   return animations;
 
