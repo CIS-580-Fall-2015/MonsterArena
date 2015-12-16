@@ -11,20 +11,17 @@ Keep compiling simple!
 
 ## TODO
 
-* Index page  
-    * arena/canvas work for rendering
 * Menu states
-* Reseting Hero Health
-* Shop UI (95% finished)
-    * Assign delegates for boss/door upgrades
-* Monster sprites
-   * ~~Monster Movement~~
-   * ~~Monster Animation~~
-   * ~~Monster Updating/Rendering~~
-   * Hero Rendering/Animation
-   * ~~Monster Spawning~~
-* **Monster/Hero interaction**
-* ~~Hero Spawning~~
+* * Credits state
+* * Game over state
+* * Help State
+* * Recompile main.js into MonsterArena.js once the above are done.
+* Hero animations
+* Implement AudioManager calls
+* Test Specials
+* Game over logic
+* General balance fixes
+* Mute buttons
 
 ## Audio Manager
 Added audio containers in HTML. Add to molule via
@@ -45,12 +42,6 @@ Public Functions:
 * toggleEffects
 
 Added 4 svg images, in img folder for icons for toggling sound.
-
-TO BE IMPLEMENTED...
-* add icons for music and sound effects toggling in UI and call functions toggleMusic() and toggleEffects() on click.
-* Wherever the wave starts, call playBattleMusic(), and ends call playIdleMusic().
-* Wherever sound effects need to be implemented, call that sound effect function.
-
 
 ## Contributors
 
