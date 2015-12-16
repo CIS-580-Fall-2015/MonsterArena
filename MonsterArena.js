@@ -763,6 +763,7 @@ window.onload = function()
     // Module variables
 
     StatsManager.SetSpawnDelegate(EntityManager.spawn_monster);
+    StatsManager.SetAudioManager(AudioManager);
 
     ShopManager.SetStatsManagerDelegates(
       StatsManager.IncreaseAttackCap,
@@ -772,14 +773,13 @@ window.onload = function()
       EntityManager.open_door,
       EntityManager.upgrade_boss
     );
+    ShopManager.SetAudioManager(AudioManager);
 
     ShopManager.AddGold(150000);
 
     EntityManager.initialize();
-    canvas = document.getElementById("monsters");
-    ctx = canvas.getContext("2d");
 
-    AudioManager.playIdleMusic();
+    //AudioManager.playIdleMusic();
     EntityManager.initialize();
 
     window.requestAnimationFrame(loop);
@@ -1612,6 +1612,11 @@ module.exports = (function()
 								];
 	/* eslint-enable */
 	specialIndex = 0;
+	
+	///////////////////
+	// Audio Manager //
+	///////////////////
+	am = undefined;
 
 	//////////////////////////////////////
 	// Flags for greying out shop items //
@@ -1658,11 +1663,11 @@ module.exports = (function()
 	///////////////////////////////////////////
 	// Cost progressions for capped upgrades //
 	///////////////////////////////////////////
-	doorCostProgression    = [100, 1000, 2000, 3000, 4000, 5000, 6000];
+	doorCostProgression    = [ 100, 1000, 2000, 3000, 4000, 5000, 6000 ];
 	doorCostIndex          = 0;
-	specialCostProgression = [300, 700, 1100, 1500];
+	specialCostProgression = [ 300, 700, 1100, 1500 ];
 	specialCostIndex       = 0;
-	bossCostProgression    = [3000, 4500];
+	bossCostProgression    = [ 3000, 4500 ];
 	bossCostIndex 		   = 0;
 
 	/////////////////////////////////////////
@@ -1893,7 +1898,6 @@ module.exports = (function()
 		UpdateAgainstWallet();
 		UpdateSelectable();
 
-		/* eslint-disable */
 		switch (currentUpgrade)
 		{
 			case 0: // Door
@@ -1938,7 +1942,6 @@ module.exports = (function()
 				}
 				break;
 		}
-		/* eslint-enable */
 		UpdatePurchaseBtn();
 
 		if (doorSelectable)
@@ -2020,6 +2023,11 @@ module.exports = (function()
 		upgradeBoss = boss;
 	};
 
+	function SetAudioManager(val)
+	{
+		am = val;
+	}
+
 	////////////////////////
 	// UI Update handlers //
 	////////////////////////
@@ -2029,6 +2037,7 @@ module.exports = (function()
 		if (DEBUG) { console.log("ShopManager: Door Plus Clicked"); }
 		descriptionText.textContent = doorPlus.descText;
 		currentUpgrade = Upgrades.DOOR;
+		am.playClickSFX();
 		if (currentSelected != undefined)
 		{
 			currentSelected.setAttribute("stroke-opacity", "0");
@@ -2057,6 +2066,7 @@ module.exports = (function()
 		if (DEBUG) { console.log("ShopManager: Attack Plus Clicked"); }
 		descriptionText.textContent = attackPlus.descText;
 		currentUpgrade = Upgrades.ATTACK;
+		am.playClickSFX();
 		if (currentSelected != undefined)
 		{
 			currentSelected.setAttribute("stroke-opacity", "0");
@@ -2085,6 +2095,7 @@ module.exports = (function()
 		if (DEBUG) { console.log("ShopManager: Health Plus Clicked"); }
 		descriptionText.textContent = healthPlus.descText;
 		currentUpgrade = Upgrades.HEALTH;
+		am.playClickSFX();
 		if (currentSelected != undefined)
 		{
 			currentSelected.setAttribute("stroke-opacity", "0");
@@ -2113,6 +2124,7 @@ module.exports = (function()
 		if (DEBUG) { console.log("ShopManager: Defense Plus Clicked"); }
 		descriptionText.textContent = defensePlus.descText;
 		currentUpgrade = Upgrades.DEFENSE;
+		am.playClickSFX();
 		if (currentSelected != undefined)
 		{
 			currentSelected.setAttribute("stroke-opacity", "0");
@@ -2141,6 +2153,7 @@ module.exports = (function()
 		if (DEBUG) { console.log("ShopManager: Special Clicked"); }
 		descriptionText.textContent = currentSpecial.getAttribute("desc");
 		currentUpgrade = Upgrades.SPECIAL;
+		am.playClickSFX();
 		if (currentSelected != undefined)
 		{
 			currentSelected.setAttribute("stroke-opacity", "0");
@@ -2169,6 +2182,7 @@ module.exports = (function()
 		if (DEBUG) { console.log("ShopManager: Boss Clicked"); }
 		descriptionText.textContent = boss.descText;
 		currentUpgrade = Upgrades.BOSS;
+		am.playClickSFX();
 		if (currentSelected != undefined)
 		{
 			currentSelected.setAttribute("stroke-opacity", "0");
@@ -2199,6 +2213,7 @@ module.exports = (function()
 			if (DEBUG) { console.log("ShopManager: PurchaseBtn Clicked"); }
 			console.log("Upgrade: " + Strings[currentUpgrade]);
 
+			am.playClickSFX();
 			/* eslint-disable */
 			switch (currentUpgrade)
 			{
@@ -2288,9 +2303,10 @@ module.exports = (function()
 	};
 
 	return {
-		AddGold: AddGold,
-		SetStatsManagerDelegates: SetStatsManagerDelegates,
-	}
+		AddGold                  : AddGold,
+		SetStatsManagerDelegates : SetStatsManagerDelegates,
+		SetAudioManager          : SetAudioManager,
+	};
 })();
 },{}],18:[function(require,module,exports){
 module.exports = (function() {
@@ -2355,6 +2371,12 @@ module.exports = (function()
 	var healthVal = startingHealthVal;
 	var specialContent = undefined;
 	var spawnDelegate = undefined;
+	
+	///////////////////
+	// Audio Manager //
+	///////////////////
+	var am = undefined;
+
 	/* eslint-disable */
 	var specialList = [
 						"stats_none_special",
@@ -2435,6 +2457,7 @@ module.exports = (function()
 		}
 
 		attackMinus1.setAttribute("stroke", "#000000");
+		am.playClickSFX();
 	}
 
 	function AttackMinus()
@@ -2453,6 +2476,7 @@ module.exports = (function()
 
 		attackPlus1.setAttribute("stroke", "#000000");
 		attackPlus2.setAttribute("stroke", "#000000");
+		am.playClickSFX();
 	}
 
 	function DefensePlus()
@@ -2471,6 +2495,7 @@ module.exports = (function()
 		}
 
 		defenseMinus1.setAttribute("stroke", "#000000");
+		am.playClickSFX();
 	}
 
 	function DefenseMinus()
@@ -2489,6 +2514,7 @@ module.exports = (function()
 
 		defensePlus1.setAttribute("stroke", "#000000");
 		defensePlus2.setAttribute("stroke", "#000000");
+		am.playClickSFX();
 	}
 
 	function HealthPlus()
@@ -2507,6 +2533,7 @@ module.exports = (function()
 		}
 
 		healthMinus1.setAttribute("stroke", "#000000");
+		am.playClickSFX();
 	}
 
 
@@ -2526,6 +2553,7 @@ module.exports = (function()
 
 		healthPlus1.setAttribute("stroke", "#000000");
 		healthPlus2.setAttribute("stroke", "#000000");
+		am.playClickSFX();
 	}
 
 	// 1 is up
@@ -2569,7 +2597,7 @@ module.exports = (function()
 				break;
 
 			case "stats_critical_special":
-				specialContent = "crit"
+				specialContent = "crit";
 				break;
 
 			case "stats_heal_special":
@@ -2586,12 +2614,14 @@ module.exports = (function()
 	function SpecialUp()
 	{
 		if (DEBUG) { console.log("StatsManager: Special Up Clicked."); }
+		am.playClickSFX();
 		UpdateSpecial(1);
 	}
 
 	function SpecialDown()
 	{
 		if (DEBUG) { console.log("StatsManager: Special Down Clicked."); }
+		am.playClickSFX();
 		UpdateSpecial(-1);
 	}
 
@@ -2625,6 +2655,11 @@ module.exports = (function()
 		spawnDelegate = val;
 	}
 
+	function SetAudioManager(val)
+	{
+		am = val;
+	}
+
 	function SpawnMonster()
 	{
 		if (DEBUG) { console.log("StatsManager: SpawnMonster Clicked"); }
@@ -2634,6 +2669,7 @@ module.exports = (function()
 		}
 		else
 		{
+			am.playClickSFX();
 			spawnDelegate(GetCurrentStats());
 		}
 	}
@@ -2662,14 +2698,15 @@ module.exports = (function()
 	}
 
 	return {
-		GetCurrentStats: GetCurrentStats,
-		SpawnMonster: SpawnMonster,
-		SetSpawnDelegate: SetSpawnDelegate,
-		GetCurrentCaps: GetCurrentCaps,
-		IncreaseAttackCap: IncreaseAttackCap,
-		IncreaseDefenseCap: IncreaseDefenseCap,
-		IncreaseHealthCap: IncreaseHealthCap,
-		AddSpecial: AddSpecial,
+		GetCurrentStats    : GetCurrentStats,
+		SpawnMonster       : SpawnMonster,
+		SetSpawnDelegate   : SetSpawnDelegate,
+		GetCurrentCaps     : GetCurrentCaps,
+		IncreaseAttackCap  : IncreaseAttackCap,
+		IncreaseDefenseCap : IncreaseDefenseCap,
+		IncreaseHealthCap  : IncreaseHealthCap,
+		AddSpecial         : AddSpecial,
+		SetAudioManager    : SetAudioManager,
 	};
 
 })();
