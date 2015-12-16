@@ -1,5 +1,6 @@
 @default_height: 595px;
 @default_width: 1180px;
+@cover_doors: 10px;
 @img_height: 590px;
 @img_width: 590px;
 @top_padding: ((@default_height - @img_height) / 2);
@@ -41,7 +42,6 @@
 	  margin: 0 auto;
 	  margin-top: 2.5px;
 	  padding: 0 0 0 0;
-	  display: inline-block;
 		
 
 		#health
@@ -71,7 +71,7 @@
 	.splash{
 	   position: absolute;
 	   width: 1180px;
-	   height: @default_height;
+	   height: @default_height + @cover_doors;
 	   background-image: url("img/splashscreen.png");
 	   background-repeat: no-repeat;
 	   background-size: 100% 100%;
@@ -83,7 +83,7 @@
 	{
 		position: absolute;
 		width: 1180px;
-		height: @default_height; 
+		height: @default_height + @cover_doors; 
 		border: 5px double #000;
 		background-color: white;
 		display: none;
@@ -114,7 +114,7 @@
 	{
 		position: absolute;
 		width: 1180px;
-		height: @default_height;
+		height: @default_height + @cover_doors;
 		background-color: white;
 		border: 5px double #000;
 		display: none;

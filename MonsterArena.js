@@ -637,6 +637,7 @@ module.exports = (function() {
 
   var ARENA_WIDTH = document.getElementById('monsters').width;
   var ARENA_HEIGHT = document.getElementById('monsters').height;
+  var openedDoorsText = document.getElementById("available_doors");
   var OFFSET = 64;
   var DEBUG = true;
 
@@ -766,7 +767,7 @@ module.exports = (function() {
   // For door upgrades
   function open_door() {
     if (unlocked_doors < doors.length) {
-      doors[unlocked_doors].open = true;
+      openedDoorsText.innerHTML = "Purchased Doors: " + unlocked_doors;
       unlocked_doors++;
     }
     console.log("EM Doors open: " + unlocked_doors);
@@ -826,10 +827,10 @@ module.exports = (function() {
       }
     }
     hero.render(ctx);
-    for (var i = 0; i < doors.length; i++)
-    {
-      doors[i].render(ctx);
-    }
+    // for (var i = 0; i < doors.length; i++)
+    // {
+    //   doors[i].render(ctx);
+    // }
   }
 
 
@@ -2568,39 +2569,40 @@ module.exports = (function() {
 		this.open = false;
 	}
 
-	Door.prototype.render = function(cntx)
-	{
-		var color;
-		if (this.open)
-		{
-			if (this.avaliable)
-			{
-				color = Colors.BLUE;
-			}
-			else
-			{
-				color = Colors.RED;
-			}
-		}
-		else
-		{
-			color = Colors.GREY;
-		}
-
-		cntx.save();
-		cntx.beginPath();
-		cntx.lineWidth = 5;
-		cntx.strokeStyle = color;
-		cntx.arc(
-			this.x,
-			this.y,
-			32,
-			0,
-			2 * Math.PI
-			);
-		cntx.stroke();
-		cntx.restore();
-	}
+	// Door.prototype.render = function(cntx)
+	// {
+	// 	var color;
+	// 	if (this.open)
+	// 	{
+	// 		if (this.avaliable)
+	// 		{
+	// 			color = Colors.BLUE;
+	// 		}
+	// 		else
+	// 		{
+	// 			color = Colors.RED;
+	// 		}
+	// 	}
+	// 	else
+	// 	{
+	// 		color = Colors.GREY;
+	// 	}
+	// 	cntx.save();
+	// 	cntx.beginPath();
+	// 	cntx.lineWidth = 5;
+	// 	cntx.strokeStyle = color;
+	// 	console.log("Stroke: " + cntx.strokeStyle);
+	// 	cntx.arc(
+	// 		this.x,
+	// 		this.y,
+	// 		32,
+	// 		0,
+	// 		2 * Math.PI
+	// 		);
+	// 	cntx.stroke();
+	// 	cntx.closePath();
+	// 	cntx.restore();
+	// }
 
 	return Door;
 
