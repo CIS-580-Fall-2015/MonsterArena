@@ -18,8 +18,9 @@ Keep compiling simple!
     * Assign delegates for boss/door upgrades
 * Monster sprites
    * ~~Monster Movement~~
-   * Monster Animation
-   * Monster Updating/Rendering
+   * ~~Monster Animation~~
+   * ~~Monster Updating/Rendering~~
+   * Hero Rendering/Animation
    * ~~Monster Spawning~~
 * **Monster/Hero interaction**
 * ~~Hero Spawning~~
