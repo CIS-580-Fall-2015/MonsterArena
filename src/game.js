@@ -39,7 +39,7 @@ window.onload = function()
 
     EntityManager.initialize();
 
-    //AudioManager.playIdleMusic();
+    AudioManager.playIdleMusic();
     EntityManager.initialize();
 
     window.requestAnimationFrame(loop);
