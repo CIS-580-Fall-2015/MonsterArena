@@ -12,10 +12,12 @@ module.exports = function() {
     StatsManager = require('./stats_manager.js'),
     AudioManager = require('./AudioManager.js')
     ctx = canvas.getContext("2d");
+    var game_over = require("./game_over.js");
+    var stateManager;
 
   var load = function(sm) {
 
-    var statemanager = sm;
+    stateManager = sm;
     // The width & height of the screen
     SCREEN_WIDTH = 1280;
     SCREEN_HEIGHT = 720;
@@ -55,7 +57,14 @@ module.exports = function() {
   };
 
   var keyDown = function(e) {
-    // Do nothing
+    switch(e.keyCode)
+    {
+      case 27: //escape
+        console.log("ESCAPE");
+        e.preventDefault();
+        stateManager.pushState(game_over);
+        break;
+    }
   };
 
   var exit = function() {

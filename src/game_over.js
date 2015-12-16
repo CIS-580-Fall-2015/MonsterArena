@@ -12,7 +12,7 @@
 module.exports = (function()
 {
 	var menu = document.getElementById("game_over");
-	var statemanager;
+	var stateManager;
 	var credits = document.getElementById("GO_credits_btn");
 	/*
 	* The load() method initializes the menu 
@@ -51,7 +51,7 @@ module.exports = (function()
 	{
 		e.preventDefault();
 		var c = require('./credits.js');
-		statemanager.pushState(c);
+		stateManager.pushState(c);
 	}
 
 	/* 

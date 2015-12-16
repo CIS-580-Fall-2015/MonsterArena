@@ -821,7 +821,7 @@ module.exports = (function() {
 
 }());
 
-},{"./hero.js":7,"./monster.js":9,"./monsters/Boss.js":10,"./monsters/Bosser.js":11,"./monsters/Bossest.js":12,"./spawner":20}],6:[function(require,module,exports){
+},{"./hero.js":8,"./monster.js":10,"./monsters/Boss.js":11,"./monsters/Bosser.js":12,"./monsters/Bossest.js":13,"./spawner":21}],6:[function(require,module,exports){
 module.exports = function() {
 //window.onload = function()
 //{ 
@@ -836,10 +836,12 @@ module.exports = function() {
     StatsManager = require('./stats_manager.js'),
     AudioManager = require('./AudioManager.js')
     ctx = canvas.getContext("2d");
+    var game_over = require("./game_over.js");
+    var stateManager;
 
   var load = function(sm) {
 
-    var statemanager = sm;
+    stateManager = sm;
     // The width & height of the screen
     SCREEN_WIDTH = 1280;
     SCREEN_HEIGHT = 720;
@@ -879,7 +881,14 @@ module.exports = function() {
   };
 
   var keyDown = function(e) {
-    // Do nothing
+    switch(e.keyCode)
+    {
+      case 27: //escape
+        console.log("ESCAPE");
+        e.preventDefault();
+        stateManager.pushState(game_over);
+        break;
+    }
   };
 
   var exit = function() {
@@ -912,7 +921,91 @@ module.exports = function() {
 
 }();
 
-},{"./AudioManager.js":1,"./entity_manager.js":5,"./hero.js":7,"./shop_manager.js":19,"./stats_manager.js":22}],7:[function(require,module,exports){
+},{"./AudioManager.js":1,"./entity_manager.js":5,"./game_over.js":7,"./hero.js":8,"./shop_manager.js":20,"./stats_manager.js":23}],7:[function(require,module,exports){
+/* Author: Nic Johnson
+ *
+ * Title: game_over.js
+ *
+ * Description: 
+ * 
+ *
+ * History:
+ * 	December 16, 2015: 
+ * 		-Date Created
+ */
+module.exports = (function()
+{
+	var menu = document.getElementById("game_over");
+	var stateManager;
+	var credits = document.getElementById("GO_credits_btn");
+	/*
+	* The load() method initializes the menu 
+	* and tells the DOM to render the menu HTML
+	* parameters:
+	* - sm the state manager
+	*/
+	var load = function(sm) 
+	{
+		stateManager = sm;
+		menu.style.display = "flex";
+	}
+
+	/*
+	* The exit() method hides the menu
+	*/
+	var exit = function() 
+	{
+		menu.style.display = "none";
+	}
+
+	/* 
+	* The update() method updates the menu
+	* (in this case, a no-op)
+	*/
+	var update = function() {}
+
+	/* 
+	* The render() method renders the menu
+	* (in this case, a no-op as the menu is 
+	* HTML elements renderd by the DOM)
+	*/
+	var render = function() {}
+
+	credits.onclick = function(e)
+	{
+		e.preventDefault();
+		var c = require('./credits.js');
+		stateManager.pushState(c);
+	}
+
+	/* 
+	* The keyDown() method handles 
+	* the key down event for the menu.
+	*/
+	var keyDown = function(event) 
+	{
+		// switch(event.keyCode) {
+		//   case 13: // ENTER
+		//     event.preventDefault();
+		// 	    stateManager.popState();
+		//     break;
+		// }
+	}
+
+	/* The keyUp() method handles the key up event */
+	function keyUp(event) {}
+
+	return {
+	    load: load,
+	    exit: exit,
+	    update: update,
+	    render: render,
+	    keyDown: keyDown,
+	    keyUp: keyUp,
+    }
+
+})();
+},{"./credits.js":3}],8:[function(require,module,exports){
 module.exports = (function() {
   var Entity = require('./entity.js');
 
@@ -1020,7 +1113,7 @@ module.exports = (function() {
 
 }());
 
-},{"./entity.js":4}],8:[function(require,module,exports){
+},{"./entity.js":4}],9:[function(require,module,exports){
 // Wait for the window to load completely
 window.onload = function() {
   
@@ -1037,7 +1130,7 @@ window.onload = function() {
     if(state) state.exit();
     return state;
   }
-  
+
   var game = require('./game');
   pushState(game);
   
@@ -1062,7 +1155,7 @@ window.onload = function() {
   window.requestAnimationFrame(loop);
   
 };
-},{"./game":6,"./splash-screen":21}],9:[function(require,module,exports){
+},{"./game":6,"./splash-screen":22}],10:[function(require,module,exports){
 /* Base class for each monster.
  * It inherits from the generic entity class.
  */
@@ -1306,7 +1399,7 @@ module.exports = (function() {
 
 }());
 
-},{"./entity.js":4,"./monsters/Boss.js":10,"./monsters/Bosser.js":11,"./monsters/Bossest.js":12,"./monsters/Creepo.js":13,"./monsters/Gunner.js":14,"./monsters/Puncher.js":15,"./monsters/Skully.js":16,"./monsters/Snappy.js":17,"./monsters/Wingy.js":18}],10:[function(require,module,exports){
+},{"./entity.js":4,"./monsters/Boss.js":11,"./monsters/Bosser.js":12,"./monsters/Bossest.js":13,"./monsters/Creepo.js":14,"./monsters/Gunner.js":15,"./monsters/Puncher.js":16,"./monsters/Skully.js":17,"./monsters/Snappy.js":18,"./monsters/Wingy.js":19}],11:[function(require,module,exports){
 /* Boss Monster Entity.
  */
 module.exports = (function() {
@@ -1341,7 +1434,7 @@ module.exports = (function() {
 
 }());
 
-},{"../animation.js":2}],11:[function(require,module,exports){
+},{"../animation.js":2}],12:[function(require,module,exports){
 /* Bosser Monster Entity.
  */
 module.exports = (function() {
@@ -1376,7 +1469,7 @@ module.exports = (function() {
 
 }());
 
-},{"../animation.js":2}],12:[function(require,module,exports){
+},{"../animation.js":2}],13:[function(require,module,exports){
 /* Bossest Monster Entity.
  */
 module.exports = (function() {
@@ -1411,7 +1504,7 @@ module.exports = (function() {
 
 }());
 
-},{"../animation.js":2}],13:[function(require,module,exports){
+},{"../animation.js":2}],14:[function(require,module,exports){
 /* Creepo Monster Entity.
  */
 module.exports = (function() {
@@ -1456,7 +1549,7 @@ module.exports = (function() {
 
 }());
 
-},{"../animation.js":2}],14:[function(require,module,exports){
+},{"../animation.js":2}],15:[function(require,module,exports){
 /* Gunner Monster Entity.
  */
 module.exports = (function() {
@@ -1501,7 +1594,7 @@ module.exports = (function() {
 
 }());
 
-},{"../animation.js":2}],15:[function(require,module,exports){
+},{"../animation.js":2}],16:[function(require,module,exports){
 /* Puncher Monster Entity.
  */
 module.exports = (function() {
@@ -1546,7 +1639,7 @@ module.exports = (function() {
 
 }());
 
-},{"../animation.js":2}],16:[function(require,module,exports){
+},{"../animation.js":2}],17:[function(require,module,exports){
 /* Skully Monster Entity.
  */
 module.exports = (function() {
@@ -1591,7 +1684,7 @@ module.exports = (function() {
 
 }());
 
-},{"../animation.js":2}],17:[function(require,module,exports){
+},{"../animation.js":2}],18:[function(require,module,exports){
 /* Snappy Monster Entity.
  */
 module.exports = (function() {
@@ -1636,7 +1729,7 @@ module.exports = (function() {
 
 }());
 
-},{"../animation.js":2}],18:[function(require,module,exports){
+},{"../animation.js":2}],19:[function(require,module,exports){
 /* Wingy Monster Entity.
  */
 module.exports = (function() {
@@ -1681,7 +1774,7 @@ module.exports = (function() {
 
 }());
 
-},{"../animation.js":2}],19:[function(require,module,exports){
+},{"../animation.js":2}],20:[function(require,module,exports){
 module.exports = (function()
 {
 	/////////////////////////////////
@@ -2434,7 +2527,7 @@ module.exports = (function()
 		SetAudioManager          : SetAudioManager,
 	};
 })();
-},{}],20:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
 module.exports = (function() {
 
   function Door(x, y) {
@@ -2447,13 +2540,14 @@ module.exports = (function() {
 
 }());
 
-},{}],21:[function(require,module,exports){
+},{}],22:[function(require,module,exports){
 /* MainMenu GameState module
  * Authors:
  * - Ian Speer, Austin Boerger
  */
 module.exports = (function (){
   var credits = require('./credits.js');
+//  var help = require("help.js");
   var menu = document.getElementById("splash-screen"),
       stateManager;
 
@@ -2494,14 +2588,21 @@ module.exports = (function (){
    */
   var keyDown = function(event) {
     switch(event.keyCode) {
+      case 32: // Space
       case 13: // ENTER
         event.preventDefault();
 		    stateManager.popState();
         break;
+
       case 67: // C
         event.preventDefault();
         stateManager.pushState(credits);
         break;
+
+      // case 72: // H
+      //   event.preventDefault();
+      //   stateManager.pushState(help);
+      //   break;
     }
   }
   
@@ -2518,7 +2619,7 @@ module.exports = (function (){
   }
   
 })();
-},{"./credits.js":3}],22:[function(require,module,exports){
+},{"./credits.js":3}],23:[function(require,module,exports){
 /* Author: Nic Johnson
  *
  * Title: StatsManager.js
@@ -2908,4 +3009,4 @@ module.exports = (function()
 
 })();
 
-},{}]},{},[8]);
+},{}]},{},[9]);

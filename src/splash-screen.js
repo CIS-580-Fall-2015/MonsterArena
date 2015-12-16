@@ -4,6 +4,7 @@
  */
 module.exports = (function (){
   var credits = require('./credits.js');
+//  var help = require("help.js");
   var menu = document.getElementById("splash-screen"),
       stateManager;
 
@@ -44,14 +45,21 @@ module.exports = (function (){
    */
   var keyDown = function(event) {
     switch(event.keyCode) {
+      case 32: // Space
       case 13: // ENTER
         event.preventDefault();
 		    stateManager.popState();
         break;
+
       case 67: // C
         event.preventDefault();
         stateManager.pushState(credits);
         break;
+
+      // case 72: // H
+      //   event.preventDefault();
+      //   stateManager.pushState(help);
+      //   break;
     }
   }
   
