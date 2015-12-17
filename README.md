@@ -17,6 +17,9 @@ It serves as the final project for [Fundementals of Game Programming](http://cat
 * Nic Johnson (njj@ksu.edu)
 * Richard Petrie (rap1011@ksu.edu)
 * David Barnes III (dbarnes3@ksu.edu)
+	*Physics/Math calculations for movment of monsters accross screen
+	*Helped set up the webpage(espically set background image for arena), and align all the elements
+	*Debugged multiple small issues in game, while trying to "break" it
 * E.N. Speer (ispeer@ksu.edu)
 * Nate Kellogg (leeroyjenkins@ksu.edu)
 
