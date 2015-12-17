@@ -9,7 +9,11 @@ It serves as the final project for [Fundementals of Game Programming](http://cat
 ## Contributors
 
 * Kyle Brown (kyle16@ksu.edu)
-* Christian Hughes (cjhughes255@ksu.edu)
+* [Christian Hughes](www.christianhughes.net) (cjhughes255@ksu.edu)
+* 	<i>Implemented general animation framework/individual monster animations.</i>
+* 	<i>Processed non-HTML entity rendering and frame updating.</i>
+* 	<i>Sourced and formatted artwork into monster sprite sheets.</i>
+* 	<i>Did a variety of debug tasks & HTML tidbits.</i>
 * Nic Johnson (njj@ksu.edu)
 * Richard Petrie (rap1011@ksu.edu)
 * David Barnes III (dbarnes3@ksu.edu)
@@ -17,8 +21,6 @@ It serves as the final project for [Fundementals of Game Programming](http://cat
 * Nate Kellogg (leeroyjenkins@ksu.edu)
 
 # Development Notes
-<hr>
-
 ## Compiling
 
 Keep compiling simple!
@@ -29,12 +31,6 @@ Keep compiling simple!
 ## TODO
 
 - [ ] Menu states
-	- [x] ~~Credits state~~
-		- [x] ~~Basic HTML/CSS~~
-		- [x] ~~Javascript class~~
-	- [x] ~~Game over state~~
-		- [x] ~~Basic HTML/CSS~~
-		- [x] ~~Javascript class~~
     - [ ] Help state
 		- [ ] Basic HTML/CSS
 		- [ ] Javascript class
@@ -45,7 +41,6 @@ Keep compiling simple!
 	- [x] ~~Stats Manager~~
 	- [x] ~~Win music~~
 - [ ] Test Specials
-- [x] ~~Game over logic~~
 - [ ] General balance fixes
 - [ ] Mute buttons
 
