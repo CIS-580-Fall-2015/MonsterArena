@@ -44,9 +44,9 @@ Keep compiling simple!
 ## TODO
 
 - [ ] Menu states
-    - [ ] Help state
-		- [ ] Basic HTML/CSS
-		- [ ] Javascript class
+    - [x] Help state
+		- [x] Basic HTML/CSS
+		- [x] Javascript class
 	- [x] ~~Recompile main.js into MonsterArena.js once the above are done.~~
 - [ ] Hero animations
 - [ ] Implement AudioManager calls
