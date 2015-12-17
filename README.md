@@ -2,7 +2,7 @@
 
 Spawn a legion of monsters to destroy the lone hero! Use your resources wisely, and fight to upgrade your monster army. Battle for a wide array of distinct monsters, and useful power-ups.
 
-This game is built using vanilla HTML5, Javascript, and the [less css framework](http://lesscss.org).
+This game is built using vanilla HTML5, Javascript, the [less css framework](http://lesscss.org), [bootstrap](http://getbootstrap.com/getting-started/), and [jquery](https://jquery.com/).
 
 It serves as the final project for [Fundementals of Game Programming](http://catalog.k-state.edu/preview_course_nopop.php?catoid=2&coid=4202) at [Kansas State University](http://www.k-state.edu). Course instruction provided by [Nathan Bean](http://people.cis.ksu.edu/~nhb7817/).
 
@@ -15,6 +15,12 @@ It serves as the final project for [Fundementals of Game Programming](http://cat
 	* <i>Sourced and formatted artwork into monster sprite sheets.</i>
 	* <i>Did a variety of debug tasks & HTML tidbits.</i>
 * Nic Johnson (njj@ksu.edu)
+	* <i>Implemented Shop interface and functionality</i>
+	* <i>Implemented Stats interface and functionality</i>
+	* <i>Debugging</i>
+		* <i>Catching Richard's misuse of < and ></i>
+		* <i>Other sneaky bugs</i>
+	* <i>Implementation of Credits & Game Over gamestates</i>
 * Richard Petrie (rap1011@ksu.edu)
 * David Barnes III (dbarnes3@ksu.edu)
 	* <i>Physics/Math calculations for movment of monsters accross screen</i>
