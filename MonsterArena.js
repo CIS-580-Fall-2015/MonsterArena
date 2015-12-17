@@ -2096,6 +2096,7 @@ module.exports = (function()
 	function AddGold(amt)
 	{
 		var val = amt || defaultAddition;
+		val = Math.floor(val);
 		totalGold += val;
 		UpdateItemGrey();
 		SetGoldText();
