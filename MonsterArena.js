@@ -1234,7 +1234,7 @@ module.exports = (function() {
   Hero.prototype.levelup = function() {
     if (this.level <= 10) {
       var t = this.maxHealth;
-      this.maxHealth *= this.health_scale;
+      this.maxHealth *= this.maxHealth_scale;
       this.attack *= this.attack_scale;
       this.defense *= this.defense_scale;
       this.req_exp *= this.exp_scale;
@@ -2017,7 +2017,7 @@ module.exports = (function()
 	////////////////
 	currentSelected = undefined;
 	currentUpgrade  = undefined;
-	totalGold       = 0;
+	totalGold       = 100;
 	defaultAddition = 100;
 	/* eslint-disable */
 	specialProgression = [

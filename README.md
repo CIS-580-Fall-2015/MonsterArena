@@ -27,6 +27,10 @@ It serves as the final project for [Fundementals of Game Programming](http://cat
 	* <i>Helped set up the webpage(espically set background image for arena), and align all the elements</i>
 	* <i>Debugged multiple small issues in game, while trying to "break" it</i>
 * E.N. Speer (ispeer@ksu.edu)
+	* <i>Drew multiple arena images and created the help screen.</i>
+	* <i>Helped with implementation of Credits.</i>
+	* <i>Implemented game states.</i>
+	* <i>And debug tasks like everyone else.</i>
 * Nate Kellogg (leeroyjenkins@ksu.edu)
 
 # Development Notes

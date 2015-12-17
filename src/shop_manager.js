@@ -42,7 +42,7 @@ module.exports = (function()
 	////////////////
 	currentSelected = undefined;
 	currentUpgrade  = undefined;
-	totalGold       = 0;
+	totalGold       = 100;
 	defaultAddition = 100;
 	/* eslint-disable */
 	specialProgression = [
