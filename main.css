@@ -33,10 +33,12 @@
 #toplevel #arena #level {
   float: left;
   padding-left: 150px;
+  padding-bottom: 0;
 }
 #toplevel #arena #health {
   -webkit-apperance: none;
   padding-left: 25px;
+  padding-bottom: 0px;
 }
 #toplevel #arena #health::-webkit-meter-optimum-value {
   background: blue;
@@ -52,7 +54,7 @@
 #toplevel .splash {
   position: absolute;
   width: 1180px;
-  height: 605px;
+  height: 615px;
   background-image: url("img/splashscreen.png");
   background-repeat: no-repeat;
   background-size: 100% 100%;
@@ -62,7 +64,7 @@
 #toplevel #game_over {
   position: absolute;
   width: 1180px;
-  height: 605px;
+  height: 615px;
   border: 5px double #000;
   background-color: white;
   display: none;
@@ -83,7 +85,7 @@
 #toplevel #credits {
   position: absolute;
   width: 1180px;
-  height: 605px;
+  height: 615px;
   background-color: white;
   border: 5px double #000;
   display: none;

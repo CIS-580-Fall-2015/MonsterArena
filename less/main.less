@@ -1,6 +1,6 @@
 @default_height: 595px;
 @default_width: 1180px;
-@cover_doors: 10px;
+@cover_doors: 20px;
 @img_height: 590px;
 @img_width: 590px;
 @top_padding: ((@default_height - @img_height) / 2);
@@ -46,13 +46,15 @@
 	  	#level
 	  	{
 	  		float: left;
-	  		padding-left: 150px
+	  		padding-left: 150px;
+	  		padding-bottom: 0;
 	  	}
 		#health
 		{
 			
 			-webkit-apperance: none;
 			padding-left: 25px;
+			padding-bottom: 0px;
 			
 			&::-webkit-meter-optimum-value
 			{
