@@ -30,13 +30,16 @@
   margin-top: 2.5px;
   padding: 0 0 0 0;
 }
+#toplevel #arena #level {
+  float: left;
+  padding-left: 150px;
+}
 #toplevel #arena #health {
   -webkit-apperance: none;
-  apperance: none;
-  background: red;
+  padding-left: 25px;
 }
-#toplevel #arena #health::-webkit-progress-value {
-  background: red;
+#toplevel #arena #health::-webkit-meter-optimum-value {
+  background: blue;
 }
 #toplevel #shop {
   width: 295px;
@@ -99,7 +102,4 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-}
-progress.health::-webkit-progress-value {
-  background: red;
 }

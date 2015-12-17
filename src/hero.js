@@ -11,7 +11,7 @@ module.exports = (function() {
   // Entity Manager
   function Hero(stats, x, y, EntityManager) {
     this.health = stats.health[0];
-    this.health_scale = stats.health[1];
+    this.maxHealth_scale = stats.health[1];
     this.attack = stats.attack[0];
     this.attack_scale = stats.attack[1];
     this.defense = stats.defense[0];
@@ -26,7 +26,7 @@ module.exports = (function() {
 
     this.exp = 0;
     this.req_exp = 10;
-    this.level = 0;
+    this.level = 1;
 
     this.x = x;
     this.y = y;

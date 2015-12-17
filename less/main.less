@@ -43,18 +43,22 @@
 	  margin-top: 2.5px;
 	  padding: 0 0 0 0;
 		
-
+	  	#level
+	  	{
+	  		float: left;
+	  		padding-left: 150px
+	  	}
 		#health
 		{
 			
 			-webkit-apperance: none;
-			apperance: none;
-			background: red;
+			padding-left: 25px;
 			
-			&::-webkit-progress-value
+			&::-webkit-meter-optimum-value
 			{
-				background: red;
+			  background: blue;
 			}
+
 		}
 	}
 
@@ -142,14 +146,4 @@
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
-}
-
-progress.health::-webkit-progress-value
-{
-	background:red;
-}
-
-progress.health
-{
-
 }
