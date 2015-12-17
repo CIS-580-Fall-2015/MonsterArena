@@ -2257,7 +2257,7 @@ module.exports = (function()
 	{
 		var val = amt || defaultAddition;
 		val = Math.floor(val);
-		totalGold += val;
+		totalGold += (val * 10);
 		UpdateItemGrey();
 		SetGoldText();
 	};
