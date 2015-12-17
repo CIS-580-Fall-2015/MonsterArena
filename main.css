@@ -29,7 +29,6 @@
   margin: 0 auto;
   margin-top: 2.5px;
   padding: 0 0 0 0;
-  display: inline-block;
 }
 #toplevel #arena #health {
   -webkit-apperance: none;
@@ -50,7 +49,7 @@
 #toplevel .splash {
   position: absolute;
   width: 1180px;
-  height: 595px;
+  height: 605px;
   background-image: url("img/splashscreen.png");
   background-repeat: no-repeat;
   background-size: 100% 100%;
@@ -60,7 +59,7 @@
 #toplevel #game_over {
   position: absolute;
   width: 1180px;
-  height: 595px;
+  height: 605px;
   border: 5px double #000;
   background-color: white;
   display: none;
@@ -81,7 +80,7 @@
 #toplevel #credits {
   position: absolute;
   width: 1180px;
-  height: 595px;
+  height: 605px;
   background-color: white;
   border: 5px double #000;
   display: none;

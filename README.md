@@ -60,3 +60,4 @@ Added 4 svg images, in img folder for icons for toggling sound.
 * Richard Petrie (rap1011@ksu.edu)
 * David Barnes III (dbarnes3@ksu.edu)
 * E.N. Speer (ispeer@ksu.edu)
+* Nate Kellogg (leeroyjenkins@ksu.edu)
