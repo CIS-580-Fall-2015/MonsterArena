@@ -77,7 +77,6 @@ module.exports = (function() {
     this.EntityManager.add_gold(damage);
 
     if (this.health <= 0) {
-      //TODO die
       alive = false;
     }
 
