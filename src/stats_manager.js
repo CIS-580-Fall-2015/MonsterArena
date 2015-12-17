@@ -27,13 +27,13 @@ module.exports = (function()
 	//////////////////////////////////////
 	// Default values for start of game //
 	//////////////////////////////////////
-	var startingAttackVal = 1;
-	var startingDefenseVal = 1;
-	var startingHealthVal = 1;
+	var startingAttackVal = 5;
+	var startingDefenseVal = 5;
+	var startingHealthVal = 5;
 
-	var attackCap = 3;
-	var defenseCap = 3;
-	var healthCap = 3;
+	var attackCap = 10;
+	var defenseCap = 10;
+	var healthCap = 10;
 
 	var attackFloor = 1;
 	var defenseFloor = 1;

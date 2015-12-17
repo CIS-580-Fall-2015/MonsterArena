@@ -33,7 +33,9 @@ module.exports = (function() {
     animations: boss
   };
 
-  var ARENA_WIDTH = document.getElementById('monsters').width;
+
+
+    var ARENA_WIDTH = document.getElementById('monsters').width;
   var ARENA_HEIGHT = document.getElementById('monsters').height;
   var openedDoorsText = document.getElementById("available_doors");
   var OFFSET = 64;
@@ -51,7 +53,6 @@ module.exports = (function() {
     doors.push(new Door(ARENA_WIDTH * 0.75, ARENA_HEIGHT * 0.75)); // South-East
     doors.push(new Door(ARENA_WIDTH * 0.25, ARENA_HEIGHT * 0.75)); // South-West
     doors.push(new Door(ARENA_WIDTH * 0.25, ARENA_HEIGHT * 0.25)); // North-West
-    doors[0].open = true;
 
     hero = new Hero(HERO_STATS, ARENA_WIDTH / 2 - 32, ARENA_HEIGHT / 2 - 32, this);
 

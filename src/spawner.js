@@ -1,11 +1,10 @@
 module.exports = (function() {
 
-	var Colors = {
-		RED: "#ff0000",
-		BLUE: "#0066ff",
-		GREY: "#737373"
-	};
-	Object.freeze(Colors);
+  function Door(x, y) {
+    this.x = x;
+    this.y = y;
+    this.avaliable = true;
+  }
 
 	function Door(x, y) {
 		this.x = x;
