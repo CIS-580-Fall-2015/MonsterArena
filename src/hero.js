@@ -43,10 +43,10 @@ module.exports = (function() {
   Hero.prototype.levelup = function() {
     if (this.level <= 10) {
       var t = this.maxHealth;
-      this.maxHealth *= this.maxHealth_scale;
+      this.maxHealth *= this.health_scale;
       this.attack *= this.attack_scale;
       this.defense *= this.defense_scale;
-      this.req_exp ^= this.exp_scale;
+      this.req_exp *= this.exp_scale;
       this.exp = 0;
       this.level++;
       document.getElementById('health').max = Math.floor(this.maxHealth);
