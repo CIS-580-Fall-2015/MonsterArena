@@ -4,7 +4,7 @@
  */
 module.exports = (function (){
   var credits = require('./credits.js');
-//  var help = require("help.js");
+  var help = require("./help_stats.js");
   var menu = document.getElementById("splash-screen"),
       stateManager;
 
@@ -56,10 +56,10 @@ module.exports = (function (){
         stateManager.pushState(credits);
         break;
 
-      // case 72: // H
-      //   event.preventDefault();
-      //   stateManager.pushState(help);
-      //   break;
+       case 72: // H
+         event.preventDefault();
+         stateManager.pushState(help);
+         break;
     }
   }
   

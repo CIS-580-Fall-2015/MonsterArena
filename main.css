@@ -56,6 +56,36 @@
   border: 5px double #000;
   display: none;
 }
+#toplevel .help_arena {
+  position: absolute;
+  width: 1180px;
+  height: 605px;
+  background-image: url("img/help_screen/help_arena.png");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  border: 5px double #000;
+  display: none;
+}
+#toplevel .help_stats {
+  position: absolute;
+  width: 1180px;
+  height: 605px;
+  background-image: url("img/help_screen/help_stats.png");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  border: 5px double #000;
+  display: none;
+}
+#toplevel .help_shop {
+  position: absolute;
+  width: 1180px;
+  height: 605px;
+  background-image: url("img/help_screen/help_shop.png");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  border: 5px double #000;
+  display: none;
+}
 #toplevel #game_over {
   position: absolute;
   width: 1180px;
