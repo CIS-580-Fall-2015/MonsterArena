@@ -7,8 +7,13 @@ This game is built using vanilla HTML5, Javascript, the [less css framework](htt
 It serves as the final project for [Fundementals of Game Programming](http://catalog.k-state.edu/preview_course_nopop.php?catoid=2&coid=4202) at [Kansas State University](http://www.k-state.edu). Course instruction provided by [Nathan Bean](http://people.cis.ksu.edu/~nhb7817/).
 
 ## Contributors
-
+* David Barnes III (dbarnes3@ksu.edu)
+	* <i>Physics/Math calculations for movment of monsters accross screen</i>
+	* <i>Helped set up the webpage(espically set background image for arena), and align all the elements</i>
+	* <i>Debugged multiple small issues in game, while trying to "break" it</i>
 * Kyle Brown (kyle16@ksu.edu)
+	* <i>Implemented Audio Manager</i>
+	* <i>Audio files</i>
 * Christian Hughes (cjhughes255@ksu.edu)
 	* <i>Implemented general animation framework/individual monster animations.</i>
 	* <i>Processed non-HTML entity rendering and frame updating.</i>
@@ -21,17 +26,13 @@ It serves as the final project for [Fundementals of Game Programming](http://cat
 		* <i>Catching Richard's misuse of < and ></i>
 		* <i>Other sneaky bugs</i>
 	* <i>Implementation of Credits & Game Over gamestates</i>
+* Nate Kellogg (leeroyjenkins@ksu.edu)
 * Richard Petrie (rap1011@ksu.edu)
-* David Barnes III (dbarnes3@ksu.edu)
-	* <i>Physics/Math calculations for movment of monsters accross screen</i>
-	* <i>Helped set up the webpage(espically set background image for arena), and align all the elements</i>
-	* <i>Debugged multiple small issues in game, while trying to "break" it</i>
 * E.N. Speer (ispeer@ksu.edu)
 	* <i>Drew multiple arena images and created the help screen.</i>
 	* <i>Helped with implementation of Credits.</i>
 	* <i>Implemented game states.</i>
 	* <i>And debug tasks like everyone else.</i>
-* Nate Kellogg (leeroyjenkins@ksu.edu)
 
 # Development Notes
 ## Compiling
