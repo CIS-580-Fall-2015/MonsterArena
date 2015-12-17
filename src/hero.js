@@ -49,7 +49,7 @@ module.exports = (function() {
       this.req_exp ^= this.exp_scale;
       this.exp = 0;
       this.level++;
-      document.getElementById('health').max = this.maxHealth;
+      document.getElementById('health').max = Math.floor(this.maxHealth);
       document.getElementById('level').innerHTML = "Hero level: " + this.level;
 
       if (DEBUG) {
