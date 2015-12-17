@@ -1,6 +1,23 @@
-# MonsterArena
+# Monster Arena
 
-Final project for CIS580
+Spawn a legion of monsters to destroy the lone hero! Use your resources wisely, and fight to upgrade your monster army. Battle for a wide array of distinct monsters, and useful power-ups.
+
+This game is built using vanilla HTML5, Javascript, and the [less css framework](http://lesscss.org).
+
+It serves as the final project for [Fundementals of Game Programming](http://catalog.k-state.edu/preview_course_nopop.php?catoid=2&coid=4202) at [Kansas State University](http://www.k-state.edu). Course instruction provided by [Nathan Bean](http://people.cis.ksu.edu/~nhb7817/).
+
+## Contributors
+
+* Kyle Brown (kyle16@ksu.edu)
+* Christian Hughes (cjhughes255@ksu.edu)
+* Nic Johnson (njj@ksu.edu)
+* Richard Petrie (rap1011@ksu.edu)
+* David Barnes III (dbarnes3@ksu.edu)
+* E.N. Speer (ispeer@ksu.edu)
+* Nate Kellogg (leeroyjenkins@ksu.edu)
+
+# Development Notes
+<hr>
 
 ## Compiling
 
@@ -51,13 +68,3 @@ Public Functions:
 * toggleEffects
 
 Added 4 svg images, in img folder for icons for toggling sound.
-
-## Contributors
-
-* Kyle Brown (kyle16@ksu.edu)
-* Christian Hughes (cjhughes255@ksu.edu)
-* Nic Johnson (njj@ksu.edu)
-* Richard Petrie (rap1011@ksu.edu)
-* David Barnes III (dbarnes3@ksu.edu)
-* E.N. Speer (ispeer@ksu.edu)
-* Nate Kellogg (leeroyjenkins@ksu.edu)
