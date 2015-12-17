@@ -75,7 +75,6 @@ module.exports = (function() {
     this.health -= damage;
 
     this.EntityManager.add_gold(damage);
-    //testing health bar
 
     if (this.health <= 0) {
       //TODO die
@@ -96,7 +95,7 @@ module.exports = (function() {
       this.health = this.maxHealth;
     }
 
-    document.getElementById('health').value = this.health;
+    document.getElementById('health').value = Math.floor(this.health);
 
     if (DEBUG) {
       console.log("Hero healed");
