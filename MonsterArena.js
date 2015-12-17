@@ -888,7 +888,7 @@ module.exports = function() {
     );
     ShopManager.SetAudioManager(AudioManager);
 
-    ShopManager.AddGold(150000);
+    //ShopManager.AddGold(150000);
 
     EntityManager.initialize();
 
@@ -1077,7 +1077,7 @@ module.exports = (function() {
       this.maxHealth *= this.health_scale;
       this.attack *= this.attack_scale;
       this.defense *= this.defense_scale;
-      this.req_exp ^= this.exp_scale;
+      this.req_exp *= this.exp_scale;
       this.exp = 0;
       this.level++;
       document.getElementById('health').max = Math.floor(this.maxHealth);
@@ -3014,6 +3014,7 @@ module.exports = (function()
 		if (DEBUG) { console.log("StatsManager: Increasing Attack Cap"); }
 		var amt = val || 1;
 		attackCap += amt;
+		RefreshButtonGrey();
 	}
 
 	function IncreaseDefenseCap(val)
@@ -3021,6 +3022,7 @@ module.exports = (function()
 		if (DEBUG) { console.log("StatsManager: Increasing Defense Cap"); }
 		var amt = val || 1;
 		defenseCap += amt;
+		RefreshButtonGrey();
 	}
 
 	function IncreaseHealthCap(val)
@@ -3028,6 +3030,26 @@ module.exports = (function()
 		if (DEBUG) { console.log("StatsManager: Increasing Health Cap"); }
 		var amt = val || 1;
 		healthCap += amt;
+		RefreshButtonGrey();
+	}
+
+	function RefreshButtonGrey()
+	{
+		if (healthVal < healthCap)
+		{
+			healthPlus1.setAttribute("stroke", "#000000");
+			healthPlus2.setAttribute("stroke", "#000000");
+		}
+		if (attackVal < attackCap)
+		{
+			attackPlus1.setAttribute("stroke", "#000000");
+			attackPlus2.setAttribute("stroke", "#000000");
+		}
+		if (defenseVal < defenseCap)
+		{
+			defensePlus1.setAttribute("stroke", "#000000");
+			defensePlus2.setAttribute("stroke", "#000000");
+		}
 	}
 
 	function SetSpawnDelegate(val)
