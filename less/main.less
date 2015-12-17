@@ -1,6 +1,6 @@
 @default_height: 595px;
 @default_width: 1180px;
-@cover_doors: 10px;
+@cover_doors: 20px;
 @img_height: 590px;
 @img_width: 590px;
 @top_padding: ((@default_height - @img_height) / 2);
@@ -43,18 +43,24 @@
 	  margin-top: 2.5px;
 	  padding: 0 0 0 0;
 		
-
+	  	#level
+	  	{
+	  		float: left;
+	  		padding-left: 150px;
+	  		padding-bottom: 0;
+	  	}
 		#health
 		{
 			
 			-webkit-apperance: none;
-			apperance: none;
-			background: red;
+			padding-left: 25px;
+			padding-bottom: 0px;
 			
-			&::-webkit-progress-value
+			&::-webkit-meter-optimum-value
 			{
-				background: red;
+			  background: blue;
 			}
+
 		}
 	}
 
@@ -175,14 +181,4 @@
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
-}
-
-progress.health::-webkit-progress-value
-{
-	background:red;
-}
-
-progress.health
-{
-
 }

@@ -1,7 +1,35 @@
-# MonsterArena
+# Monster Arena
 
-Final project for CIS580
+Spawn a legion of monsters to destroy the lone hero! Use your resources wisely, and fight to upgrade your monster army. Battle for a wide array of distinct monsters, and useful power-ups.
 
+This game is built using vanilla HTML5, Javascript, the [less css framework](http://lesscss.org), [bootstrap](http://getbootstrap.com/getting-started/), and [jquery](https://jquery.com/).
+
+It serves as the final project for [Fundementals of Game Programming](http://catalog.k-state.edu/preview_course_nopop.php?catoid=2&coid=4202) at [Kansas State University](http://www.k-state.edu). Course instruction provided by [Nathan Bean](http://people.cis.ksu.edu/~nhb7817/).
+
+## Contributors
+
+* Kyle Brown (kyle16@ksu.edu)
+* Christian Hughes (cjhughes255@ksu.edu)
+	* <i>Implemented general animation framework/individual monster animations.</i>
+	* <i>Processed non-HTML entity rendering and frame updating.</i>
+	* <i>Sourced and formatted artwork into monster sprite sheets.</i>
+	* <i>Did a variety of debug tasks & HTML tidbits.</i>
+* Nic Johnson (njj@ksu.edu)
+	* <i>Implemented Shop interface and functionality</i>
+	* <i>Implemented Stats interface and functionality</i>
+	* <i>Debugging</i>
+		* <i>Catching Richard's misuse of < and ></i>
+		* <i>Other sneaky bugs</i>
+	* <i>Implementation of Credits & Game Over gamestates</i>
+* Richard Petrie (rap1011@ksu.edu)
+* David Barnes III (dbarnes3@ksu.edu)
+	* <i>Physics/Math calculations for movment of monsters accross screen</i>
+	* <i>Helped set up the webpage(espically set background image for arena), and align all the elements</i>
+	* <i>Debugged multiple small issues in game, while trying to "break" it</i>
+* E.N. Speer (ispeer@ksu.edu)
+* Nate Kellogg (leeroyjenkins@ksu.edu)
+
+# Development Notes
 ## Compiling
 
 Keep compiling simple!
@@ -12,12 +40,6 @@ Keep compiling simple!
 ## TODO
 
 - [ ] Menu states
-	- [x] ~~Credits state~~
-		- [x] ~~Basic HTML/CSS~~
-		- [x] ~~Javascript class~~
-	- [x] ~~Game over state~~
-		- [x] ~~Basic HTML/CSS~~
-		- [x] ~~Javascript class~~
     - [ ] Help state
 		- [ ] Basic HTML/CSS
 		- [ ] Javascript class
@@ -28,7 +50,6 @@ Keep compiling simple!
 	- [x] ~~Stats Manager~~
 	- [x] ~~Win music~~
 - [ ] Test Specials
-- [x] ~~Game over logic~~
 - [ ] General balance fixes
 - [ ] Mute buttons
 
@@ -51,13 +72,3 @@ Public Functions:
 * toggleEffects
 
 Added 4 svg images, in img folder for icons for toggling sound.
-
-## Contributors
-
-* Kyle Brown (kyle16@ksu.edu)
-* Christian Hughes (cjhughes255@ksu.edu)
-* Nic Johnson (njj@ksu.edu)
-* Richard Petrie (rap1011@ksu.edu)
-* David Barnes III (dbarnes3@ksu.edu)
-* E.N. Speer (ispeer@ksu.edu)
-* Nate Kellogg (leeroyjenkins@ksu.edu)

@@ -11,7 +11,7 @@ module.exports = (function() {
   // Entity Manager
   function Hero(stats, x, y, EntityManager) {
     this.health = stats.health[0];
-    this.health_scale = stats.health[1];
+    this.maxHealth_scale = stats.health[1];
     this.attack = stats.attack[0];
     this.attack_scale = stats.attack[1];
     this.defense = stats.defense[0];
@@ -26,7 +26,7 @@ module.exports = (function() {
 
     this.exp = 0;
     this.req_exp = 10;
-    this.level = 0;
+    this.level = 1;
 
     this.x = x;
     this.y = y;
@@ -41,15 +41,15 @@ module.exports = (function() {
   // Levelups the hero's stats based
   // on scaling factor
   Hero.prototype.levelup = function() {
-    if (this.level >= 10) {
+    if (this.level <= 10) {
       var t = this.maxHealth;
-      this.maxHealth *= this.maxHealth_scale;
+      this.maxHealth *= this.health_scale;
       this.attack *= this.attack_scale;
       this.defense *= this.defense_scale;
-      this.req_exp ^= this.exp_scale;
+      this.req_exp *= this.exp_scale;
       this.exp = 0;
       this.level++;
-      document.getElementById('health').max = this.maxHealth;
+      document.getElementById('health').max = Math.floor(this.maxHealth);
       document.getElementById('level').innerHTML = "Hero level: " + this.level;
 
       if (DEBUG) {
@@ -75,10 +75,8 @@ module.exports = (function() {
     this.health -= damage;
 
     this.EntityManager.add_gold(damage);
-    //testing health bar
 
     if (this.health <= 0) {
-      //TODO die
       alive = false;
     }
 
@@ -96,12 +94,14 @@ module.exports = (function() {
       this.health = this.maxHealth;
     }
 
+    document.getElementById('health').value = Math.floor(this.health);
+
     if (DEBUG) {
       console.log("Hero healed");
     }
   };
 
-  Hero.prototype.render = function(cntx) 
+  Hero.prototype.render = function(cntx)
   {
     cntx.drawImage(
       this.img, // image
@@ -113,7 +113,7 @@ module.exports = (function() {
       this.y, // destination y
       this.width, // destination width
       this.height // destination height
-     );  
+     );
   };
 
   return Hero;

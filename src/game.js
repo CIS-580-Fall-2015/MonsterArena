@@ -37,7 +37,7 @@ module.exports = function() {
     );
     ShopManager.SetAudioManager(AudioManager);
 
-    ShopManager.AddGold(150000);
+    //ShopManager.AddGold(150000);
 
     EntityManager.initialize();
 
