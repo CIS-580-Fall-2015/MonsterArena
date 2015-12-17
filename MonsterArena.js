@@ -12,18 +12,18 @@
  * ===========
  * Description
  * ===========
- * This script implements an audio manager in JavaScript and HTML5.
+ * This script implements an audio manager in JavaScript and HTML5.  
  * Uses the browserify module.exports design pattern.
- *
+ * 
  * ==========
  * How to Use
  * ==========
- * In the script that needs to use music and sound effects, add the following line of code to
+ * In the script that needs to use music and sound effects, add the following line of code to 
  * reference the audio manager; given that both scripts are in src folder:
- * var audiomanager = require('./AudioManager.js');
- *
- *
- * Then you can use the prototype functions in this class.
+ * var audiomanager = require('./AudioManager.js');		
+ * 
+ * 
+ * Then you can use the prototype functions in this class. 
  * For music, call play music functions (i.e. audiomanager.playIdleMusic()).
  * It will stop the current music, and play the new music.
  * For sound FX, call play soundFX functions (i.e. audiomanager.playUpgradeSFX()).
@@ -39,10 +39,10 @@
  * </div>
  * <div>
  *  <audio id="soundfx1">Audio:Canvas Not Supported</audio>
- * </div>
+ * </div> 
  * <div>
  *  <audio id="soundfx2">Audio:Canvas Not Supported</audio>
- * </div>
+ * </div> 
  *
  * ===============
  * Version History
@@ -50,10 +50,10 @@
  * Version Date				Version Number kb-4RGB-pixels() 	Comment
  * -----------				---------------------------------	-------
  * ad-2015-12-09 23:50:00	(0,0,1)(0,7,231)(1,12,9)(23,50,0)	AudioManager created
- *			00-00-01 | 00-07-E7 | 01-0C-09 | 17-32-00
+ *			00-00-01 | 00-07-E7 | 01-0C-09 | 17-32-00 
  *
  * ad-2015-12-10 20:07:00	(0,0,1)(0,7,231)(1,12,10)(20,7,0)	Design outline
- *			00-00-01 | 00-07-E7 | 01-0C-0A | 14-07-00
+ *			00-00-01 | 00-07-E7 | 01-0C-0A | 14-07-00 
  *
  * ad-2015-12-11 19:17:00	(0,0,1)(0,7,231)(1,12,11)(19,17,0)	Working Version
  *			00-00-01 | 00-07-E7 | 01-0C-0b | 13-10-00
@@ -92,12 +92,12 @@
  * COMMENT                  MEANING
  * -------                  -------
  * BEGIN OF Xxx Yyy ZZZ   	Indicates the beginning of a section of related functions where Xxx Yyy is the Catagory Name, ZZZ is type like Variables, Functions, Sets, Gets...
- * !END OF Xxx Yyy ZZZ    	Indicates the end       of a section of related functions  ""   ""  "" ""   ""      "" ...
+ * !END OF Xxx Yyy ZZZ    	Indicates the end       of a section of related functions  ""   ""  "" ""   ""      "" ... 
  * Normal Xxx Convention    This Convention Means a Name or Title of Some Xxx Functionality or Related Section of Code
  * lower case convention    this convention means a comment describing how some section of code works
  * camelCaseConvention      thisIsTheConventionForNamingVariables (where private variables the first char is '_')
- *
- *
+ * 
+ * 
  * =========
  * Functions
  * =========
@@ -133,7 +133,7 @@
  *	MAX_VOLUME_LVL = .9; // The level that the max volume should be (.9 = 90%).
  *	MIN_VOLUME_LVL = .1; // The level that tests if it is on volume should be (.1 = 10%).
  *	ZERO_VOLUME_LVL = 0; // the level that means zero volume (no sound playing).
- *
+ * 
  * ~Enumerations
  *	AudioSounds - Numbers that correspond with audio sounds
  *		IDLEMUSIC: 0,
@@ -164,7 +164,7 @@
  *		3: "audio/MALoseMusic.wav",
  *		4: "audio/MALevelUpSound.wav",
  *		5: "audio/MAUpgradeSound.wav",
- *		6: "audio/MABuffSound.wav",
+ *		6: "audio/MABuffSound.wav", 
  *		7: "audio/MADebuffSound.wav", *
  *		8: "audio/MAClickSound.wav",
  *		9: "audio/MASpawnSound.wav"
@@ -214,9 +214,9 @@ module.exports = (function()
   function AudioManager()
   {
 	this.DEBUG = true; // prints debug statements
-
+	
 	// Audio Enumerations
-	this.AudioSounds =
+	this.AudioSounds = 
 	{
 		IDLEMUSIC: 0,
 		BATTLEMUSIC: 1,
@@ -232,7 +232,7 @@ module.exports = (function()
 	Object.freeze(this.AudioSounds);
 
 	// Audio Strings
-	this.Strings =
+	this.Strings = 
 	{
 		0: "IDLEMUSIC",
 		1: "BATTLEMUSIC",
@@ -246,9 +246,9 @@ module.exports = (function()
 		9: "SPAWNSOUND"
 	}
 	Object.freeze(this.Strings);
-
+	
 	// Audio File-paths
-	this.MusicFiles =
+	this.MusicFiles = 
 	{
 		0: "audio/MAIdleMusic.wav",
 		1: "audio/MABattleMusic.wav",
@@ -262,8 +262,8 @@ module.exports = (function()
 		9: "audio/MASpawnSound.wav"
 	}
 	Object.freeze(this.MusicFiles);
-
-
+	
+	
 	// Global DOM Elements
 	this.musicElm = document.getElementById("bgmusic"); // music element
 	this.soundElm = document.getElementById("soundfx"); // sound effects element
@@ -274,7 +274,7 @@ module.exports = (function()
 		this.currentTime = 0;
 		this.play();
 	}, false);
-
+	
 	// Private Variables
 	this._curMusic = 0; // the current music number that is playing
 	this._curSFX = 4;	// the current sound effects number that is playing
@@ -285,23 +285,23 @@ module.exports = (function()
 	this.MIN_VOLUME_LVL = .1; // The level that the max volume should be (.1 = 90%).
 	this.ZERO_VOLUME_LVL = 0; // the level that means zero volume (no sound playing).
 
-
-
-  } // !END OF Audio Manager CLASS FUNCTION
-
-
+	
+	
+  } // !END OF Audio Manager CLASS FUNCTION  
+  
+  
 	// BEGIN OF General Audio Playing FUNCTIONS
 	// Toggle  Volume Functions
 	function toggleMusic(musicElm, maxVolLvl, minVolLvl, zeroVolLvl){
 		if (musicElm.volume >= minVolLvl)
 		{
-			musicElm.volume = zeroVolLvl;
+			musicElm.volume = zeroVolLvl;	
 		} else
 		{
 			musicElm.volume = maxVolLvl;
-		}
+		}				
 	}
-
+	
 	function playMusic(musicElm, musicPath) {
 		//console.log("AudioManager: General Play Music-debug")
 		musicElm.src = musicPath;	// sets the file path
@@ -310,10 +310,10 @@ module.exports = (function()
 	function pauseMusic(musicElm) {
 		musicElm.pause();			// pauses the music
 	}
-
+	
 	// !END OF General Audio Playing FUNCTIONS
-
-
+	
+	
 	// BEGIN OF Game Specific Audio FUNCTIONS
 	// Music Play Functions
 	AudioManager.prototype.playIdleMusic = function ()
@@ -335,7 +335,7 @@ module.exports = (function()
 		this._curMusic = 2;
 		playMusic(this.musicElm, this.MusicFiles[this._curMusic]);
 	}
-
+	
 	// Sound FX Play Functions
 	AudioManager.prototype.playLevelUpSFX = function ()
 	{
@@ -373,7 +373,7 @@ module.exports = (function()
 		this._curSFX = 9;
 		playMusic(this.soundElm,this.MusicFiles[this._curSFX]);
 	}
-
+	
 	// Volume Control Functions
 	AudioManager.prototype.toggleMusic = function ()
 	{
@@ -387,7 +387,7 @@ module.exports = (function()
 	}
 	// !END OF Game Specific Audio FUNCTIONS
 
-
+	
 	return new AudioManager();	// returns a new AudioManager()
 })();
 
@@ -492,11 +492,11 @@ module.exports = function () {
  *
  * Title: credits.js
  *
- * Description:
- *
+ * Description: 
+ * 
  *
  * History:
- * 	December 16, 2015:
+ * 	December 16, 2015: 
  * 		-Date Created
  */
 module.exports = (function()
@@ -505,12 +505,12 @@ module.exports = (function()
 	var stateManager;
 	var back = document.getElementById("cred_go_back");
 	/*
-	* The load() method initializes the menu
+	* The load() method initializes the menu 
 	* and tells the DOM to render the menu HTML
 	* parameters:
 	* - sm the state manager
 	*/
-	var load = function(sm)
+	var load = function(sm) 
 	{
 		stateManager = sm;
 		menu.style.display = "flex";
@@ -519,20 +519,20 @@ module.exports = (function()
 	/*
 	* The exit() method hides the menu
 	*/
-	var exit = function()
+	var exit = function() 
 	{
 		menu.style.display = "none";
 	}
 
-	/*
+	/* 
 	* The update() method updates the menu
 	* (in this case, a no-op)
 	*/
 	var update = function() {}
 
-	/*
+	/* 
 	* The render() method renders the menu
-	* (in this case, a no-op as the menu is
+	* (in this case, a no-op as the menu is 
 	* HTML elements renderd by the DOM)
 	*/
 	var render = function() {}
@@ -544,11 +544,11 @@ module.exports = (function()
 		stateManager.popState();
 	}
 
-	/*
-	* The keyDown() method handles
+	/* 
+	* The keyDown() method handles 
 	* the key down event for the menu.
 	*/
-	var keyDown = function(event)
+	var keyDown = function(event) 
 	{
 		// switch(event.keyCode) {
 		//   case 13: // ENTER
@@ -851,7 +851,7 @@ module.exports = (function() {
 },{"./hero.js":8,"./monster.js":10,"./monsters/Boss.js":11,"./monsters/Bosser.js":12,"./monsters/Bossest.js":13,"./spawner":21}],6:[function(require,module,exports){
 module.exports = function() {
 //window.onload = function()
-//{
+//{ 
     // Module variables
     gameTime = 0;
     canvas = document.getElementById("monsters");
@@ -949,11 +949,11 @@ module.exports = function() {
  *
  * Title: game_over.js
  *
- * Description:
- *
+ * Description: 
+ * 
  *
  * History:
- * 	December 16, 2015:
+ * 	December 16, 2015: 
  * 		-Date Created
  */
 module.exports = (function()
@@ -962,12 +962,12 @@ module.exports = (function()
 	var stateManager;
 	var credits = document.getElementById("GO_credits_btn");
 	/*
-	* The load() method initializes the menu
+	* The load() method initializes the menu 
 	* and tells the DOM to render the menu HTML
 	* parameters:
 	* - sm the state manager
 	*/
-	var load = function(sm)
+	var load = function(sm) 
 	{
 		stateManager = sm;
 		menu.style.display = "flex";
@@ -976,20 +976,20 @@ module.exports = (function()
 	/*
 	* The exit() method hides the menu
 	*/
-	var exit = function()
+	var exit = function() 
 	{
 		menu.style.display = "none";
 	}
 
-	/*
+	/* 
 	* The update() method updates the menu
 	* (in this case, a no-op)
 	*/
 	var update = function() {}
 
-	/*
+	/* 
 	* The render() method renders the menu
-	* (in this case, a no-op as the menu is
+	* (in this case, a no-op as the menu is 
 	* HTML elements renderd by the DOM)
 	*/
 	var render = function() {}
@@ -1001,11 +1001,11 @@ module.exports = (function()
 		stateManager.pushState(c);
 	}
 
-	/*
-	* The keyDown() method handles
+	/* 
+	* The keyDown() method handles 
 	* the key down event for the menu.
 	*/
-	var keyDown = function(event)
+	var keyDown = function(event) 
 	{
 		// switch(event.keyCode) {
 		//   case 13: // ENTER
@@ -1051,9 +1051,9 @@ module.exports = (function() {
     this.EntityManager = EntityManager;
     this.maxHealth = this.health;
     this.img = new Image();
-    this.img.src = "./img/test_player.png";
-    this.width = 32;
-    this.height = 32;
+    this.img.src = "./img/hero/heropeasantfront.png";
+    this.width = 64;
+    this.height = 64;
 
     this.exp = 0;
     this.req_exp = 10;
@@ -1081,6 +1081,7 @@ module.exports = (function() {
       this.exp = 0;
       this.level++;
       document.getElementById('health').max = this.maxHealth;
+      document.getElementById('level').innerHTML = "Hero level: " + this.level;
 
       if (DEBUG) {
         console.log("Hero leveled up! Level: " +this.level);
@@ -1131,8 +1132,19 @@ module.exports = (function() {
     }
   };
 
-  Hero.prototype.render = function(cntx) {
-    cntx.fillRect(this.x, this.y, 64, 64);
+  Hero.prototype.render = function(cntx) 
+  {
+    cntx.drawImage(
+      this.img, // image
+      0, // source x
+      0, // source y
+      this.width, // source width
+      this.height, // source height
+      this.x, // destination x
+      this.y, // destination y
+      this.width, // destination width
+      this.height // destination height
+     );  
   };
 
   return Hero;
@@ -1142,27 +1154,27 @@ module.exports = (function() {
 },{"./entity.js":4}],9:[function(require,module,exports){
 // Wait for the window to load completely
 window.onload = function() {
-
+  
   var gameTime = 0,
       gameState = [];
-
+    
   var pushState = function(state) {
     state.load({pushState: pushState, popState: popState});
     gameState.push(state);
   }
-
+  
   var popState = function() {
-    state = gameState.pop();
+    state = gameState.pop(); 
     if(state) state.exit();
     return state;
   }
 
   var game = require('./game');
   pushState(game);
-
+  
   var splashScreen = require('./splash-screen');
   pushState(splashScreen);
-
+  
   // Event handlers for key events
   window.onkeydown = function(event) {
     gameState[gameState.length-1].keyDown(event);
@@ -1170,7 +1182,7 @@ window.onload = function() {
   window.onkeyup = function(event) {
     gameState[gameState.length-1].keyUp(event);
   }
-
+  
   function loop(newTime) {
     var elapsedTime = (newTime - gameTime) / 1000;
     gameTime = newTime;
@@ -1179,7 +1191,7 @@ window.onload = function() {
     window.requestAnimationFrame(loop);
   }
   window.requestAnimationFrame(loop);
-
+  
 };
 },{"./game":6,"./splash-screen":22}],10:[function(require,module,exports){
 /* Base class for each monster.
@@ -1838,7 +1850,7 @@ module.exports = (function()
 	// // scope stuff for event      //
 	// // handlers                   //
 	// ////////////////////////////////
-	// var self =
+	// var self = 
 
 	////////////////
 	// Properties //
@@ -1857,7 +1869,7 @@ module.exports = (function()
 								];
 	/* eslint-enable */
 	specialIndex = 0;
-
+	
 	///////////////////
 	// Audio Manager //
 	///////////////////
@@ -2556,12 +2568,11 @@ module.exports = (function()
 },{}],21:[function(require,module,exports){
 module.exports = (function() {
 
-	var Colors = {
-		RED: "#ff0000",
-		BLUE: "#0066ff",
-		GREY: "#737373"
-	};
-	Object.freeze(Colors);
+  function Door(x, y) {
+    this.x = x;
+    this.y = y;
+    this.avaliable = true;
+  }
 
 	function Door(x, y) {
 		this.x = x;
@@ -2605,7 +2616,7 @@ module.exports = (function() {
 	// 	cntx.restore();
 	// }
 
-  return Door;
+	return Door;
 
 }());
 
@@ -2621,7 +2632,7 @@ module.exports = (function (){
       stateManager;
 
   /*
-   * The load() method initializes the menu
+   * The load() method initializes the menu 
    * and tells the DOM to render the menu HTML
    * parameters:
    * - sm the state manager
@@ -2630,29 +2641,29 @@ module.exports = (function (){
     stateManager = sm;
     menu.style.display = "flex";
   }
-
+  
   /*
    * The exit() method hides the menu
    */
   var exit = function() {
     menu.style.display = "none";
   }
-
-  /*
+    
+  /* 
    * The update() method updates the menu
    * (in this case, a no-op)
    */
   var update = function() {}
-
-  /*
+  
+  /* 
    * The render() method renders the menu
-   * (in this case, a no-op as the menu is
+   * (in this case, a no-op as the menu is 
    * HTML elements renderd by the DOM)
    */
   var render = function() {}
-
-  /*
-   * The keyDown() method handles
+    
+  /* 
+   * The keyDown() method handles 
    * the key down event for the menu.
    */
   var keyDown = function(event) {
@@ -2674,10 +2685,10 @@ module.exports = (function (){
       //   break;
     }
   }
-
+  
   /* The keyUp() method handles the key up event */
   function keyUp(event) {}
-
+  
   return {
     load: load,
     exit: exit,
@@ -2686,7 +2697,7 @@ module.exports = (function (){
     keyDown: keyDown,
     keyUp: keyUp
   }
-
+  
 })();
 },{"./credits.js":3}],23:[function(require,module,exports){
 /* Author: Nic Johnson
@@ -2718,13 +2729,13 @@ module.exports = (function()
 	//////////////////////////////////////
 	// Default values for start of game //
 	//////////////////////////////////////
-	var startingAttackVal = 5;
-	var startingDefenseVal = 5;
-	var startingHealthVal = 5;
+	var startingAttackVal = 1;
+	var startingDefenseVal = 1;
+	var startingHealthVal = 1;
 
-	var attackCap = 10;
-	var defenseCap = 10;
-	var healthCap = 10;
+	var attackCap = 3;
+	var defenseCap = 3;
+	var healthCap = 3;
 
 	var attackFloor = 1;
 	var defenseFloor = 1;
@@ -2738,7 +2749,7 @@ module.exports = (function()
 	var healthVal = startingHealthVal;
 	var specialContent = undefined;
 	var spawnDelegate = undefined;
-
+	
 	///////////////////
 	// Audio Manager //
 	///////////////////

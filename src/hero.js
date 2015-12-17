@@ -20,9 +20,9 @@ module.exports = (function() {
     this.EntityManager = EntityManager;
     this.maxHealth = this.health;
     this.img = new Image();
-    this.img.src = "./img/test_player.png";
-    this.width = 32;
-    this.height = 32;
+    this.img.src = "./img/hero/heropeasantfront.png";
+    this.width = 64;
+    this.height = 64;
 
     this.exp = 0;
     this.req_exp = 10;
@@ -101,8 +101,19 @@ module.exports = (function() {
     }
   };
 
-  Hero.prototype.render = function(cntx) {
-    cntx.fillRect(this.x, this.y, 64, 64);
+  Hero.prototype.render = function(cntx) 
+  {
+    cntx.drawImage(
+      this.img, // image
+      0, // source x
+      0, // source y
+      this.width, // source width
+      this.height, // source height
+      this.x, // destination x
+      this.y, // destination y
+      this.width, // destination width
+      this.height // destination height
+     );  
   };
 
   return Hero;
