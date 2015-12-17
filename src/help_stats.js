@@ -3,18 +3,18 @@
  */
  
 module.exports = (function (){
-  var menu = document.getElementById("help-stats");
+  var helpStats = document.getElementById("help-stats");
   var nextHelp = require("./help_arena.js");
    var  stateManager;
 
-  var load = function(StateManager) {
-    stateManager = StateManager;
-    menu.style.display = "flex";
+  var load = function(sm) {
+    stateManager = sm;
+    helpStats.style.display = "flex";
   }
   
-  /* Hides the menu on exit. */
+  /* Hides the helpStats on exit. */
   var exit = function() {
-    menu.style.display = "none";
+    helpStats.style.display = "none";
   }
     
   /*Not applicable to this state */
@@ -23,7 +23,7 @@ module.exports = (function (){
   /*Not applicable to this state. */
   var render = function() {}
     
-/* Handles keydown events in order to exit the menu. */
+/* Handles keydown events in order to exit the helpStats. */
   var keyDown = function(event) {
     switch(event.keyCode) {
       case 13: // ENTER

@@ -3,18 +3,17 @@
  */
  
 module.exports = (function (){
-  var menu = document.getElementById("help-shop");
-  var nextHelp = require("./help_stats.js");
+  var helpShop = document.getElementById("help-shop");
    var  stateManager;
 
-  var load = function(StateManager) {
-    stateManager = StateManager;
-    menu.style.display = "flex";
+  var load = function(sm) {
+    stateManager = sm;
+    helpShop.style.display = "flex";
   }
   
-  /* Hides the menu on exit. */
+  /* Hides the helpShop on exit. */
   var exit = function() {
-    menu.style.display = "none";
+    helpShop.style.display = "none";
   }
     
   /*Not applicable to this state */
@@ -23,13 +22,12 @@ module.exports = (function (){
   /*Not applicable to this state. */
   var render = function() {}
     
-/* Handles keydown events in order to exit the menu. */
+/* Handles keydown events in order to exit the helpShop. */
   var keyDown = function(event) {
     switch(event.keyCode) {
       case 13: // ENTER
         event.preventDefault();
 		stateManager.popState();
-		stateManager.pushState(nextHelp);
         break;
 	case 27: //ESC
 		event.preventDefault();

@@ -3,18 +3,18 @@
  */
  
 module.exports = (function (){
-  var menu = document.getElementById("help-arena");
+  var helpArena = document.getElementById("help-arena");
   var nextHelp = require("./help_shop.js");
    var  stateManager;
 
-  var load = function(StateManager) {
-    stateManager = StateManager;
-    menu.style.display = "flex";
+  var load = function(sm) {
+    stateManager = sm;
+    helpArena.style.display = "flex";
   }
   
-  /* Hides the menu on exit. */
+  /* Hides the helpArena on exit. */
   var exit = function() {
-    menu.style.display = "none";
+    helpArena.style.display = "none";
   }
     
   /*Not applicable to this state */
@@ -23,7 +23,7 @@ module.exports = (function (){
   /*Not applicable to this state. */
   var render = function() {}
     
-/* Handles keydown events in order to exit the menu. */
+/* Handles keydown events in order to exit the helpArena. */
   var keyDown = function(event) {
     switch(event.keyCode) {
       case 13: // ENTER

@@ -1034,18 +1034,18 @@ module.exports = (function()
  */
  
 module.exports = (function (){
-  var menu = document.getElementById("help-arena");
+  var helpArena = document.getElementById("help-arena");
   var nextHelp = require("./help_shop.js");
    var  stateManager;
 
-  var load = function(StateManager) {
-    stateManager = StateManager;
-    menu.style.display = "flex";
+  var load = function(sm) {
+    stateManager = sm;
+    helpArena.style.display = "flex";
   }
   
-  /* Hides the menu on exit. */
+  /* Hides the helpArena on exit. */
   var exit = function() {
-    menu.style.display = "none";
+    helpArena.style.display = "none";
   }
     
   /*Not applicable to this state */
@@ -1054,7 +1054,7 @@ module.exports = (function (){
   /*Not applicable to this state. */
   var render = function() {}
     
-/* Handles keydown events in order to exit the menu. */
+/* Handles keydown events in order to exit the helpArena. */
   var keyDown = function(event) {
     switch(event.keyCode) {
       case 13: // ENTER
@@ -1088,18 +1088,17 @@ module.exports = (function (){
  */
  
 module.exports = (function (){
-  var menu = document.getElementById("help-shop");
-  var nextHelp = require("./help_stats.js");
+  var helpShop = document.getElementById("help-shop");
    var  stateManager;
 
-  var load = function(StateManager) {
-    stateManager = StateManager;
-    menu.style.display = "flex";
+  var load = function(sm) {
+    stateManager = sm;
+    helpShop.style.display = "flex";
   }
   
-  /* Hides the menu on exit. */
+  /* Hides the helpShop on exit. */
   var exit = function() {
-    menu.style.display = "none";
+    helpShop.style.display = "none";
   }
     
   /*Not applicable to this state */
@@ -1108,13 +1107,12 @@ module.exports = (function (){
   /*Not applicable to this state. */
   var render = function() {}
     
-/* Handles keydown events in order to exit the menu. */
+/* Handles keydown events in order to exit the helpShop. */
   var keyDown = function(event) {
     switch(event.keyCode) {
       case 13: // ENTER
         event.preventDefault();
 		stateManager.popState();
-		stateManager.pushState(nextHelp);
         break;
 	case 27: //ESC
 		event.preventDefault();
@@ -1136,24 +1134,24 @@ module.exports = (function (){
   }
   
 })();
-},{"./help_stats.js":10}],10:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 /* Help Screen GameState module
  * Authors: Ian Speer
  */
  
 module.exports = (function (){
-  var menu = document.getElementById("help-stats");
+  var helpStats = document.getElementById("help-stats");
   var nextHelp = require("./help_arena.js");
    var  stateManager;
 
-  var load = function(StateManager) {
-    stateManager = StateManager;
-    menu.style.display = "flex";
+  var load = function(sm) {
+    stateManager = sm;
+    helpStats.style.display = "flex";
   }
   
-  /* Hides the menu on exit. */
+  /* Hides the helpStats on exit. */
   var exit = function() {
-    menu.style.display = "none";
+    helpStats.style.display = "none";
   }
     
   /*Not applicable to this state */
@@ -1162,7 +1160,7 @@ module.exports = (function (){
   /*Not applicable to this state. */
   var render = function() {}
     
-/* Handles keydown events in order to exit the menu. */
+/* Handles keydown events in order to exit the helpStats. */
   var keyDown = function(event) {
     switch(event.keyCode) {
       case 13: // ENTER
@@ -1270,7 +1268,6 @@ module.exports = (function() {
     this.EntityManager.add_gold(damage);
 
     if (this.health <= 0) {
-      //TODO die
       alive = false;
     }
 
