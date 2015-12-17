@@ -10,10 +10,10 @@ It serves as the final project for [Fundementals of Game Programming](http://cat
 
 * Kyle Brown (kyle16@ksu.edu)
 * [Christian Hughes](www.christianhughes.net) (cjhughes255@ksu.edu)
-* 	<i>Implemented general animation framework/individual monster animations.</i>
-* 	<i>Processed non-HTML entity rendering and frame updating.</i>
-* 	<i>Sourced and formatted artwork into monster sprite sheets.</i>
-* 	<i>Did a variety of debug tasks & HTML tidbits.</i>
+	* <i>Implemented general animation framework/individual monster animations.</i>
+	* <i>Processed non-HTML entity rendering and frame updating.</i>
+	* <i>Sourced and formatted artwork into monster sprite sheets.</i>
+	* <i>Did a variety of debug tasks & HTML tidbits.</i>
 * Nic Johnson (njj@ksu.edu)
 * Richard Petrie (rap1011@ksu.edu)
 * David Barnes III (dbarnes3@ksu.edu)
