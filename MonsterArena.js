@@ -695,7 +695,7 @@ module.exports = (function() {
           damage = monsters[i].attack;
 
           if (monsters[i].special == "heal") {
-            monsters[0].health += damage;
+            monsters[0].health += damage/3;
             if (monsters[0].health > monsters[0].maxHealth) {
               monsters[0].health = monsters[0].maxHealth;
             }
@@ -735,7 +735,7 @@ module.exports = (function() {
       var dodge = false;
       if (monsters[0].special == "dodge") {
         var r = Math.random()
-        if (r < .85) {
+        if (r > .85) {
           dodge = true;
         }
       }
@@ -1074,7 +1074,7 @@ module.exports = (function() {
   Hero.prototype.levelup = function() {
     if (this.level <= 10) {
       var t = this.maxHealth;
-      this.maxHealth *= this.maxHealth_scale;
+      this.maxHealth *= this.health_scale;
       this.attack *= this.attack_scale;
       this.defense *= this.defense_scale;
       this.req_exp ^= this.exp_scale;
