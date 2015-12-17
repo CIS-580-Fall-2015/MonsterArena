@@ -9,7 +9,7 @@ It serves as the final project for [Fundementals of Game Programming](http://cat
 ## Contributors
 
 * Kyle Brown (kyle16@ksu.edu)
-* [Christian Hughes](www.christianhughes.net) (cjhughes255@ksu.edu)
+* Christian Hughes (cjhughes255@ksu.edu)
 	* <i>Implemented general animation framework/individual monster animations.</i>
 	* <i>Processed non-HTML entity rendering and frame updating.</i>
 	* <i>Sourced and formatted artwork into monster sprite sheets.</i>
