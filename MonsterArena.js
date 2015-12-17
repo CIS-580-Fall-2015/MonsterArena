@@ -1077,7 +1077,7 @@ module.exports = (function() {
       this.maxHealth *= this.health_scale;
       this.attack *= this.attack_scale;
       this.defense *= this.defense_scale;
-      this.req_exp ^= this.exp_scale;
+      this.req_exp *= this.exp_scale;
       this.exp = 0;
       this.level++;
       document.getElementById('health').max = this.maxHealth;
