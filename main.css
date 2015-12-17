@@ -30,6 +30,9 @@
   margin-top: 2.5px;
   padding: 0 0 0 0;
 }
+#toplevel #arena #level{
+	display: inline-block;
+}
 #toplevel #arena #health {
   -webkit-apperance: none;
   apperance: none;
